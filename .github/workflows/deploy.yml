@@ -1,7 +1,9 @@
-name: Deploy portfolio
+name: Validate portfolio
 
 on:
   push:
+    branches: [main]
+  pull_request:
     branches: [main]
   workflow_dispatch:
 
@@ -9,7 +11,7 @@ permissions:
   contents: read
 
 jobs:
-  deploy:
+  validate:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -27,14 +29,3 @@ jobs:
 
       - name: Validate and build
         run: npm test
-
-      - name: Deploy to Cloudflare Workers
-        uses: cloudflare/wrangler-action@v4
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: deploy
-          secrets: |
-            ADMIN_PASSWORD
-        env:
-          ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
