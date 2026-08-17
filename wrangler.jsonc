@@ -4,6 +4,8 @@
   "main": "./worker/index.ts",
   "compatibility_date": "2026-05-15",
   "compatibility_flags": ["nodejs_compat"],
+  "workers_dev": true,
+  "preview_urls": false,
   "vars": {
     "ADMIN_EMAIL": "saim.goodm@gmail.com"
   },
@@ -11,6 +13,7 @@
     {
       "binding": "DB",
       "database_name": "khalid-portfolio-db",
+      "database_id": "7d987f40-2252-4b57-ac3a-0a77883850a5",
       "migrations_dir": "drizzle"
     }
   ],
