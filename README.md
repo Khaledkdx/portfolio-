@@ -63,18 +63,20 @@ npm run cf:types
 The CMS creates its required D1 tables on first use. A custom domain can be
 connected later from the Cloudflare dashboard.
 
-## GitHub automatic deployment
+## GitHub and manual deployment
 
-Create a GitHub repository and push this project. In **Settings → Secrets and
-variables → Actions**, add these repository secrets:
+The project can be stored on GitHub without connecting the repository to
+Cloudflare. Every push runs the build and tests through
+`.github/workflows/deploy.yml`, but publishing remains a deliberate local step:
 
-- `CLOUDFLARE_API_TOKEN`
-- `CLOUDFLARE_ACCOUNT_ID`
-- `ADMIN_PASSWORD` — use a unique password with at least 12 characters
+```bash
+npx wrangler login
+npm run deploy
+```
 
-Pushing to `main` runs the tests and deploys the Worker through
-`.github/workflows/deploy.yml`. Never commit `.dev.vars`, passwords, API tokens,
-or account credentials.
+Set `ADMIN_PASSWORD` with `npx wrangler secret put ADMIN_PASSWORD` whenever the
+admin password needs to be created or changed. Never commit `.dev.vars`,
+passwords, API tokens, or account credentials.
 
 ## Changing the admin email
 
