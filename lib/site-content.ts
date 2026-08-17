@@ -20,6 +20,18 @@ export type Experience = {
   summary: LocalizedText;
 };
 
+export type ProjectImage = {
+  id: string;
+  url: string;
+  alt: LocalizedText;
+};
+
+export type ProjectLink = {
+  id: string;
+  label: LocalizedText;
+  url: string;
+};
+
 export type Project = {
   id: string;
   status: "published" | "draft" | "archived";
@@ -32,6 +44,9 @@ export type Project = {
   outcome: LocalizedText;
   tools: string[];
   metrics: Array<{ label: LocalizedText; value: string }>;
+  images: ProjectImage[];
+  links: ProjectLink[];
+  /** Legacy fields are accepted during migration and removed on the next save. */
   image?: string;
   externalUrl?: string;
 };
@@ -95,7 +110,10 @@ export const DEFAULT_CONTENT: SiteContent = {
   activeDesign: "growth-operator",
   profile: {
     name: "Khalid Mohamad",
-    role: t("Business Growth & Automation Specialist", "متخصص تطوير الأعمال والأتمتة"),
+    role: t(
+      "Business Growth & Automation Specialist",
+      "متخصص تطوير الأعمال والأتمتة",
+    ),
     headline: t(
       "I turn business bottlenecks into growth systems.",
       "أحوّل اختناقات الأعمال إلى أنظمة نمو.",
@@ -242,7 +260,10 @@ export const DEFAULT_CONTENT: SiteContent = {
     },
     {
       id: "abm",
-      role: t("Flutter Developer & Media Buyer", "مطوّر Flutter ومشتري إعلانات"),
+      role: t(
+        "Flutter Developer & Media Buyer",
+        "مطوّر Flutter ومشتري إعلانات",
+      ),
       company: "ABM Service",
       period: "Selected experience",
       summary: t(
@@ -257,7 +278,10 @@ export const DEFAULT_CONTENT: SiteContent = {
       status: "published",
       order: 1,
       eyebrow: t("AI + REAL ESTATE OPERATIONS", "AI + عمليات العقارات"),
-      title: t("A multilingual operating layer for real estate teams", "طبقة تشغيل ذكية ومتعددة اللغات لفرق العقارات"),
+      title: t(
+        "A multilingual operating layer for real estate teams",
+        "طبقة تشغيل ذكية ومتعددة اللغات لفرق العقارات",
+      ),
       summary: t(
         "AI agents designed around the way sales and management teams actually work.",
         "وكلاء ذكاء اصطناعي مصممون حول طريقة عمل فرق المبيعات والإدارة فعليًا.",
@@ -274,15 +298,28 @@ export const DEFAULT_CONTENT: SiteContent = {
         "A clearer route from business knowledge to fast, role-appropriate action for sales and leadership.",
         "مسار أوضح يحول معرفة الشركة إلى إجراءات سريعة ومناسبة لصلاحيات فرق المبيعات والإدارة.",
       ),
-      tools: ["GPT", "RAG", "Vector DB", "n8n", "WhatsApp", "Telegram", "Google Drive"],
+      tools: [
+        "GPT",
+        "RAG",
+        "Vector DB",
+        "n8n",
+        "WhatsApp",
+        "Telegram",
+        "Google Drive",
+      ],
       metrics: [],
+      images: [],
+      links: [],
     },
     {
       id: "performance-marketing",
       status: "published",
       order: 2,
       eyebrow: t("PAID MEDIA + MARKET RESEARCH", "إعلانات مدفوعة + بحث سوق"),
-      title: t("Campaign decisions built around the market—not assumptions", "قرارات حملات مبنية على السوق لا على الافتراضات"),
+      title: t(
+        "Campaign decisions built around the market—not assumptions",
+        "قرارات حملات مبنية على السوق لا على الافتراضات",
+      ),
       summary: t(
         "Performance marketing work across UAE and KSA brands, from audience research to ongoing optimization.",
         "عمل تسويقي قائم على الأداء لعلامات في الإمارات والسعودية، من دراسة الجمهور إلى التحسين المستمر.",
@@ -301,13 +338,18 @@ export const DEFAULT_CONTENT: SiteContent = {
       ),
       tools: ["Meta Ads", "Google Ads", "TikTok Ads", "Snapchat Ads", "Excel"],
       metrics: [],
+      images: [],
+      links: [],
     },
     {
       id: "creative-operations",
       status: "published",
       order: 3,
       eyebrow: t("CONTENT + CREATIVE OPERATIONS", "محتوى + عمليات إبداعية"),
-      title: t("A content system teams can actually keep using", "نظام محتوى يستطيع الفريق الاستمرار في استخدامه"),
+      title: t(
+        "A content system teams can actually keep using",
+        "نظام محتوى يستطيع الفريق الاستمرار في استخدامه",
+      ),
       summary: t(
         "Strategy, copy, design and video production connected through an organized media workflow.",
         "استراتيجية وكتابة وتصميم وإنتاج فيديو مرتبطة بمسار منظم لإدارة المواد الإعلامية.",
@@ -324,15 +366,30 @@ export const DEFAULT_CONTENT: SiteContent = {
         "A more consistent brand output and a simpler handoff between creative, marketing and sales teams.",
         "مخرجات أكثر اتساقًا للعلامة وتسليم أبسط بين فرق الإبداع والتسويق والمبيعات.",
       ),
-      tools: ["Photoshop", "Illustrator", "Premiere Pro", "After Effects", "CapCut", "Canva"],
+      tools: [
+        "Photoshop",
+        "Illustrator",
+        "Premiere Pro",
+        "After Effects",
+        "CapCut",
+        "Canva",
+      ],
       metrics: [],
+      images: [],
+      links: [],
     },
     {
       id: "product-technology",
       status: "published",
       order: 4,
-      eyebrow: t("PRODUCT + TECHNICAL PROBLEM SOLVING", "منتجات + حل مشكلات تقنية"),
-      title: t("From operational need to a usable digital product", "من الاحتياج التشغيلي إلى منتج رقمي قابل للاستخدام"),
+      eyebrow: t(
+        "PRODUCT + TECHNICAL PROBLEM SOLVING",
+        "منتجات + حل مشكلات تقنية",
+      ),
+      title: t(
+        "From operational need to a usable digital product",
+        "من الاحتياج التشغيلي إلى منتج رقمي قابل للاستخدام",
+      ),
       summary: t(
         "Cross-platform application development backed by practical technical support and clean integrations.",
         "تطوير تطبيقات متعددة المنصات مدعوم بدعم تقني عملي وتكاملات منظمة.",
@@ -351,6 +408,8 @@ export const DEFAULT_CONTENT: SiteContent = {
       ),
       tools: ["Flutter", "Dart", "REST APIs", "Riverpod", "Bloc", "GetX"],
       metrics: [],
+      images: [],
+      links: [],
     },
   ],
 };
@@ -365,4 +424,89 @@ export function isLocale(value: string): value is Locale {
 
 export function isDesignSlug(value: string): value is DesignSlug {
   return DESIGN_SLUGS.includes(value as DesignSlug);
+}
+
+export function projectImages(project: Project): ProjectImage[] {
+  if (Array.isArray(project.images) && project.images.length > 0)
+    return project.images;
+  if (!project.image) return [];
+  return [
+    {
+      id: `legacy-image-${project.id}`,
+      url: project.image,
+      alt: { ...project.title },
+    },
+  ];
+}
+
+export function projectLinks(project: Project): ProjectLink[] {
+  if (Array.isArray(project.links) && project.links.length > 0)
+    return project.links;
+  if (!project.externalUrl) return [];
+  return [
+    {
+      id: `legacy-link-${project.id}`,
+      label: { en: "View project", ar: "عرض المشروع" },
+      url: project.externalUrl,
+    },
+  ];
+}
+
+export function normalizeSiteContent(content: SiteContent): SiteContent {
+  return {
+    ...content,
+    projects: (content.projects ?? []).map((project) => {
+      const normalized: Project = {
+        ...project,
+        images: projectImages(project),
+        links: projectLinks(project),
+      };
+      delete normalized.image;
+      delete normalized.externalUrl;
+      return normalized;
+    }),
+  };
+}
+
+export function isHttpUrl(value: string): boolean {
+  try {
+    const url = new URL(value);
+    return url.protocol === "http:" || url.protocol === "https:";
+  } catch {
+    return false;
+  }
+}
+
+export function validateSiteContent(input: SiteContent): string | null {
+  const content = normalizeSiteContent(input);
+  if (
+    !content.profile?.headline?.en?.trim() ||
+    !content.profile?.headline?.ar?.trim() ||
+    !isDesignSlug(content.activeDesign)
+  ) {
+    return "Invalid site content";
+  }
+  for (const project of content.projects) {
+    if (project.images.length > 6)
+      return "A project can contain up to 6 images.";
+    if (project.links.length > 3) return "A project can contain up to 3 links.";
+    if (project.status !== "published") continue;
+    if (project.links.some((link) => !isHttpUrl(link.url)))
+      return "Project links must use a valid http or https URL.";
+    if (!project.title.en.trim() || !project.title.ar.trim())
+      return "Published projects require English and Arabic titles.";
+    if (
+      project.images.some(
+        (image) => !image.url || !image.alt.en.trim() || !image.alt.ar.trim(),
+      )
+    )
+      return "Published project images require English and Arabic alt text.";
+    if (
+      project.links.some(
+        (link) => !link.label.en.trim() || !link.label.ar.trim(),
+      )
+    )
+      return "Published project links require English and Arabic names.";
+  }
+  return null;
 }

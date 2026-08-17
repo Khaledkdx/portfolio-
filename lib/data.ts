@@ -1,5 +1,9 @@
 import { env } from "cloudflare:workers";
-import { DEFAULT_CONTENT, type SiteContent } from "./site-content";
+import {
+  DEFAULT_CONTENT,
+  normalizeSiteContent,
+  type SiteContent,
+} from "./site-content";
 
 type D1Result<T> = { results?: T[] };
 type PreparedStatement = {
@@ -13,8 +17,18 @@ type D1Like = {
   batch: (statements: PreparedStatement[]) => Promise<unknown>;
 };
 type R2Like = {
-  put: (key: string, value: ArrayBuffer, options: { httpMetadata: { contentType: string } }) => Promise<unknown>;
-  get: (key: string) => Promise<{ body: ReadableStream; httpMetadata?: { contentType?: string }; size?: number } | null>;
+  put: (
+    key: string,
+    value: ArrayBuffer,
+    options: { httpMetadata: { contentType: string } },
+  ) => Promise<unknown>;
+  get: (
+    key: string,
+  ) => Promise<{
+    body: ReadableStream;
+    httpMetadata?: { contentType?: string };
+    size?: number;
+  } | null>;
   delete: (key: string) => Promise<unknown>;
 };
 
@@ -62,14 +76,16 @@ export async function readSiteContent(): Promise<SiteContent> {
   if (!row) {
     const content = cloneDefaults();
     await db
-      .prepare("INSERT INTO site_content (id, content_json, updated_at) VALUES (1, ?, ?)")
+      .prepare(
+        "INSERT INTO site_content (id, content_json, updated_at) VALUES (1, ?, ?)",
+      )
       .bind(JSON.stringify(content), new Date().toISOString())
       .run();
     return content;
   }
 
   try {
-    return JSON.parse(row.content_json) as SiteContent;
+    return normalizeSiteContent(JSON.parse(row.content_json) as SiteContent);
   } catch {
     return cloneDefaults();
   }
@@ -80,10 +96,15 @@ export async function saveSiteContent(content: SiteContent): Promise<void> {
   if (!db) throw new Error("Persistent storage is unavailable.");
   await ensureSchema(db);
   await db
-    .prepare(`INSERT INTO site_content (id, content_json, updated_at)
+    .prepare(
+      `INSERT INTO site_content (id, content_json, updated_at)
       VALUES (1, ?, ?)
-      ON CONFLICT(id) DO UPDATE SET content_json = excluded.content_json, updated_at = excluded.updated_at`)
-    .bind(JSON.stringify(content), new Date().toISOString())
+      ON CONFLICT(id) DO UPDATE SET content_json = excluded.content_json, updated_at = excluded.updated_at`,
+    )
+    .bind(
+      JSON.stringify(normalizeSiteContent(content)),
+      new Date().toISOString(),
+    )
     .run();
 }
 
@@ -103,17 +124,21 @@ export async function listMedia(): Promise<MediaAsset[]> {
   const db = bindings().DB;
   if (!db) return [];
   await ensureSchema(db);
-  const result = await db.prepare(`SELECT id, object_key, filename, content_type, size,
-    alt_en, alt_ar, created_at FROM media_assets ORDER BY created_at DESC`).all<{
-    id: string;
-    object_key: string;
-    filename: string;
-    content_type: string;
-    size: number;
-    alt_en: string;
-    alt_ar: string;
-    created_at: string;
-  }>();
+  const result = await db
+    .prepare(
+      `SELECT id, object_key, filename, content_type, size,
+    alt_en, alt_ar, created_at FROM media_assets ORDER BY created_at DESC`,
+    )
+    .all<{
+      id: string;
+      object_key: string;
+      filename: string;
+      content_type: string;
+      size: number;
+      alt_en: string;
+      alt_ar: string;
+      created_at: string;
+    }>();
   return (result.results ?? []).map((row) => ({
     id: row.id,
     objectKey: row.object_key,
@@ -127,24 +152,56 @@ export async function listMedia(): Promise<MediaAsset[]> {
   }));
 }
 
-export async function storeMedia(file: File, altEn: string, altAr: string): Promise<MediaAsset> {
+export async function storeMedia(
+  file: File,
+  altEn: string,
+  altAr: string,
+): Promise<MediaAsset> {
   const { DB: db, MEDIA: media } = bindings();
   if (!db || !media) throw new Error("Media storage is unavailable.");
   await ensureSchema(db);
 
   const id = crypto.randomUUID();
-  const extension = file.name.split(".").pop()?.toLowerCase().replace(/[^a-z0-9]/g, "") || "jpg";
+  const extension =
+    file.name
+      .split(".")
+      .pop()
+      ?.toLowerCase()
+      .replace(/[^a-z0-9]/g, "") || "jpg";
   const objectKey = `uploads/${id}.${extension}`;
   const createdAt = new Date().toISOString();
-  await media.put(objectKey, await file.arrayBuffer(), { httpMetadata: { contentType: file.type } });
+  await media.put(objectKey, await file.arrayBuffer(), {
+    httpMetadata: { contentType: file.type },
+  });
   await db
-    .prepare(`INSERT INTO media_assets
+    .prepare(
+      `INSERT INTO media_assets
       (id, object_key, filename, content_type, size, alt_en, alt_ar, created_at)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?)`)
-    .bind(id, objectKey, file.name, file.type, file.size, altEn, altAr, createdAt)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+    )
+    .bind(
+      id,
+      objectKey,
+      file.name,
+      file.type,
+      file.size,
+      altEn,
+      altAr,
+      createdAt,
+    )
     .run();
 
-  return { id, objectKey, filename: file.name, contentType: file.type, size: file.size, altEn, altAr, createdAt, url: `/media/${encodeURIComponent(id)}` };
+  return {
+    id,
+    objectKey,
+    filename: file.name,
+    contentType: file.type,
+    size: file.size,
+    altEn,
+    altAr,
+    createdAt,
+    url: `/media/${encodeURIComponent(id)}`,
+  };
 }
 
 export async function getMediaObject(key: string) {

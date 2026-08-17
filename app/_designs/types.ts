@@ -1,4 +1,13 @@
-import type { DesignSlug, Locale, Project, SiteContent } from "@/lib/site-content";
+import {
+  projectImages,
+  projectLinks,
+  type DesignSlug,
+  type Locale,
+  type Project,
+  type SiteContent,
+} from "@/lib/site-content";
+
+export { projectImages, projectLinks };
 
 export type DesignProps = {
   content: SiteContent;
@@ -14,7 +23,12 @@ export function publishedProjects(content: SiteContent): Project[] {
     .sort((a, b) => a.order - b.order);
 }
 
-export function languageHref({ locale, preview, variantPath, design }: DesignProps): string {
+export function languageHref({
+  locale,
+  preview,
+  variantPath,
+  design,
+}: DesignProps): string {
   const nextLocale = locale === "en" ? "ar" : "en";
   if (variantPath) return `${variantPath}?locale=${nextLocale}`;
   if (preview) return `/designs/${design}?locale=${nextLocale}`;
