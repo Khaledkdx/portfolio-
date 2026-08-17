@@ -11,6 +11,7 @@ import {
   type DesignProps,
 } from "../types";
 import s from "./casebook.module.css";
+import { ProjectMetrics } from "../ProjectMetrics";
 
 export default function Casebook(props: DesignProps) {
   const { content, locale, design, preview } = props;
@@ -108,6 +109,7 @@ export default function Casebook(props: DesignProps) {
                 <p>{pick(project.eyebrow, locale)}</p>
                 <h3>{pick(project.title, locale)}</h3>
                 <blockquote>“{pick(project.summary, locale)}”</blockquote>
+                <ProjectMetrics project={project} locale={locale} />
                 {links.length > 0 && (
                   <div className={s.sources}>
                     <b>{locale === "ar" ? "مصادر العدد" : "ISSUE SOURCES"}</b>

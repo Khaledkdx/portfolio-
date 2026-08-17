@@ -11,6 +11,7 @@ import {
   type DesignProps,
 } from "../types";
 import s from "./boardroom.module.css";
+import { ProjectMetrics } from "../ProjectMetrics";
 
 export default function Boardroom(props: DesignProps) {
   const { content, locale, design, preview } = props;
@@ -161,6 +162,7 @@ export default function Boardroom(props: DesignProps) {
                 <p>{pick(project.eyebrow, locale)}</p>
                 <h3>{pick(project.title, locale)}</h3>
                 <p className={s.summary}>{pick(project.summary, locale)}</p>
+                <ProjectMetrics project={project} locale={locale} />
                 <div className={s.three}>
                   <section>
                     <b>{pick(content.labels.challenge, locale)}</b>

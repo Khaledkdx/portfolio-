@@ -42,18 +42,46 @@ test("includes ten complete selectable design directions", async () => {
   assert.match(route, /variantPath=\{`\/\$\{value\}`\}/);
 });
 
-test("protects admin mutations and includes deployment assets", async () => {
-  const [adminPage, contentRoute, auth, hosting] = await Promise.all([
+test("protects every admin mutation and includes deployment assets", async () => {
+  const [adminPage, contentRoute, designRoute, mediaRoute, auth, hosting] = await Promise.all([
     readFile(new URL("app/admin/page.tsx", root), "utf8"),
     readFile(new URL("app/api/admin/content/route.ts", root), "utf8"),
+    readFile(new URL("app/api/admin/design/route.ts", root), "utf8"),
+    readFile(new URL("app/api/admin/media/[id]/route.ts", root), "utf8"),
     readFile(new URL("lib/owner-auth.ts", root), "utf8"),
     readFile(new URL(".openai/hosting.json", root), "utf8"),
   ]);
-  assert.match(adminPage, /requireOwner\("\/admin"\)/);
+  assert.match(adminPage, /requireOwner\(returnTo\)/);
   assert.match(contentRoute, /getOwner\(\)/);
+  assert.match(designRoute, /getOwner\(\)/);
+  assert.match(designRoute, /updateActiveDesign/);
+  assert.match(mediaRoute, /getOwner\(\)/);
+  assert.match(mediaRoute, /status: 409/);
   assert.match(auth, /saim\.goodm@gmail\.com/);
   assert.match(hosting, /"d1": "DB"/);
   assert.match(hosting, /"r2": "MEDIA"/);
   await access(new URL("public/og.png", root));
   await access(new URL("dist/server/index.js", root));
+});
+
+test("admin contains design activation, CMS repeaters, media safety and dirty-state protection", async () => {
+  const [editor, data, designsPage, designPreviewPage, metrics] = await Promise.all([
+    readFile(new URL("app/admin/AdminEditor.tsx", root), "utf8"),
+    readFile(new URL("lib/data.ts", root), "utf8"),
+    readFile(new URL("app/designs/page.tsx", root), "utf8"),
+    readFile(new URL("app/designs/[design]/page.tsx", root), "utf8"),
+    readFile(new URL("app/_designs/ProjectMetrics.tsx", root), "utf8"),
+  ]);
+  assert.match(editor, /"designs"/);
+  assert.match(editor, /beforeunload/);
+  assert.match(editor, /\/api\/admin\/design/);
+  assert.match(editor, /design-preview-stage/);
+  assert.match(editor, /PreviewDevice/);
+  assert.match(editor, /project\.metrics\.map/);
+  assert.match(editor, /saveMediaAlt/);
+  assert.match(editor, /deleteMedia/);
+  assert.match(data, /json_set\(content_json, '\$\.activeDesign'/);
+  assert.match(designsPage, /redirect\("\/admin\?tab=designs"\)/);
+  assert.match(designPreviewPage, /admin\?tab=designs&preview=/);
+  assert.match(metrics, /if \(!metrics\.length\) return null/);
 });

@@ -11,6 +11,7 @@ import {
   type DesignProps,
 } from "../types";
 import s from "./luxury.module.css";
+import { ProjectMetrics } from "../ProjectMetrics";
 
 export default function Luxury(props: DesignProps) {
   const { content, locale, design, preview } = props;
@@ -98,6 +99,7 @@ export default function Luxury(props: DesignProps) {
                 <p>{pick(project.eyebrow, locale)}</p>
                 <h3>{pick(project.title, locale)}</h3>
                 <p>{pick(project.summary, locale)}</p>
+                <ProjectMetrics project={project} locale={locale} />
                 {links.map((link) => (
                   <a
                     style={{

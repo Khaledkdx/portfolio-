@@ -458,6 +458,8 @@ export function normalizeSiteContent(content: SiteContent): SiteContent {
     projects: (content.projects ?? []).map((project) => {
       const normalized: Project = {
         ...project,
+        tools: Array.isArray(project.tools) ? project.tools : [],
+        metrics: Array.isArray(project.metrics) ? project.metrics : [],
         images: projectImages(project),
         links: projectLinks(project),
       };
@@ -486,6 +488,14 @@ export function validateSiteContent(input: SiteContent): string | null {
   ) {
     return "Invalid site content";
   }
+  if (!/^\S+@\S+\.\S+$/.test(content.profile.email)) return "Enter a valid public email address.";
+  if (!/^\d{8,15}$/.test(content.profile.whatsapp)) return "Enter a valid international WhatsApp number.";
+  if (content.profile.linkedin && !isHttpUrl(content.profile.linkedin)) return "LinkedIn must use a valid http or https URL.";
+  if (!content.profile.role.en.trim() || !content.profile.role.ar.trim() || !content.profile.intro.en.trim() || !content.profile.intro.ar.trim()) return "The public profile requires English and Arabic content.";
+  if (Object.values(content.labels).some((label) => !label.en.trim() || !label.ar.trim())) return "Section labels require English and Arabic text.";
+  if (content.approach.some((item) => !item.title.en.trim() || !item.title.ar.trim() || !item.description.en.trim() || !item.description.ar.trim())) return "Approach items require English and Arabic content.";
+  if (content.services.some((item) => !item.title.en.trim() || !item.title.ar.trim() || !item.description.en.trim() || !item.description.ar.trim())) return "Services require English and Arabic content.";
+  if (content.experiences.some((item) => !item.company.trim() || !item.role.en.trim() || !item.role.ar.trim() || !item.summary.en.trim() || !item.summary.ar.trim())) return "Experience items require a company and bilingual content.";
   for (const project of content.projects) {
     if (project.images.length > 6)
       return "A project can contain up to 6 images.";
@@ -507,6 +517,7 @@ export function validateSiteContent(input: SiteContent): string | null {
       )
     )
       return "Published project links require English and Arabic names.";
+    if (project.metrics.some((metric) => !metric.label.en.trim() || !metric.label.ar.trim() || !metric.value.trim())) return "Published project metrics require bilingual labels and a value.";
   }
   return null;
 }

@@ -1,11 +1,9 @@
-import { DesignLab } from "./DesignLab";
+import { redirect } from "next/navigation";
 import { requireOwner } from "@/lib/owner-auth";
-import { readSiteContent } from "@/lib/data";
 
 export const dynamic = "force-dynamic";
 
 export default async function DesignsPage() {
   await requireOwner("/designs");
-  const content = await readSiteContent();
-  return <DesignLab content={content} />;
+  redirect("/admin?tab=designs");
 }

@@ -11,6 +11,7 @@ import {
   type DesignProps,
 } from "../types";
 import s from "./growth-os.module.css";
+import { ProjectMetrics } from "../ProjectMetrics";
 
 export default function GrowthOS(props: DesignProps) {
   const { content, locale, design, preview } = props;
@@ -177,6 +178,7 @@ export default function GrowthOS(props: DesignProps) {
                     />
                   )}
                   <p>{pick(project.summary, locale)}</p>
+                  <ProjectMetrics project={project} locale={locale} />
                   <section>
                     <p>
                       <b>{pick(content.labels.challenge, locale)}</b>

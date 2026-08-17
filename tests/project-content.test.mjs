@@ -49,3 +49,25 @@ test("enforces gallery and link limits and bilingual publication metadata", () =
   ];
   assert.match(validateSiteContent(content), /alt text/);
 });
+
+test("requires complete public CMS content and verified published metrics", () => {
+  const content = clone();
+  content.labels.work.ar = "";
+  assert.match(validateSiteContent(content), /Section labels/);
+
+  const metricContent = clone();
+  metricContent.projects[0].metrics = [
+    { label: { en: "Qualified leads", ar: "عملاء مؤهلون" }, value: "" },
+  ];
+  assert.match(validateSiteContent(metricContent), /metrics/);
+
+  metricContent.projects[0].status = "draft";
+  assert.equal(validateSiteContent(metricContent), null);
+});
+
+test("normalizes old projects that do not have metrics", () => {
+  const content = clone();
+  delete content.projects[0].metrics;
+  const normalized = normalizeSiteContent(content);
+  assert.deepEqual(normalized.projects[0].metrics, []);
+});

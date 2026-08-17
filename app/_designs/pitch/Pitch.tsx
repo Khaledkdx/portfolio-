@@ -11,6 +11,7 @@ import {
   type DesignProps,
 } from "../types";
 import s from "./pitch.module.css";
+import { ProjectMetrics } from "../ProjectMetrics";
 
 export default function Pitch(props: DesignProps) {
   const { content, locale, design, preview } = props;
@@ -153,6 +154,7 @@ export default function Pitch(props: DesignProps) {
                   <p>{pick(project.eyebrow, locale)}</p>
                   <h3>{pick(project.title, locale)}</h3>
                   <p>{pick(project.summary, locale)}</p>
+                  <ProjectMetrics project={project} locale={locale} />
                   {links.length > 0 && (
                     <div className={s.pitchLinks}>
                       {links.map((link) => (

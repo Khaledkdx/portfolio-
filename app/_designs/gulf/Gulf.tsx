@@ -11,6 +11,7 @@ import {
   type DesignProps,
 } from "../types";
 import s from "./gulf.module.css";
+import { ProjectMetrics } from "../ProjectMetrics";
 
 export default function Gulf(props: DesignProps) {
   const { content, locale, design, preview } = props;
@@ -132,6 +133,7 @@ export default function Gulf(props: DesignProps) {
                 </div>
                 <h3>{pick(project.title, locale)}</h3>
                 <p>{pick(project.summary, locale)}</p>
+                <ProjectMetrics project={project} locale={locale} />
                 {links.map((link) => (
                   <a
                     style={{

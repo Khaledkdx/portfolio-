@@ -11,6 +11,7 @@ import {
   type DesignProps,
 } from "../types";
 import s from "./war-room.module.css";
+import { ProjectMetrics } from "../ProjectMetrics";
 
 export default function WarRoom(props: DesignProps) {
   const { content, locale, design, preview } = props;
@@ -158,6 +159,7 @@ export default function WarRoom(props: DesignProps) {
                   <p className={s.dossierLead}>
                     {pick(project.summary, locale)}
                   </p>
+                  <ProjectMetrics project={project} locale={locale} />
                   <div className={s.briefGrid}>
                     <p>
                       <b>{pick(content.labels.challenge, locale)}</b>

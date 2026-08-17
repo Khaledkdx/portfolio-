@@ -1812,6 +1812,30 @@ a {
   box-shadow: 4px 4px 0 var(--mini-ink);
 }
 
+.public-project-metrics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 22px 0;
+}
+.public-project-metrics > div {
+  min-width: 120px;
+  padding: 12px 14px;
+  border: 1px solid currentColor;
+}
+.public-project-metrics dt {
+  font-size: 10px;
+  opacity: 0.66;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.public-project-metrics dd {
+  margin: 0;
+  font-size: clamp(18px, 2vw, 28px);
+  font-weight: 700;
+}
+
 /* Admin */
 .admin-shell {
   min-height: 100vh;
@@ -1962,6 +1986,41 @@ a {
   padding: 12px 15px;
   margin-bottom: 22px;
   font-size: 12px;
+}
+.admin-dirty {
+  color: #8b4e12;
+  background: #fff0c9;
+  border: 1px solid #e3c073;
+  padding: 8px 10px;
+  font-size: 10px;
+  white-space: nowrap;
+}
+.admin-stack.compact {
+  gap: 14px;
+}
+.admin-filterbar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+.admin-filterbar.vertical {
+  display: grid;
+  padding: 12px;
+  margin: 0;
+  border-bottom: 1px solid #d4d2c9;
+}
+.admin-filterbar input,
+.admin-filterbar select {
+  width: 100%;
+  border: 1px solid #cbc9c0;
+  background: #fff;
+  padding: 10px 11px;
+  font-size: 11px;
+  color: #171915;
+}
+.empty-state.indexed {
+  padding: 18px;
+  margin: 0;
 }
 .admin-content-grid {
   display: grid;
@@ -2150,6 +2209,28 @@ a {
   width: auto;
   font-size: 11px;
 }
+.project-header-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 6px;
+}
+.project-header-actions > button,
+.danger-button {
+  border: 1px solid #c8c7bf;
+  background: #fff;
+  padding: 10px 11px;
+  cursor: pointer;
+  font-size: 10px;
+}
+.project-header-actions > button:disabled {
+  opacity: 0.4;
+}
+.project-header-actions .danger-button {
+  color: #a3332b;
+  border-color: #d7aaa6;
+}
 .project-assets header p,
 .project-links header p {
   margin: 7px 0 0;
@@ -2271,6 +2352,209 @@ a {
     monospace;
   color: #777;
 }
+.repeater-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding-top: 3px;
+}
+.repeater-actions button {
+  border: 1px solid #c8c7bf;
+  background: #f7f6f1;
+  padding: 7px 10px;
+  font-size: 9px;
+  cursor: pointer;
+}
+.repeater-actions button:disabled {
+  opacity: 0.35;
+}
+.repeater-actions .danger {
+  color: #a3332b;
+  margin-inline-start: auto;
+}
+.skill-editor {
+  display: grid;
+  gap: 8px;
+}
+.skill-editor > div {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+  border-bottom: 1px solid #dedcd3;
+  padding-bottom: 8px;
+}
+.skill-editor input {
+  width: 100%;
+  border: 1px solid #cbc9c0;
+  background: #fff;
+  padding: 11px 12px;
+}
+.project-metrics-editor header p {
+  margin: 7px 0 0;
+  color: #70726a;
+  font-size: 11px;
+}
+
+/* Design manager */
+.designs-intro {
+  max-width: 760px;
+  margin: 0;
+  color: #65685f;
+  line-height: 1.6;
+}
+.design-admin-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+.design-admin-card {
+  position: relative;
+  min-height: 285px;
+  padding: 24px;
+  border: 1px solid #ceccc2;
+  background: #f9f8f3;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.03);
+}
+.design-admin-card.active {
+  border-color: #66772e;
+  box-shadow: inset 0 0 0 2px #b9ce69;
+}
+.design-card-number {
+  position: absolute;
+  inset: 21px 22px auto auto;
+  font: 10px var(--font-jetbrains), monospace;
+  color: #777970;
+}
+[dir="rtl"] .design-card-number {
+  inset: 21px auto auto 22px;
+}
+.design-swatches {
+  display: flex;
+  margin-bottom: 35px;
+}
+.design-swatches i {
+  width: 28px;
+  height: 28px;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  margin-inline-end: -5px;
+}
+.design-admin-card p {
+  margin: 0 0 7px;
+  color: #6c6e66;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.design-admin-card h2 {
+  font: 550 clamp(24px, 2.4vw, 36px) var(--font-newsreader), serif;
+  letter-spacing: -0.03em;
+  margin: 0 0 18px;
+}
+.active-design-label {
+  color: #516024;
+  background: #e3edbd;
+  padding: 6px 9px;
+  font-size: 9px;
+  text-transform: uppercase;
+}
+.design-card-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 24px;
+}
+.design-card-actions button,
+.preview-controls button,
+.preview-actions button,
+.preview-actions a {
+  border: 1px solid currentColor;
+  background: transparent;
+  color: inherit;
+  padding: 10px 12px;
+  cursor: pointer;
+  font-size: 10px;
+}
+.design-card-actions button.primary,
+.preview-actions button.primary {
+  background: #171915;
+  color: #fff;
+}
+.design-card-actions button:disabled,
+.preview-actions button:disabled {
+  opacity: 0.38;
+  cursor: default;
+}
+.design-preview-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  background: #242620;
+  color: #f7f5ed;
+  padding: 14px;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: 14px;
+}
+.design-preview-toolbar {
+  display: grid;
+  grid-template-columns: minmax(180px, 1fr) auto minmax(180px, 1fr);
+  gap: 16px;
+  align-items: center;
+}
+.design-preview-toolbar > div:first-child {
+  display: grid;
+  gap: 3px;
+}
+.design-preview-toolbar b {
+  font-size: 13px;
+}
+.design-preview-toolbar span {
+  color: #a6a99d;
+  font-size: 9px;
+}
+.preview-controls,
+.preview-actions {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+.preview-actions {
+  justify-content: flex-end;
+}
+.preview-controls button,
+.preview-actions button,
+.preview-actions a {
+  border-color: #565950;
+}
+.preview-controls button.active {
+  background: #b9ce69;
+  color: #171915;
+  border-color: #b9ce69;
+}
+.design-preview-stage {
+  margin: 0 auto;
+  width: 100%;
+  height: 100%;
+  background: #111;
+  overflow: hidden;
+  transition: width 240ms ease;
+}
+.design-preview-stage.tablet {
+  width: min(768px, 100%);
+}
+.design-preview-stage.mobile {
+  width: min(390px, 100%);
+}
+.design-preview-stage iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: #fff;
+}
 .experience-edit .field-grid {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
@@ -2282,13 +2566,15 @@ a {
 .media-grid article {
   border: 1px solid #d4d2c9;
   background: #fff;
+  display: flex;
+  flex-direction: column;
 }
 .media-grid img {
   width: 100%;
   height: 180px;
   object-fit: cover;
 }
-.media-grid article div {
+.media-grid article .media-meta {
   padding: 11px;
   display: grid;
   gap: 5px;
@@ -2301,6 +2587,41 @@ a {
 .media-grid span {
   font-size: 9px;
   color: #888;
+}
+.media-meta small {
+  font-size: 9px;
+  color: #777;
+  line-height: 1.45;
+}
+.media-meta small.used {
+  color: #536224;
+}
+.media-alt-fields {
+  display: grid;
+  gap: 9px;
+  padding: 0 11px 11px;
+}
+.media-card-actions {
+  display: flex;
+  gap: 6px;
+  margin-top: auto;
+  padding: 11px;
+  border-top: 1px solid #e3e1da;
+}
+.media-card-actions button {
+  border: 1px solid #c8c7bf;
+  background: #f7f6f1;
+  padding: 8px 9px;
+  font-size: 9px;
+  cursor: pointer;
+}
+.media-card-actions .danger {
+  color: #a3332b;
+  margin-inline-start: auto;
+}
+.media-card-actions button:disabled {
+  opacity: 0.4;
+  cursor: default;
 }
 .empty-state {
   color: #777;
@@ -2355,17 +2676,24 @@ a {
     grid-template-columns: 1fr;
   }
   .admin-shell {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
+    width: 100%;
+    overflow-x: hidden;
   }
   .admin-sidebar {
     position: static;
     height: auto;
     padding: 16px;
+    width: 100%;
+    min-width: 0;
+    overflow: hidden;
   }
   .admin-sidebar nav {
     display: flex;
     overflow-x: auto;
     margin-top: 15px;
+    width: 100%;
+    min-width: 0;
   }
   .admin-sidebar nav button {
     flex-shrink: 0;
@@ -2380,6 +2708,12 @@ a {
   .project-index {
     max-height: 290px;
     overflow: auto;
+  }
+  .design-preview-toolbar {
+    grid-template-columns: 1fr;
+  }
+  .preview-actions {
+    justify-content: flex-start;
   }
 }
 @media (max-width: 650px) {
@@ -2405,6 +2739,8 @@ a {
   }
   .admin-main {
     padding: 24px 14px 70px;
+    width: 100%;
+    min-width: 0;
   }
   .admin-topbar {
     align-items: flex-start;
@@ -2413,6 +2749,7 @@ a {
   .admin-top-actions {
     width: 100%;
     justify-content: space-between;
+    flex-wrap: wrap;
   }
   .admin-content-grid,
   .field-grid,
@@ -2428,7 +2765,7 @@ a {
     padding: 20px;
   }
   .media-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: 1fr;
   }
   .media-picker-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -2438,5 +2775,39 @@ a {
   }
   .admin-sidebar nav button {
     padding: 10px;
+  }
+  .admin-dirty {
+    width: 100%;
+  }
+  .design-admin-grid {
+    grid-template-columns: 1fr;
+  }
+  .design-admin-card {
+    min-height: 250px;
+  }
+  .project-editor > header,
+  .project-assets > header,
+  .project-links > header,
+  .project-metrics-editor > header {
+    flex-direction: column;
+  }
+  .project-header-actions {
+    justify-content: flex-start;
+  }
+  .skill-editor > div {
+    grid-template-columns: 1fr;
+  }
+  .design-preview-overlay {
+    padding: 8px;
+  }
+  .preview-controls,
+  .preview-actions {
+    overflow-x: auto;
+  }
+  .preview-controls button,
+  .preview-actions button,
+  .preview-actions a {
+    flex-shrink: 0;
+    padding: 8px;
   }
 }

@@ -11,6 +11,7 @@ import {
   type DesignProps,
 } from "../types";
 import s from "./stories.module.css";
+import { ProjectMetrics } from "../ProjectMetrics";
 
 export default function Stories(props: DesignProps) {
   const { content, locale, design, preview } = props;
@@ -117,6 +118,7 @@ export default function Stories(props: DesignProps) {
                 <p>{pick(project.eyebrow, locale)}</p>
                 <h3>{pick(project.title, locale)}</h3>
                 <blockquote>{pick(project.summary, locale)}</blockquote>
+                <ProjectMetrics project={project} locale={locale} />
                 <div className={s.chapters}>
                   <section>
                     <b>{locale === "ar" ? "قبل" : "Before"}</b>

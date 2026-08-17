@@ -1,6 +1,7 @@
 import { env } from "cloudflare:workers";
 import {
   DEFAULT_CONTENT,
+  type DesignSlug,
   normalizeSiteContent,
   type SiteContent,
 } from "./site-content";
@@ -105,6 +106,16 @@ export async function saveSiteContent(content: SiteContent): Promise<void> {
       JSON.stringify(normalizeSiteContent(content)),
       new Date().toISOString(),
     )
+    .run();
+}
+
+export async function updateActiveDesign(activeDesign: DesignSlug): Promise<void> {
+  const db = bindings().DB;
+  if (!db) throw new Error("Persistent storage is unavailable.");
+  await readSiteContent();
+  await db
+    .prepare("UPDATE site_content SET content_json = json_set(content_json, '$.activeDesign', ?), updated_at = ? WHERE id = 1")
+    .bind(activeDesign, new Date().toISOString())
     .run();
 }
 
@@ -221,4 +232,25 @@ export async function getMediaById(id: string) {
   if (!row) return null;
   const object = await getMediaObject(row.object_key);
   return object ? { object, contentType: row.content_type } : null;
+}
+
+export async function updateMediaMetadata(id: string, altEn: string, altAr: string): Promise<MediaAsset | null> {
+  const db = bindings().DB;
+  if (!db) throw new Error("Media storage is unavailable.");
+  await ensureSchema(db);
+  const existing = await db.prepare("SELECT id FROM media_assets WHERE id = ?").bind(id).first<{ id: string }>();
+  if (!existing) return null;
+  await db.prepare("UPDATE media_assets SET alt_en = ?, alt_ar = ? WHERE id = ?").bind(altEn, altAr, id).run();
+  return (await listMedia()).find((asset) => asset.id === id) ?? null;
+}
+
+export async function deleteMediaAsset(id: string): Promise<boolean> {
+  const { DB: db, MEDIA: media } = bindings();
+  if (!db || !media) throw new Error("Media storage is unavailable.");
+  await ensureSchema(db);
+  const asset = await db.prepare("SELECT object_key FROM media_assets WHERE id = ?").bind(id).first<{ object_key: string }>();
+  if (!asset) return false;
+  await media.delete(asset.object_key);
+  await db.prepare("DELETE FROM media_assets WHERE id = ?").bind(id).run();
+  return true;
 }
