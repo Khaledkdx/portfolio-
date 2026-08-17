@@ -733,7 +733,7 @@ export function AdminEditor({
         </nav>
         <div className="admin-side-footer">
           <Link href={`/${locale}`}>{t.live}</Link>
-          <Link href="/signout-with-chatgpt?return_to=/en">{t.signout}</Link>
+          <Link href="/api/auth/logout">{t.signout}</Link>
         </div>
       </aside>
       <section className="admin-main">

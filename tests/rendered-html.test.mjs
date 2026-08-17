@@ -42,14 +42,16 @@ test("includes ten complete selectable design directions", async () => {
   assert.match(route, /variantPath=\{`\/\$\{value\}`\}/);
 });
 
-test("protects every admin mutation and includes deployment assets", async () => {
-  const [adminPage, contentRoute, designRoute, mediaRoute, auth, hosting] = await Promise.all([
+test("protects every admin mutation and includes independent deployment config", async () => {
+  const [adminPage, contentRoute, designRoute, mediaRoute, auth, loginRoute, hosting, workflow] = await Promise.all([
     readFile(new URL("app/admin/page.tsx", root), "utf8"),
     readFile(new URL("app/api/admin/content/route.ts", root), "utf8"),
     readFile(new URL("app/api/admin/design/route.ts", root), "utf8"),
     readFile(new URL("app/api/admin/media/[id]/route.ts", root), "utf8"),
     readFile(new URL("lib/owner-auth.ts", root), "utf8"),
-    readFile(new URL(".openai/hosting.json", root), "utf8"),
+    readFile(new URL("app/api/auth/login/route.ts", root), "utf8"),
+    readFile(new URL("wrangler.jsonc", root), "utf8"),
+    readFile(new URL(".github/workflows/deploy.yml", root), "utf8"),
   ]);
   assert.match(adminPage, /requireOwner\(returnTo\)/);
   assert.match(contentRoute, /getOwner\(\)/);
@@ -57,9 +59,13 @@ test("protects every admin mutation and includes deployment assets", async () =>
   assert.match(designRoute, /updateActiveDesign/);
   assert.match(mediaRoute, /getOwner\(\)/);
   assert.match(mediaRoute, /status: 409/);
-  assert.match(auth, /saim\.goodm@gmail\.com/);
-  assert.match(hosting, /"d1": "DB"/);
-  assert.match(hosting, /"r2": "MEDIA"/);
+  assert.match(auth, /ADMIN_PASSWORD/);
+  assert.match(loginRoute, /httpOnly: true/);
+  assert.doesNotMatch(auth, /ChatGPT|oai-authenticated/);
+  assert.match(hosting, /"binding": "DB"/);
+  assert.match(hosting, /"binding": "MEDIA"/);
+  assert.match(workflow, /cloudflare\/wrangler-action@v4/);
+  assert.match(workflow, /ADMIN_PASSWORD/);
   await access(new URL("public/og.png", root));
   await access(new URL("dist/server/index.js", root));
 });

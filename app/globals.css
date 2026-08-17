@@ -2664,6 +2664,101 @@ a {
   border-bottom: 1px solid;
 }
 
+.login-page {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 28px;
+  background:
+    linear-gradient(90deg, rgba(20, 24, 17, 0.055) 1px, transparent 1px),
+    #eeede7;
+  background-size: 52px 100%;
+  color: #171915;
+}
+.login-page > section {
+  width: min(100%, 510px);
+  padding: clamp(32px, 6vw, 64px);
+  background: #f9f8f3;
+  border: 1px solid #cbc9c0;
+  box-shadow: 14px 14px 0 #171915;
+}
+.login-mark {
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #768b35;
+  border-radius: 50%;
+  color: #65772c;
+  font: 11px var(--font-jetbrains), monospace;
+}
+.login-page > section > p:first-of-type {
+  margin: 38px 0 10px;
+  color: #75786f;
+  font: 9px var(--font-jetbrains), monospace;
+  letter-spacing: 0.14em;
+}
+.login-page h1 {
+  margin: 0;
+  font: 550 clamp(48px, 7vw, 76px) var(--font-newsreader), serif;
+  letter-spacing: -0.055em;
+  line-height: 0.92;
+}
+.login-copy {
+  max-width: 390px;
+  color: #666960;
+  font-size: 13px;
+  line-height: 1.6;
+}
+.independent-login {
+  display: grid;
+  gap: 15px;
+  margin: 34px 0 26px;
+}
+.independent-login label {
+  display: grid;
+  gap: 7px;
+}
+.independent-login label span {
+  font-size: 10px;
+  font-weight: 700;
+}
+.independent-login input {
+  width: 100%;
+  border: 1px solid #bdbbb2;
+  background: #fff;
+  padding: 14px;
+  color: #171915;
+  outline: none;
+}
+.independent-login input:focus {
+  border-color: #171915;
+  box-shadow: 0 0 0 2px rgba(23, 25, 21, 0.1);
+}
+.independent-login p {
+  margin: 0;
+  padding: 10px;
+  background: #fee1dc;
+  color: #8a2820;
+  font-size: 11px;
+}
+.independent-login button {
+  border: 0;
+  background: #171915;
+  color: #fff;
+  padding: 15px;
+  cursor: pointer;
+  font-weight: 700;
+}
+.independent-login button:disabled {
+  opacity: 0.55;
+}
+.login-page section > a {
+  color: #62655e;
+  font-size: 11px;
+  border-bottom: 1px solid currentColor;
+}
+
 @media (max-width: 980px) {
   .design-lab {
     padding: 24px;
