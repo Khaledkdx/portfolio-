@@ -64,8 +64,10 @@ test("protects every admin mutation and includes independent deployment config",
   assert.doesNotMatch(auth, /ChatGPT|oai-authenticated/);
   assert.match(hosting, /"binding": "DB"/);
   assert.match(hosting, /"binding": "MEDIA"/);
-  assert.match(workflow, /cloudflare\/wrangler-action@v4/);
-  assert.match(workflow, /ADMIN_PASSWORD/);
+  assert.match(workflow, /actions\/setup-node@v6/);
+  assert.match(workflow, /run: npm test/);
+  assert.doesNotMatch(workflow, /cloudflare\/wrangler-action/);
+  assert.doesNotMatch(workflow, /ADMIN_PASSWORD/);
   await access(new URL("public/og.png", root));
   await access(new URL("dist/server/index.js", root));
 });
