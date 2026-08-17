@@ -5,30 +5,37 @@ import test from "node:test";
 const root = new URL("../", import.meta.url);
 
 test("ships bilingual portfolio content without private CV details", async () => {
-  const [content, portfolio] = await Promise.all([
+  const [content, boardroom, manifesto] = await Promise.all([
     readFile(new URL("lib/site-content.ts", root), "utf8"),
-    readFile(new URL("app/_components/Portfolio.tsx", root), "utf8"),
+    readFile(new URL("app/_designs/boardroom/Boardroom.tsx", root), "utf8"),
+    readFile(new URL("app/_designs/manifesto/Manifesto.tsx", root), "utf8"),
   ]);
   assert.match(content, /I turn business bottlenecks into growth systems\./);
   assert.match(content, /أحوّل اختناقات الأعمال إلى أنظمة نمو/);
   assert.match(content, /saim\.goodm@gmail\.com/);
   assert.match(content, /971506797854/);
   assert.doesNotMatch(content, /Alradwan|Sammanoud|Download CV/);
-  assert.match(portfolio, /dir=\{locale === "ar" \? "rtl" : "ltr"\}/);
+  assert.match(boardroom, /dir=\{locale === "ar" \? "rtl" : "ltr"\}/);
+  assert.match(manifesto, /dir=\{locale === "ar" \? "rtl" : "ltr"\}/);
 });
 
 test("includes ten complete selectable design directions", async () => {
-  const [content, portfolio, css] = await Promise.all([
+  const [content, portfolio, registry] = await Promise.all([
     readFile(new URL("lib/site-content.ts", root), "utf8"),
     readFile(new URL("app/_components/Portfolio.tsx", root), "utf8"),
-    readFile(new URL("app/globals.css", root), "utf8"),
+    readFile(new URL("app/_designs/registry.ts", root), "utf8"),
   ]);
   const slugs = ["growth-operator", "executive-brief", "campaign-desk", "systems-map", "signal-scale", "gulf-modern", "proof-of-work", "momentum", "studio-ledger", "control-room"];
   for (const slug of slugs) {
     assert.match(content, new RegExp(slug));
-    assert.match(css, new RegExp(`theme-${slug}`));
+    assert.match(registry, new RegExp(`slug: "${slug}"`));
   }
-  assert.match(portfolio, /switch \(design\)/);
+  const components = [
+    "boardroom/Boardroom.tsx", "manifesto/Manifesto.tsx", "luxury/Luxury.tsx", "growth-os/GrowthOS.tsx", "casebook/Casebook.tsx",
+    "gulf/Gulf.tsx", "war-room/WarRoom.tsx", "reel/Reel.tsx", "stories/Stories.tsx", "pitch/Pitch.tsx",
+  ];
+  for (const component of components) await access(new URL(`app/_designs/${component}`, root));
+  assert.match(portfolio, /definition\.load\(\)/);
   const route = await readFile(new URL("app/[locale]/page.tsx", root), "utf8");
   assert.match(route, /\^\(10\|\[1-9\]\)\$/);
   assert.match(route, /DESIGN_SLUGS\[index\]/);

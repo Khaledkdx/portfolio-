@@ -77,16 +77,16 @@ export const DESIGN_SLUGS = [
 export type DesignSlug = (typeof DESIGN_SLUGS)[number];
 
 export const DESIGN_NAMES: Record<DesignSlug, string> = {
-  "growth-operator": "Growth Operator",
-  "executive-brief": "Executive Brief",
-  "campaign-desk": "Campaign Desk",
-  "systems-map": "Systems Map",
-  "signal-scale": "Signal & Scale",
-  "gulf-modern": "Gulf Modern",
-  "proof-of-work": "Proof of Work",
-  momentum: "Momentum",
-  "studio-ledger": "Studio Ledger",
-  "control-room": "Control Room",
+  "growth-operator": "Boardroom Annual Report",
+  "executive-brief": "Creative Agency Manifesto",
+  "campaign-desk": "Quiet Luxury Advisor",
+  "systems-map": "SaaS Growth OS",
+  "signal-scale": "Editorial Campaign Casebook",
+  "gulf-modern": "Gulf Architectural Modernism",
+  "proof-of-work": "Performance Marketing War Room",
+  momentum: "Motion-first Creator Reel",
+  "studio-ledger": "Human-Centered Growth Stories",
+  "control-room": "Neo-Brutalist Pitch Deck",
 };
 
 const t = (en: string, ar: string): LocalizedText => ({ en, ar });

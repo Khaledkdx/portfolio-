@@ -5,16 +5,16 @@ import { useState } from "react";
 import { DESIGN_NAMES, DESIGN_SLUGS, type DesignSlug, type SiteContent } from "@/lib/site-content";
 
 const directions: Record<DesignSlug, string> = {
-  "growth-operator": "Editorial / Olive / Organic",
-  "executive-brief": "Refined / Charcoal / Brass",
-  "campaign-desk": "Magazine / Ink / Signal red",
-  "systems-map": "Diagrammatic / Grid / Orange",
-  "signal-scale": "Modular / Cobalt / Acid lime",
-  "gulf-modern": "Architectural / Sand / Emerald",
-  "proof-of-work": "Brutal / Black / Work-first",
-  momentum: "Kinetic / Coral / Oversized type",
-  "studio-ledger": "Archival / Paper / Burgundy",
-  "control-room": "Operational / Dark / Monospace",
+  "growth-operator": "Corporate report / Navy / Editorial",
+  "executive-brief": "Agency manifesto / Acid / Poster-led",
+  "campaign-desk": "Quiet luxury / Cream / Minimal",
+  "systems-map": "SaaS OS / Cobalt / Bento system",
+  "signal-scale": "Marketing magazine / Paper / Case-led",
+  "gulf-modern": "Gulf architecture / Sand / Arches",
+  "proof-of-work": "Media war room / Dark / Operational",
+  momentum: "Creator reel / Kinetic / Full-screen",
+  "studio-ledger": "Human stories / Warm / Narrative",
+  "control-room": "Pitch deck / Brutalist / Slide-based",
 };
 
 export function DesignLab({ content }: { content: SiteContent }) {
@@ -50,8 +50,8 @@ export function DesignLab({ content }: { content: SiteContent }) {
         {DESIGN_SLUGS.map((design, index) => (
           <article className={`design-card mini-${design}${active === design ? " is-active" : ""}`} key={design}>
             <Link className="design-preview" href={`/${index + 1}`} aria-label={`Preview ${DESIGN_NAMES[design]}`}>
-              <div className="mini-nav"><i /><span>KHALID / GROWTH</span></div>
-              <div className="mini-stage"><b>{String(index + 1).padStart(2, "0")}</b><h2>I turn bottlenecks into growth systems.</h2><span>VIEW WORK ↗</span></div>
+              <div className="mini-nav"><i /><span>{directions[design].split(" / ")[0]}</span></div>
+              <div className="mini-stage"><b>{String(index + 1).padStart(2, "0")}</b><h2>I turn bottlenecks into growth systems.</h2><span>{directions[design].split(" / ")[1]} ↗</span></div>
               <div className="mini-blocks"><i /><i /><i /></div>
             </Link>
             <footer>
