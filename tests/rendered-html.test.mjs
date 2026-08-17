@@ -29,6 +29,10 @@ test("includes ten complete selectable design directions", async () => {
     assert.match(css, new RegExp(`theme-${slug}`));
   }
   assert.match(portfolio, /switch \(design\)/);
+  const route = await readFile(new URL("app/[locale]/page.tsx", root), "utf8");
+  assert.match(route, /\^\(10\|\[1-9\]\)\$/);
+  assert.match(route, /DESIGN_SLUGS\[index\]/);
+  assert.match(route, /variantPath=\{`\/\$\{value\}`\}/);
 });
 
 test("protects admin mutations and includes deployment assets", async () => {

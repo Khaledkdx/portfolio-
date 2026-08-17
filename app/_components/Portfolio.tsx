@@ -14,11 +14,18 @@ type Props = {
   locale: Locale;
   design?: DesignSlug;
   preview?: boolean;
+  variantPath?: string;
 };
 
-function Nav({ content, locale, design, preview }: Props & { design: DesignSlug }) {
+type ResolvedProps = Props & { design: DesignSlug; preview: boolean };
+
+function Nav({ content, locale, design, preview, variantPath }: Props & { design: DesignSlug }) {
   const nextLocale = locale === "en" ? "ar" : "en";
-  const localeHref = preview ? `/designs/${design}?locale=${nextLocale}` : `/${nextLocale}`;
+  const localeHref = variantPath
+    ? `${variantPath}?locale=${nextLocale}`
+    : preview
+      ? `/designs/${design}?locale=${nextLocale}`
+      : `/${nextLocale}`;
   return (
     <nav className="site-nav" aria-label={locale === "en" ? "Main navigation" : "التنقل الرئيسي"}>
       <a className="brand" href="#top" aria-label="Khalid Mohamad home">
@@ -209,10 +216,10 @@ function ThemeLabel({ design, preview }: { design: DesignSlug; preview?: boolean
   return <div className="preview-label"><Link href="/designs">← Design lab</Link><span>{DESIGN_NAMES[design]}</span></div>;
 }
 
-function StandardFlow({ content, locale, design, preview }: Required<Props>) {
+function StandardFlow({ content, locale, design, preview, variantPath }: ResolvedProps) {
   return <main className={`portfolio theme-${design}`} id="top" dir={locale === "ar" ? "rtl" : "ltr"}>
     <ThemeLabel design={design} preview={preview} />
-    <Nav content={content} locale={locale} design={design} preview={preview} />
+    <Nav content={content} locale={locale} design={design} preview={preview} variantPath={variantPath} />
     <section className="hero hero-split"><HeroCopy content={content} locale={locale} /><Portrait content={content} priority /></section>
     <Approach content={content} locale={locale} />
     <Services content={content} locale={locale} />
@@ -222,82 +229,82 @@ function StandardFlow({ content, locale, design, preview }: Required<Props>) {
   </main>;
 }
 
-function ExecutiveFlow({ content, locale, design, preview }: Required<Props>) {
+function ExecutiveFlow({ content, locale, design, preview, variantPath }: ResolvedProps) {
   return <main className={`portfolio theme-${design}`} id="top" dir={locale === "ar" ? "rtl" : "ltr"}>
-    <ThemeLabel design={design} preview={preview} /><Nav content={content} locale={locale} design={design} preview={preview} />
+    <ThemeLabel design={design} preview={preview} /><Nav content={content} locale={locale} design={design} preview={preview} variantPath={variantPath} />
     <section className="hero hero-executive"><p className="kicker">Private brief / 2026</p><HeroCopy content={content} locale={locale} /><Portrait content={content} priority /></section>
     <Projects content={content} locale={locale} lead /><div className="paired-sections"><Services content={content} locale={locale} /><Approach content={content} locale={locale} /></div>
     <Experience content={content} locale={locale} /><Contact content={content} locale={locale} />
   </main>;
 }
 
-function CampaignFlow({ content, locale, design, preview }: Required<Props>) {
+function CampaignFlow({ content, locale, design, preview, variantPath }: ResolvedProps) {
   return <main className={`portfolio theme-${design}`} id="top" dir={locale === "ar" ? "rtl" : "ltr"}>
-    <ThemeLabel design={design} preview={preview} /><Nav content={content} locale={locale} design={design} preview={preview} />
+    <ThemeLabel design={design} preview={preview} /><Nav content={content} locale={locale} design={design} preview={preview} variantPath={variantPath} />
     <section className="hero hero-campaign"><div className="issue-tag">ISSUE 01 — GROWTH</div><HeroCopy content={content} locale={locale} /><Portrait content={content} priority /></section>
     <Services content={content} locale={locale} /><Projects content={content} locale={locale} /><Approach content={content} locale={locale} /><Experience content={content} locale={locale} /><Contact content={content} locale={locale} />
   </main>;
 }
 
-function SystemsFlow({ content, locale, design, preview }: Required<Props>) {
+function SystemsFlow({ content, locale, design, preview, variantPath }: ResolvedProps) {
   return <main className={`portfolio theme-${design}`} id="top" dir={locale === "ar" ? "rtl" : "ltr"}>
-    <ThemeLabel design={design} preview={preview} /><Nav content={content} locale={locale} design={design} preview={preview} />
+    <ThemeLabel design={design} preview={preview} /><Nav content={content} locale={locale} design={design} preview={preview} variantPath={variantPath} />
     <section className="hero hero-system"><HeroCopy content={content} locale={locale} /><div className="system-orbit"><Portrait content={content} priority /><span className="node node-a">MARKET</span><span className="node node-b">SYSTEM</span><span className="node node-c">GROWTH</span></div></section>
     <Approach content={content} locale={locale} /><Projects content={content} locale={locale} /><Services content={content} locale={locale} /><Experience content={content} locale={locale} /><Contact content={content} locale={locale} />
   </main>;
 }
 
-function SignalFlow({ content, locale, design, preview }: Required<Props>) {
+function SignalFlow({ content, locale, design, preview, variantPath }: ResolvedProps) {
   return <main className={`portfolio theme-${design}`} id="top" dir={locale === "ar" ? "rtl" : "ltr"}>
-    <ThemeLabel design={design} preview={preview} /><Nav content={content} locale={locale} design={design} preview={preview} />
+    <ThemeLabel design={design} preview={preview} /><Nav content={content} locale={locale} design={design} preview={preview} variantPath={variantPath} />
     <section className="hero hero-signal"><HeroCopy content={content} locale={locale} /><div className="signal-side"><Portrait content={content} priority /><div className="signal-note">STRATEGY → SYSTEM → SCALE</div></div></section>
     <div className="signal-band"><span>BUSINESS DEVELOPMENT</span><span>PERFORMANCE MARKETING</span><span>AI AUTOMATION</span></div>
     <Projects content={content} locale={locale} lead /><Services content={content} locale={locale} /><Approach content={content} locale={locale} /><Experience content={content} locale={locale} /><Contact content={content} locale={locale} />
   </main>;
 }
 
-function GulfFlow({ content, locale, design, preview }: Required<Props>) {
+function GulfFlow({ content, locale, design, preview, variantPath }: ResolvedProps) {
   return <main className={`portfolio theme-${design}`} id="top" dir={locale === "ar" ? "rtl" : "ltr"}>
-    <ThemeLabel design={design} preview={preview} /><Nav content={content} locale={locale} design={design} preview={preview} />
+    <ThemeLabel design={design} preview={preview} /><Nav content={content} locale={locale} design={design} preview={preview} variantPath={variantPath} />
     <section className="hero hero-gulf"><div className="gulf-arch"><Portrait content={content} priority /></div><HeroCopy content={content} locale={locale} /><p className="vertical-note">UAE · KSA · REMOTE</p></section>
     <Approach content={content} locale={locale} /><Services content={content} locale={locale} /><Projects content={content} locale={locale} /><Experience content={content} locale={locale} /><Contact content={content} locale={locale} />
   </main>;
 }
 
-function ProofFlow({ content, locale, design, preview }: Required<Props>) {
+function ProofFlow({ content, locale, design, preview, variantPath }: ResolvedProps) {
   return <main className={`portfolio theme-${design}`} id="top" dir={locale === "ar" ? "rtl" : "ltr"}>
-    <ThemeLabel design={design} preview={preview} /><Nav content={content} locale={locale} design={design} preview={preview} />
+    <ThemeLabel design={design} preview={preview} /><Nav content={content} locale={locale} design={design} preview={preview} variantPath={variantPath} />
     <section className="hero hero-proof"><div className="proof-number">04</div><HeroCopy content={content} locale={locale} /><Portrait content={content} priority /></section>
     <Projects content={content} locale={locale} lead /><Services content={content} locale={locale} /><Experience content={content} locale={locale} /><Approach content={content} locale={locale} /><Contact content={content} locale={locale} />
   </main>;
 }
 
-function MomentumFlow({ content, locale, design, preview }: Required<Props>) {
+function MomentumFlow({ content, locale, design, preview, variantPath }: ResolvedProps) {
   return <main className={`portfolio theme-${design}`} id="top" dir={locale === "ar" ? "rtl" : "ltr"}>
-    <ThemeLabel design={design} preview={preview} /><Nav content={content} locale={locale} design={design} preview={preview} />
+    <ThemeLabel design={design} preview={preview} /><Nav content={content} locale={locale} design={design} preview={preview} variantPath={variantPath} />
     <section className="hero hero-momentum"><div className="momentum-word" aria-hidden="true">MOVE</div><HeroCopy content={content} locale={locale} /><Portrait content={content} priority /></section>
     <Services content={content} locale={locale} /><Approach content={content} locale={locale} /><Projects content={content} locale={locale} lead /><Experience content={content} locale={locale} /><Contact content={content} locale={locale} />
   </main>;
 }
 
-function LedgerFlow({ content, locale, design, preview }: Required<Props>) {
+function LedgerFlow({ content, locale, design, preview, variantPath }: ResolvedProps) {
   return <main className={`portfolio theme-${design}`} id="top" dir={locale === "ar" ? "rtl" : "ltr"}>
-    <ThemeLabel design={design} preview={preview} /><Nav content={content} locale={locale} design={design} preview={preview} />
+    <ThemeLabel design={design} preview={preview} /><Nav content={content} locale={locale} design={design} preview={preview} variantPath={variantPath} />
     <section className="hero hero-ledger"><div className="ledger-meta"><span>FILE: KM-001</span><span>STATUS: OPEN</span></div><HeroCopy content={content} locale={locale} /><Portrait content={content} priority /></section>
     <Approach content={content} locale={locale} /><Projects content={content} locale={locale} /><div className="paired-sections"><Experience content={content} locale={locale} /><Services content={content} locale={locale} /></div><Contact content={content} locale={locale} />
   </main>;
 }
 
-function ControlFlow({ content, locale, design, preview }: Required<Props>) {
+function ControlFlow({ content, locale, design, preview, variantPath }: ResolvedProps) {
   return <main className={`portfolio theme-${design}`} id="top" dir={locale === "ar" ? "rtl" : "ltr"}>
-    <ThemeLabel design={design} preview={preview} /><Nav content={content} locale={locale} design={design} preview={preview} />
+    <ThemeLabel design={design} preview={preview} /><Nav content={content} locale={locale} design={design} preview={preview} variantPath={variantPath} />
     <section className="hero hero-control"><div className="control-status"><i /> SYSTEM ONLINE</div><HeroCopy content={content} locale={locale} /><Portrait content={content} priority /><div className="control-readout"><span>01 DIAGNOSE</span><span>02 DESIGN</span><span>03 IMPROVE</span></div></section>
     <Approach content={content} locale={locale} /><Services content={content} locale={locale} /><Projects content={content} locale={locale} /><Experience content={content} locale={locale} /><Contact content={content} locale={locale} />
   </main>;
 }
 
-export function Portfolio({ content, locale, design = content.activeDesign, preview = false }: Props) {
-  const props = { content, locale, design, preview } as Required<Props>;
+export function Portfolio({ content, locale, design = content.activeDesign, preview = false, variantPath }: Props) {
+  const props: ResolvedProps = { content, locale, design, preview, variantPath };
   switch (design) {
     case "executive-brief": return <ExecutiveFlow {...props} />;
     case "campaign-desk": return <CampaignFlow {...props} />;

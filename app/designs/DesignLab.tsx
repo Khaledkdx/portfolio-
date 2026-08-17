@@ -49,14 +49,14 @@ export function DesignLab({ content }: { content: SiteContent }) {
       <section className="design-grid">
         {DESIGN_SLUGS.map((design, index) => (
           <article className={`design-card mini-${design}${active === design ? " is-active" : ""}`} key={design}>
-            <Link className="design-preview" href={`/designs/${design}`} aria-label={`Preview ${DESIGN_NAMES[design]}`}>
+            <Link className="design-preview" href={`/${index + 1}`} aria-label={`Preview ${DESIGN_NAMES[design]}`}>
               <div className="mini-nav"><i /><span>KHALID / GROWTH</span></div>
               <div className="mini-stage"><b>{String(index + 1).padStart(2, "0")}</b><h2>I turn bottlenecks into growth systems.</h2><span>VIEW WORK ↗</span></div>
               <div className="mini-blocks"><i /><i /><i /></div>
             </Link>
             <footer>
               <div><span>{String(index + 1).padStart(2, "0")}</span><h3>{DESIGN_NAMES[design]}</h3><p>{directions[design]}</p></div>
-              <div className="design-buttons"><Link href={`/designs/${design}`}>Full preview</Link><button disabled={active === design || saving !== null} onClick={() => activate(design)}>{active === design ? "Live now" : saving === design ? "Setting…" : "Set live"}</button></div>
+              <div className="design-buttons"><Link href={`/${index + 1}`}>Full preview</Link><button disabled={active === design || saving !== null} onClick={() => activate(design)}>{active === design ? "Live now" : saving === design ? "Setting…" : "Set live"}</button></div>
             </footer>
           </article>
         ))}
