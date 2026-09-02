@@ -19,13 +19,13 @@ test("ships bilingual portfolio content without private CV details", async () =>
   assert.match(manifesto, /dir=\{locale === "ar" \? "rtl" : "ltr"\}/);
 });
 
-test("includes ten complete selectable design directions", async () => {
+test("includes thirty-two complete selectable design directions and independent project views", async () => {
   const [content, portfolio, registry] = await Promise.all([
     readFile(new URL("lib/site-content.ts", root), "utf8"),
     readFile(new URL("app/_components/Portfolio.tsx", root), "utf8"),
     readFile(new URL("app/_designs/registry.ts", root), "utf8"),
   ]);
-  const slugs = ["growth-operator", "executive-brief", "campaign-desk", "systems-map", "signal-scale", "gulf-modern", "proof-of-work", "momentum", "studio-ledger", "control-room"];
+  const slugs = ["growth-operator", "executive-brief", "campaign-desk", "systems-map", "signal-scale", "gulf-modern", "proof-of-work", "momentum", "studio-ledger", "control-room", "arabic-geometry", "spatial-orbit", "modular-cubes", "future-signal", "swiss-grid", "analog-scrapbook", "art-deco", "zen-strategy", "retro-computer", "organic-lab", "museum-walk", "growth-transit", "campaign-comics", "folded-mail", "contact-sheet", "gtm-gameboard", "whiteboard-workshop", "broadcast-studio", "type-tunnel", "tactile-clay", "rain-credential", "stagger-proof"];
   for (const slug of slugs) {
     assert.match(content, new RegExp(slug));
     assert.match(registry, new RegExp(`slug: "${slug}"`));
@@ -33,13 +33,27 @@ test("includes ten complete selectable design directions", async () => {
   const components = [
     "boardroom/Boardroom.tsx", "manifesto/Manifesto.tsx", "luxury/Luxury.tsx", "growth-os/GrowthOS.tsx", "casebook/Casebook.tsx",
     "gulf/Gulf.tsx", "war-room/WarRoom.tsx", "reel/Reel.tsx", "stories/Stories.tsx", "pitch/Pitch.tsx",
+    "arabic-geometry/ArabicGeometry.tsx", "spatial-orbit/SpatialOrbit.tsx", "modular-cubes/ModularCubes.tsx", "future-signal/FutureSignal.tsx", "swiss-grid/SwissGrid.tsx",
+    "analog-scrapbook/AnalogScrapbook.tsx", "art-deco/ArtDeco.tsx", "zen-strategy/ZenStrategy.tsx", "retro-computer/RetroComputer.tsx", "organic-lab/OrganicLab.tsx",
+    "museum-walk/MuseumWalk.tsx", "growth-transit/GrowthTransit.tsx", "campaign-comics/CampaignComics.tsx", "folded-mail/FoldedMail.tsx", "contact-sheet/ContactSheet.tsx",
+    "gtm-gameboard/GtmGameboard.tsx", "whiteboard-workshop/WhiteboardWorkshop.tsx", "broadcast-studio/BroadcastStudio.tsx", "type-tunnel/TypeTunnel.tsx", "tactile-clay/TactileClay.tsx",
+    "rain-credential/RainCredential.tsx", "stagger-proof/StaggerProof.tsx",
   ];
   for (const component of components) await access(new URL(`app/_designs/${component}`, root));
+  const projectFolders = ["boardroom", "manifesto", "luxury", "growth-os", "casebook", "gulf", "war-room", "reel", "stories", "pitch", "arabic-geometry", "spatial-orbit", "modular-cubes", "future-signal", "swiss-grid", "analog-scrapbook", "art-deco", "zen-strategy", "retro-computer", "organic-lab", "museum-walk", "growth-transit", "campaign-comics", "folded-mail", "contact-sheet", "gtm-gameboard", "whiteboard-workshop", "broadcast-studio", "type-tunnel", "tactile-clay", "rain-credential", "stagger-proof"];
+  for (const folder of projectFolders) {
+    const projectSource = await readFile(new URL(`app/_designs/${folder}/Project.tsx`, root), "utf8");
+    await access(new URL(`app/_designs/${folder}/project.module.css`, root));
+    assert.doesNotMatch(projectSource, /ProjectDetailView/);
+    assert.match(projectSource, /ProjectPicture/);
+  }
   assert.match(portfolio, /definition\.load\(\)/);
+  assert.match(registry, /loadProject/);
   const route = await readFile(new URL("app/[locale]/page.tsx", root), "utf8");
-  assert.match(route, /\^\(10\|\[1-9\]\)\$/);
+  assert.match(route, /3\[0-2\]\|\[12\]\[0-9\]/);
   assert.match(route, /DESIGN_SLUGS\[index\]/);
   assert.match(route, /variantPath=\{`\/\$\{value\}`\}/);
+  await access(new URL("app/[locale]/projects/[slug]/page.tsx", root));
 });
 
 test("protects every admin mutation and includes independent deployment config", async () => {
@@ -88,8 +102,13 @@ test("admin contains design activation, CMS repeaters, media safety and dirty-st
   assert.match(editor, /project\.metrics\.map/);
   assert.match(editor, /saveMediaAlt/);
   assert.match(editor, /deleteMedia/);
+  assert.match(editor, /companies\.items\.map/);
+  assert.match(editor, /showCompanyName/);
+  assert.match(editor, /assignCompanyLogo/);
   assert.match(data, /json_set\(content_json, '\$\.activeDesign'/);
   assert.match(designsPage, /redirect\("\/admin\?tab=designs"\)/);
   assert.match(designPreviewPage, /admin\?tab=designs&preview=/);
   assert.match(metrics, /if \(!metrics\.length\) return null/);
+  await access(new URL("components/ui/logos3.tsx", root));
+  await access(new URL("components/ui/carousel.tsx", root));
 });

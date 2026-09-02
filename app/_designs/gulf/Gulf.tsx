@@ -1,9 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
+import { PortraitImage } from "@/app/_components/PortraitImage";
 import { DESIGN_NAMES, pick } from "@/lib/site-content";
 import {
   languageHref,
   n,
+  projectHref,
   projectImages,
   projectLinks,
   publishedProjects,
@@ -45,14 +47,7 @@ export default function Gulf(props: DesignProps) {
       <header className={s.hero}>
         <div className={s.arch}>
           <div>
-            <Image
-              src={content.profile.portrait}
-              alt={content.profile.name}
-              width={900}
-              height={1200}
-              priority
-              unoptimized
-            />
+            <PortraitImage content={content} fill={false} sizes="(max-width: 760px) 100vw, 36vw" priority />
           </div>
           <span>UAE / KSA / REMOTE</span>
         </div>
@@ -131,7 +126,7 @@ export default function Gulf(props: DesignProps) {
                   <span>{n(i)}</span>
                   <p>{pick(project.eyebrow, locale)}</p>
                 </div>
-                <h3>{pick(project.title, locale)}</h3>
+                <Link href={projectHref(project, props)}><h3>{pick(project.title, locale)}</h3></Link>
                 <p>{pick(project.summary, locale)}</p>
                 <ProjectMetrics project={project} locale={locale} />
                 {links.map((link) => (

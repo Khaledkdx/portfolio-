@@ -1,0 +1,15 @@
+import Image from "next/image";
+import { PortraitImage } from "@/app/_components/PortraitImage";
+import Link from "next/link";
+import { pick } from "@/lib/site-content";
+import { languageHref, projectHref, projectImages, publishedProjects, whatsappHref, type DesignProps } from "../types";
+import s from "./organic-lab.module.css";
+
+export default function OrganicLab(props:DesignProps){const{content,locale}=props;const projects=publishedProjects(content);return <main className={s.page} dir={locale==="ar"?"rtl":"ltr"}>
+<nav><b>KHALID / GROWTH LAB</b><div><a href="#work">{pick(content.labels.work,locale)}</a><Link href={languageHref(props)}>{locale==="ar"?"EN":"AR"}</Link></div></nav>
+<header className={s.hero}><svg className={s.contours} viewBox="0 0 800 800" aria-hidden="true"><path d="M86 402c20-235 198-354 397-289 204 67 298 280 160 456-121 156-415 190-525 22C73 523 77 469 86 402Z"/><path d="M151 403c17-181 153-273 307-223 158 52 230 216 123 352-93 120-321 147-406 17-35-52-31-94-24-146Z"/><path d="M223 406c12-121 102-183 205-149 105 35 154 145 82 236-63 80-215 98-272 11-23-35-21-63-15-98Z"/></svg><div className={s.copy}><span>BUSINESS AS A LIVING SYSTEM</span><h1>{pick(content.profile.headline,locale)}</h1><p>{pick(content.profile.intro,locale)}</p><a href="#work">EXPLORE THE SYSTEM ↓</a></div><figure><PortraitImage content={content} priority sizes="(max-width:760px) 84vw, 38vw" /><figcaption>{pick(content.profile.role,locale)}</figcaption></figure></header>
+<section className={s.ecosystem}><header><span>01 / ECOSYSTEM</span><h2>{pick(content.labels.services,locale)}</h2></header><div className={s.branches}>{content.services.map((service,i)=><article key={service.id} className={s[`branch${i}`]}><i/><span>{service.number}</span><h3>{pick(service.title,locale)}</h3><p>{pick(service.description,locale)}</p></article>)}</div></section>
+<section className={s.cycle}><div className={s.cycleCore}>{locale==="ar"?"نمو":"GROWTH"}</div>{content.approach.map((item,i)=><article key={item.id} className={s[`step${i}`]}><b>{i+1}</b><h3>{pick(item.title,locale)}</h3><p>{pick(item.description,locale)}</p></article>)}</section>
+<section className={s.work} id="work"><header><span>02 / FIELD STUDIES</span><h2>{pick(content.labels.work,locale)}</h2></header><div>{projects.map((project,i)=>{const cover=projectImages(project)[0];return <Link href={projectHref(project,props)} key={project.id} className={s.project}><div className={s.blob}>{cover?<Image src={cover.url} alt={pick(cover.alt,locale)} fill sizes="(max-width:760px) 86vw, 38vw" unoptimized/>:<span>{String(i+1).padStart(2,"0")}</span>}</div><p>{pick(project.eyebrow,locale)}</p><h3>{pick(project.title,locale)}</h3><small>{pick(project.summary,locale)}</small><b>READ FIELD STUDY ↗</b></Link>})}</div></section>
+<footer id="contact"><div className={s.seed}/><span>PLANT THE NEXT SYSTEM</span><h2>{pick(content.labels.contact,locale)}</h2><p>{pick(content.labels.contactCopy,locale)}</p><div><a href={`mailto:${content.profile.email}`}>EMAIL ↗</a><a href={whatsappHref(content)} target="_blank" rel="noreferrer">WHATSAPP ↗</a></div></footer>
+</main>}

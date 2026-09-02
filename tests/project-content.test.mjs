@@ -18,6 +18,7 @@ test("migrates legacy image and external URL without losing data", () => {
 
   const migrated = normalizeSiteContent(content).projects[0];
   assert.equal(migrated.images[0].url, "/media/legacy-image");
+  assert.deepEqual(migrated.images[0].caption, { en: "", ar: "" });
   assert.equal(migrated.links[0].url, "https://example.com/case");
   assert.equal("image" in migrated, false);
   assert.equal("externalUrl" in migrated, false);
@@ -41,11 +42,12 @@ test("enforces gallery and link limits and bilingual publication metadata", () =
     id: String(index),
     url: `/media/${index}`,
     alt: { en: "Image", ar: "صورة" },
+    caption: { en: "", ar: "" },
   }));
   assert.match(validateSiteContent(content), /up to 6 images/);
 
   content.projects[0].images = [
-    { id: "one", url: "/media/one", alt: { en: "", ar: "" } },
+    { id: "one", url: "/media/one", alt: { en: "", ar: "" }, caption: { en: "", ar: "" } },
   ];
   assert.match(validateSiteContent(content), /alt text/);
 });
@@ -70,4 +72,70 @@ test("normalizes old projects that do not have metrics", () => {
   delete content.projects[0].metrics;
   const normalized = normalizeSiteContent(content);
   assert.deepEqual(normalized.projects[0].metrics, []);
+});
+
+test("migrates image captions and clamps portrait focal points", () => {
+  const content = clone();
+  content.projects[0].images = [{
+    id: "legacy-caption",
+    url: "/media/legacy-caption",
+    alt: { en: "Campaign preview", ar: "معاينة الحملة" },
+  }];
+  content.profile.portraitFocalPoint = {
+    desktop: { x: -40, y: 140 },
+    mobile: { x: 35, y: 62 },
+  };
+  const normalized = normalizeSiteContent(content);
+  assert.deepEqual(normalized.projects[0].images[0].caption, { en: "", ar: "" });
+  assert.deepEqual(normalized.profile.portraitFocalPoint.desktop, { x: 0, y: 100 });
+  assert.deepEqual(normalized.profile.portraitFocalPoint.mobile, { x: 35, y: 62 });
+});
+
+test("migrates project detail fields and stable slugs", () => {
+  const content = clone();
+  delete content.projects[0].slug;
+  delete content.projects[0].description;
+  delete content.projects[0].implementation;
+  const normalized = normalizeSiteContent(content);
+  assert.equal(normalized.projects[0].slug, content.projects[0].id);
+  assert.deepEqual(normalized.projects[0].description, content.projects[0].summary);
+  assert.deepEqual(normalized.projects[0].implementation, { en: "", ar: "" });
+});
+
+test("published project slugs must be valid and unique", () => {
+  const content = clone();
+  content.projects[1].slug = content.projects[0].slug;
+  assert.match(validateSiteContent(content), /unique/);
+  content.projects[1].slug = "!!!";
+  assert.match(validateSiteContent(content), /URL slug/);
+  content.projects[1].status = "draft";
+  assert.equal(validateSiteContent(content), null);
+});
+
+test("migrates the companies section and validates only visible logos", () => {
+  const legacy = clone();
+  delete legacy.companies;
+  const migrated = normalizeSiteContent(legacy);
+  assert.deepEqual(migrated.companies.items, []);
+  assert.equal(migrated.companies.heading.en, "Selected companies and teams");
+
+  const content = clone();
+  content.companies.items = [{
+    id: "client-one",
+    name: { en: "", ar: "" },
+    logoUrl: "",
+    alt: { en: "", ar: "" },
+    website: "",
+    showName: true,
+    visible: false,
+  }];
+  assert.equal(validateSiteContent(content), null);
+  content.companies.items[0].visible = true;
+  assert.match(validateSiteContent(content), /require a logo/);
+  content.companies.items[0].logoUrl = "/media/client-one";
+  assert.match(validateSiteContent(content), /alt text/);
+  content.companies.items[0].alt = { en: "Client one logo", ar: "شعار العميل الأول" };
+  assert.match(validateSiteContent(content), /English and Arabic names/);
+  content.companies.items[0].showName = false;
+  assert.equal(validateSiteContent(content), null);
 });

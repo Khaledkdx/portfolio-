@@ -27,6 +27,7 @@ export async function DELETE(_request: Request, { params }: RouteContext) {
   const usages: string[] = [];
   if (content.profile.portrait === url) usages.push("Profile portrait");
   for (const project of content.projects) if (project.images.some((image) => image.url === url)) usages.push(project.title.en || project.id);
+  for (const company of content.companies.items) if (company.logoUrl === url) usages.push(company.name.en || "Company logo");
   if (usages.length) return NextResponse.json({ error: "Media is still in use", usages }, { status: 409 });
   if (!(await deleteMediaAsset(id))) return NextResponse.json({ error: "Media not found" }, { status: 404 });
   return NextResponse.json({ ok: true });

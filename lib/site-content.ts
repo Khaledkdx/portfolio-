@@ -24,6 +24,12 @@ export type ProjectImage = {
   id: string;
   url: string;
   alt: LocalizedText;
+  caption: LocalizedText;
+};
+
+export type PortraitFocalPoint = {
+  desktop: { x: number; y: number };
+  mobile: { x: number; y: number };
 };
 
 export type ProjectLink = {
@@ -32,15 +38,28 @@ export type ProjectLink = {
   url: string;
 };
 
+export type CompanyLogo = {
+  id: string;
+  name: LocalizedText;
+  logoUrl: string;
+  alt: LocalizedText;
+  website: string;
+  showName: boolean;
+  visible: boolean;
+};
+
 export type Project = {
   id: string;
+  slug: string;
   status: "published" | "draft" | "archived";
   order: number;
   title: LocalizedText;
   eyebrow: LocalizedText;
   summary: LocalizedText;
+  description: LocalizedText;
   challenge: LocalizedText;
   solution: LocalizedText;
+  implementation: LocalizedText;
   outcome: LocalizedText;
   tools: string[];
   metrics: Array<{ label: LocalizedText; value: string }>;
@@ -63,6 +82,7 @@ export type SiteContent = {
     whatsapp: string;
     linkedin: string;
     portrait: string;
+    portraitFocalPoint: PortraitFocalPoint;
   };
   labels: Record<string, LocalizedText>;
   approach: Array<{
@@ -73,6 +93,10 @@ export type SiteContent = {
   services: Service[];
   skills: string[];
   experiences: Experience[];
+  companies: {
+    heading: LocalizedText;
+    items: CompanyLogo[];
+  };
   projects: Project[];
 };
 
@@ -87,6 +111,28 @@ export const DESIGN_SLUGS = [
   "momentum",
   "studio-ledger",
   "control-room",
+  "arabic-geometry",
+  "spatial-orbit",
+  "modular-cubes",
+  "future-signal",
+  "swiss-grid",
+  "analog-scrapbook",
+  "art-deco",
+  "zen-strategy",
+  "retro-computer",
+  "organic-lab",
+  "museum-walk",
+  "growth-transit",
+  "campaign-comics",
+  "folded-mail",
+  "contact-sheet",
+  "gtm-gameboard",
+  "whiteboard-workshop",
+  "broadcast-studio",
+  "type-tunnel",
+  "tactile-clay",
+  "rain-credential",
+  "stagger-proof",
 ] as const;
 
 export type DesignSlug = (typeof DESIGN_SLUGS)[number];
@@ -102,6 +148,28 @@ export const DESIGN_NAMES: Record<DesignSlug, string> = {
   momentum: "Motion-first Creator Reel",
   "studio-ledger": "Human-Centered Growth Stories",
   "control-room": "Neo-Brutalist Pitch Deck",
+  "arabic-geometry": "Arabic Geometry",
+  "spatial-orbit": "Spatial 3D Orbit",
+  "modular-cubes": "Modular Cubes",
+  "future-signal": "Future Signal 2040",
+  "swiss-grid": "Swiss Grid System",
+  "analog-scrapbook": "Analog Scrapbook",
+  "art-deco": "Art Deco Executive",
+  "zen-strategy": "Zen Strategy",
+  "retro-computer": "Retro Growth Computer",
+  "organic-lab": "Organic Growth Lab",
+  "museum-walk": "Museum Walk",
+  "growth-transit": "Growth Transit",
+  "campaign-comics": "Campaign Comics",
+  "folded-mail": "Folded Direct Mail",
+  "contact-sheet": "Contact Sheet Studio",
+  "gtm-gameboard": "GTM Gameboard",
+  "whiteboard-workshop": "Whiteboard Workshop",
+  "broadcast-studio": "Broadcast Studio",
+  "type-tunnel": "Type Tunnel",
+  "tactile-clay": "Tactile Clay Lab",
+  "rain-credential": "Rain Credential",
+  "stagger-proof": "Stagger Proof Studio",
 };
 
 const t = (en: string, ar: string): LocalizedText => ({ en, ar });
@@ -130,6 +198,10 @@ export const DEFAULT_CONTENT: SiteContent = {
     whatsapp: "971506797854",
     linkedin: "",
     portrait: "/khalid-portrait.jpg",
+    portraitFocalPoint: {
+      desktop: { x: 50, y: 32 },
+      mobile: { x: 50, y: 30 },
+    },
   },
   labels: {
     work: t("Selected work", "أعمال مختارة"),
@@ -272,9 +344,17 @@ export const DEFAULT_CONTENT: SiteContent = {
       ),
     },
   ],
+  companies: {
+    heading: t(
+      "Selected companies and teams",
+      "شركات وفرق عمل مختارة",
+    ),
+    items: [],
+  },
   projects: [
     {
       id: "real-estate-agent",
+      slug: "real-estate-agent",
       status: "published",
       order: 1,
       eyebrow: t("AI + REAL ESTATE OPERATIONS", "AI + عمليات العقارات"),
@@ -286,6 +366,10 @@ export const DEFAULT_CONTENT: SiteContent = {
         "AI agents designed around the way sales and management teams actually work.",
         "وكلاء ذكاء اصطناعي مصممون حول طريقة عمل فرق المبيعات والإدارة فعليًا.",
       ),
+      description: t(
+        "A practical operating system for real-estate teams that brings business knowledge, lead handling and day-to-day follow-up into one multilingual workflow.",
+        "نظام تشغيل عملي لفرق العقارات يجمع معرفة الشركة ومعالجة العملاء والمتابعة اليومية داخل مسار عمل واحد متعدد اللغات.",
+      ),
       challenge: t(
         "Information and follow-up were spread across documents, messaging channels and different levels of team access.",
         "كانت المعلومات والمتابعة موزعة بين المستندات وقنوات الرسائل ومستويات وصول مختلفة داخل الفريق.",
@@ -293,6 +377,10 @@ export const DEFAULT_CONTENT: SiteContent = {
       solution: t(
         "Built GPT-based agents with RAG, vector search and n8n workflows for lead qualification, summaries, CRM updates and WhatsApp/Telegram messaging.",
         "بنيت وكلاء يعتمدون على GPT وRAG والبحث المتجهي مع مسارات n8n لتأهيل العملاء والتلخيص وتحديث CRM والمراسلة عبر واتساب وتيليجرام.",
+      ),
+      implementation: t(
+        "Mapped team roles and information sources, structured the knowledge base, then connected qualification, summaries, CRM updates and messaging through controlled automation flows.",
+        "حددت أدوار الفريق ومصادر المعلومات، ونظمت قاعدة المعرفة، ثم ربطت التأهيل والتلخيص وتحديث CRM والمراسلات عبر مسارات أتمتة محكومة.",
       ),
       outcome: t(
         "A clearer route from business knowledge to fast, role-appropriate action for sales and leadership.",
@@ -313,6 +401,7 @@ export const DEFAULT_CONTENT: SiteContent = {
     },
     {
       id: "performance-marketing",
+      slug: "performance-marketing",
       status: "published",
       order: 2,
       eyebrow: t("PAID MEDIA + MARKET RESEARCH", "إعلانات مدفوعة + بحث سوق"),
@@ -324,6 +413,10 @@ export const DEFAULT_CONTENT: SiteContent = {
         "Performance marketing work across UAE and KSA brands, from audience research to ongoing optimization.",
         "عمل تسويقي قائم على الأداء لعلامات في الإمارات والسعودية، من دراسة الجمهور إلى التحسين المستمر.",
       ),
+      description: t(
+        "A repeatable campaign workflow connecting market research, media planning, creative direction and ongoing optimization for brands in the UAE and Saudi Arabia.",
+        "مسار حملات قابل للتكرار يربط بحث السوق وتخطيط الوسائط والتوجيه الإبداعي والتحسين المستمر لعلامات في الإمارات والسعودية.",
+      ),
       challenge: t(
         "Different brands needed channel choices, messaging and budgets that matched their actual audience and commercial context.",
         "احتاجت العلامات المختلفة إلى قنوات ورسائل وميزانيات تناسب جمهورها وسياقها التجاري الفعلي.",
@@ -331,6 +424,10 @@ export const DEFAULT_CONTENT: SiteContent = {
       solution: t(
         "Combined competitor analysis, media planning and KPI-led optimization across Google, Meta, TikTok and Snapchat.",
         "جمعت بين تحليل المنافسين وتخطيط الوسائط والتحسين وفق مؤشرات الأداء عبر Google وMeta وTikTok وSnapchat.",
+      ),
+      implementation: t(
+        "Built audience and competitor views, selected channels around the commercial objective, organized campaign structures and reviewed performance against the agreed KPIs.",
+        "بنيت تصورًا للجمهور والمنافسين، واخترت القنوات وفق الهدف التجاري، ونظمت هيكل الحملات وراجعت الأداء مقابل مؤشرات الأداء المتفق عليها.",
       ),
       outcome: t(
         "More disciplined media decisions and a repeatable process for learning from campaign performance.",
@@ -343,6 +440,7 @@ export const DEFAULT_CONTENT: SiteContent = {
     },
     {
       id: "creative-operations",
+      slug: "creative-operations",
       status: "published",
       order: 3,
       eyebrow: t("CONTENT + CREATIVE OPERATIONS", "محتوى + عمليات إبداعية"),
@@ -354,6 +452,10 @@ export const DEFAULT_CONTENT: SiteContent = {
         "Strategy, copy, design and video production connected through an organized media workflow.",
         "استراتيجية وكتابة وتصميم وإنتاج فيديو مرتبطة بمسار منظم لإدارة المواد الإعلامية.",
       ),
+      description: t(
+        "A connected content operation covering strategy, copy, design, video and reusable asset management instead of isolated campaign files.",
+        "عملية محتوى مترابطة تشمل الاستراتيجية والكتابة والتصميم والفيديو وإدارة الأصول القابلة لإعادة الاستخدام بدلًا من ملفات حملات منفصلة.",
+      ),
       challenge: t(
         "Fast campaign production can create inconsistent assets, lost files and unnecessary work between marketing and sales.",
         "قد يؤدي الإنتاج السريع للحملات إلى مواد غير متسقة وملفات مفقودة وعمل متكرر بين التسويق والمبيعات.",
@@ -361,6 +463,10 @@ export const DEFAULT_CONTENT: SiteContent = {
       solution: t(
         "Created campaign assets and video while organizing reusable libraries for faster content deployment across channels.",
         "أنشأت مواد الحملات والفيديو ونظمت مكتبات قابلة لإعادة الاستخدام لتسريع نشر المحتوى عبر القنوات.",
+      ),
+      implementation: t(
+        "Established reusable templates, naming and storage conventions, production checkpoints and a clearer handoff between creative, marketing and sales.",
+        "أنشأت قوالب قابلة لإعادة الاستخدام وقواعد للتسمية والتخزين ونقاط مراجعة للإنتاج وتسليمًا أوضح بين الإبداع والتسويق والمبيعات.",
       ),
       outcome: t(
         "A more consistent brand output and a simpler handoff between creative, marketing and sales teams.",
@@ -380,6 +486,7 @@ export const DEFAULT_CONTENT: SiteContent = {
     },
     {
       id: "product-technology",
+      slug: "product-technology",
       status: "published",
       order: 4,
       eyebrow: t(
@@ -394,6 +501,10 @@ export const DEFAULT_CONTENT: SiteContent = {
         "Cross-platform application development backed by practical technical support and clean integrations.",
         "تطوير تطبيقات متعددة المنصات مدعوم بدعم تقني عملي وتكاملات منظمة.",
       ),
+      description: t(
+        "Cross-platform product delivery shaped around real operational needs, reliable integrations and a maintainable user experience.",
+        "تنفيذ منتجات متعددة المنصات مصمم حول احتياجات تشغيلية حقيقية وتكاملات موثوقة وتجربة استخدام قابلة للصيانة.",
+      ),
       challenge: t(
         "Digital products need to work reliably across devices while connecting cleanly to backend services and real workflows.",
         "يجب أن تعمل المنتجات الرقمية بثبات عبر الأجهزة وأن تتصل بوضوح بالخدمات الخلفية ومسارات العمل الحقيقية.",
@@ -401,6 +512,10 @@ export const DEFAULT_CONTENT: SiteContent = {
       solution: t(
         "Developed responsive Flutter applications, integrated REST APIs and applied structured state management and testing practices.",
         "طورت تطبيقات Flutter متجاوبة وربطت REST APIs وطبقت إدارة حالة منظمة وممارسات اختبار مناسبة.",
+      ),
+      implementation: t(
+        "Translated workflows into responsive screens, connected REST services, structured application state and tested the paths most important to users and operations.",
+        "حولت مسارات العمل إلى شاشات متجاوبة، وربطت خدمات REST، ونظمت حالة التطبيق، واختبرت المسارات الأكثر أهمية للمستخدمين والعمليات.",
       ),
       outcome: t(
         "Technical execution grounded in usability, maintainability and the business process behind the product.",
@@ -428,13 +543,18 @@ export function isDesignSlug(value: string): value is DesignSlug {
 
 export function projectImages(project: Project): ProjectImage[] {
   if (Array.isArray(project.images) && project.images.length > 0)
-    return project.images;
+    return project.images.map((image) => ({
+      ...image,
+      alt: image.alt ?? { en: "", ar: "" },
+      caption: image.caption ?? { en: "", ar: "" },
+    }));
   if (!project.image) return [];
   return [
     {
       id: `legacy-image-${project.id}`,
       url: project.image,
       alt: { ...project.title },
+      caption: { en: "", ar: "" },
     },
   ];
 }
@@ -455,9 +575,40 @@ export function projectLinks(project: Project): ProjectLink[] {
 export function normalizeSiteContent(content: SiteContent): SiteContent {
   return {
     ...content,
+    profile: {
+      ...content.profile,
+      portraitFocalPoint: {
+        desktop: {
+          x: clampFocalPoint(content.profile?.portraitFocalPoint?.desktop?.x, 50),
+          y: clampFocalPoint(content.profile?.portraitFocalPoint?.desktop?.y, 32),
+        },
+        mobile: {
+          x: clampFocalPoint(content.profile?.portraitFocalPoint?.mobile?.x, 50),
+          y: clampFocalPoint(content.profile?.portraitFocalPoint?.mobile?.y, 30),
+        },
+      },
+    },
+    companies: {
+      heading: content.companies?.heading ?? {
+        en: "Selected companies and teams",
+        ar: "شركات وفرق عمل مختارة",
+      },
+      items: (content.companies?.items ?? []).map((company) => ({
+        ...company,
+        name: company.name ?? { en: "", ar: "" },
+        logoUrl: company.logoUrl ?? "",
+        alt: company.alt ?? { en: "", ar: "" },
+        website: company.website ?? "",
+        showName: company.showName ?? true,
+        visible: company.visible ?? true,
+      })),
+    },
     projects: (content.projects ?? []).map((project) => {
       const normalized: Project = {
         ...project,
+        slug: normalizeProjectSlug(project.slug || project.id),
+        description: project.description ?? project.summary ?? { en: "", ar: "" },
+        implementation: project.implementation ?? { en: "", ar: "" },
         tools: Array.isArray(project.tools) ? project.tools : [],
         metrics: Array.isArray(project.metrics) ? project.metrics : [],
         images: projectImages(project),
@@ -468,6 +619,26 @@ export function normalizeSiteContent(content: SiteContent): SiteContent {
       return normalized;
     }),
   };
+}
+
+function clampFocalPoint(value: number | undefined, fallback: number): number {
+  if (!Number.isFinite(value)) return fallback;
+  return Math.min(100, Math.max(0, Number(value)));
+}
+
+export function normalizeProjectSlug(value: string): string {
+  return value
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 80);
+}
+
+export function projectBySlug(content: SiteContent, slug: string): Project | null {
+  return content.projects.find(
+    (project) => project.status === "published" && project.slug === slug,
+  ) ?? null;
 }
 
 export function isHttpUrl(value: string): boolean {
@@ -481,6 +652,7 @@ export function isHttpUrl(value: string): boolean {
 
 export function validateSiteContent(input: SiteContent): string | null {
   const content = normalizeSiteContent(input);
+  const publishedSlugs = new Set<string>();
   if (
     !content.profile?.headline?.en?.trim() ||
     !content.profile?.headline?.ar?.trim() ||
@@ -493,6 +665,15 @@ export function validateSiteContent(input: SiteContent): string | null {
   if (content.profile.linkedin && !isHttpUrl(content.profile.linkedin)) return "LinkedIn must use a valid http or https URL.";
   if (!content.profile.role.en.trim() || !content.profile.role.ar.trim() || !content.profile.intro.en.trim() || !content.profile.intro.ar.trim()) return "The public profile requires English and Arabic content.";
   if (Object.values(content.labels).some((label) => !label.en.trim() || !label.ar.trim())) return "Section labels require English and Arabic text.";
+  if (!content.companies.heading.en.trim() || !content.companies.heading.ar.trim()) return "The companies section requires an English and Arabic heading.";
+  if (content.companies.items.length > 30) return "The companies section can contain up to 30 entries.";
+  for (const company of content.companies.items) {
+    if (!company.visible) continue;
+    if (!company.logoUrl.trim()) return "Visible companies require a logo.";
+    if (!company.alt.en.trim() || !company.alt.ar.trim()) return "Visible company logos require English and Arabic alt text.";
+    if (company.showName && (!company.name.en.trim() || !company.name.ar.trim())) return "Companies showing a name require English and Arabic names.";
+    if (company.website && !isHttpUrl(company.website)) return "Company websites must use a valid http or https URL.";
+  }
   if (content.approach.some((item) => !item.title.en.trim() || !item.title.ar.trim() || !item.description.en.trim() || !item.description.ar.trim())) return "Approach items require English and Arabic content.";
   if (content.services.some((item) => !item.title.en.trim() || !item.title.ar.trim() || !item.description.en.trim() || !item.description.ar.trim())) return "Services require English and Arabic content.";
   if (content.experiences.some((item) => !item.company.trim() || !item.role.en.trim() || !item.role.ar.trim() || !item.summary.en.trim() || !item.summary.ar.trim())) return "Experience items require a company and bilingual content.";
@@ -501,10 +682,28 @@ export function validateSiteContent(input: SiteContent): string | null {
       return "A project can contain up to 6 images.";
     if (project.links.length > 3) return "A project can contain up to 3 links.";
     if (project.status !== "published") continue;
+    if (!project.slug || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(project.slug))
+      return "Published projects require a URL slug using lowercase letters, numbers and hyphens.";
+    if (publishedSlugs.has(project.slug))
+      return "Published project URL slugs must be unique.";
+    publishedSlugs.add(project.slug);
     if (project.links.some((link) => !isHttpUrl(link.url)))
       return "Project links must use a valid http or https URL.";
     if (!project.title.en.trim() || !project.title.ar.trim())
       return "Published projects require English and Arabic titles.";
+    if (
+      !project.summary.en.trim() ||
+      !project.summary.ar.trim() ||
+      !project.description.en.trim() ||
+      !project.description.ar.trim() ||
+      !project.challenge.en.trim() ||
+      !project.challenge.ar.trim() ||
+      !project.solution.en.trim() ||
+      !project.solution.ar.trim() ||
+      !project.outcome.en.trim() ||
+      !project.outcome.ar.trim()
+    )
+      return "Published projects require bilingual summary, description, challenge, solution and business value.";
     if (
       project.images.some(
         (image) => !image.url || !image.alt.en.trim() || !image.alt.ar.trim(),

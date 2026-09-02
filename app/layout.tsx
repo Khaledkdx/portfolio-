@@ -16,9 +16,11 @@ import {
   Noto_Sans_Arabic,
   Sora,
   Tajawal,
-  Unbounded,
-} from "next/font/google";
+  Unbounded, Geist } from "next/font/google";
 import "./globals.css";
+import { cn } from "@/lib/utils";
+
+const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 const instrument = Instrument_Sans({ variable: "--font-instrument", subsets: ["latin"] });
 const newsreader = Newsreader({ variable: "--font-newsreader", subsets: ["latin"] });
@@ -45,7 +47,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={cn("font-sans", geist.variable)}>
       <body className={`${instrument.variable} ${newsreader.variable} ${jetbrains.variable} ${arabic.variable} ${archivo.variable} ${changa.variable} ${cormorant.variable} ${tajawal.variable} ${sora.variable} ${kufi.variable} ${marcellus.variable} ${alexandria.variable} ${barlow.variable} ${cairo.variable} ${fraunces.variable} ${notoArabic.variable} ${unbounded.variable}`}>
         {children}
       </body>

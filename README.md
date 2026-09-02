@@ -1,6 +1,6 @@
 # Khalid — Business Growth & Automation
 
-Independent bilingual portfolio and CMS for Khalid Mohamad. It includes ten
+Independent bilingual portfolio and CMS for Khalid Mohamad. It includes thirty-two
 complete visual directions, English and Arabic layouts, persistent content in
 Cloudflare D1, image uploads in R2, and a password-protected admin workspace.
 
@@ -9,7 +9,11 @@ stored on GitHub and deployed directly to Cloudflare Workers.
 
 ## What is included
 
-- Public routes: `/en`, `/ar`, and design previews `/1` through `/10`.
+- Public routes: `/en`, `/ar`, and design previews `/1` through `/32`.
+- Thirty-two independent landing pages and matching project-detail layouts.
+- Bilingual alt text and optional captions for every project image.
+- Desktop and mobile portrait focal-point controls in the admin workspace.
+- Published case studies: `/:locale/projects/:slug`, with matching numbered-design previews.
 - Admin workspace: `/admin`.
 - Content, projects, galleries, links, metrics, and active design stored in D1.
 - Media files stored in R2.

@@ -1,9 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
+import { PortraitImage } from "@/app/_components/PortraitImage";
 import { DESIGN_NAMES, pick } from "@/lib/site-content";
 import {
   languageHref,
   n,
+  projectHref,
   projectImages,
   projectLinks,
   publishedProjects,
@@ -58,14 +60,7 @@ export default function Pitch(props: DesignProps) {
           </a>
         </div>
         <div className={s.cutout}>
-          <Image
-            src={content.profile.portrait}
-            alt={content.profile.name}
-            width={900}
-            height={1200}
-            priority
-            unoptimized
-          />
+          <PortraitImage content={content} fill={false} sizes="(max-width: 760px) 100vw, 24vw" priority />
           <b>
             GROW
             <br />
@@ -152,7 +147,7 @@ export default function Pitch(props: DesignProps) {
                 </div>
                 <div className={s.caseCopy}>
                   <p>{pick(project.eyebrow, locale)}</p>
-                  <h3>{pick(project.title, locale)}</h3>
+                  <Link href={projectHref(project, props)}><h3>{pick(project.title, locale)}</h3></Link>
                   <p>{pick(project.summary, locale)}</p>
                   <ProjectMetrics project={project} locale={locale} />
                   {links.length > 0 && (

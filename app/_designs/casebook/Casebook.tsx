@@ -1,9 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
+import { PortraitImage } from "@/app/_components/PortraitImage";
 import { DESIGN_NAMES, pick } from "@/lib/site-content";
 import {
   languageHref,
   n,
+  projectHref,
   projectImages,
   projectLinks,
   publishedProjects,
@@ -52,14 +54,7 @@ export default function Casebook(props: DesignProps) {
           <p>{pick(content.profile.intro, locale)}</p>
         </div>
         <figure>
-          <Image
-            src={content.profile.portrait}
-            alt={content.profile.name}
-            width={900}
-            height={1200}
-            priority
-            unoptimized
-          />
+          <PortraitImage content={content} fill={false} sizes="(max-width: 760px) 100vw, 38vw" priority />
           <figcaption>
             Portrait of an operator working across growth, marketing and
             systems.
@@ -107,7 +102,7 @@ export default function Casebook(props: DesignProps) {
               <div className={s.caseHead}>
                 <span>CASE {n(i)}</span>
                 <p>{pick(project.eyebrow, locale)}</p>
-                <h3>{pick(project.title, locale)}</h3>
+                <Link href={projectHref(project, props)}><h3>{pick(project.title, locale)}</h3></Link>
                 <blockquote>“{pick(project.summary, locale)}”</blockquote>
                 <ProjectMetrics project={project} locale={locale} />
                 {links.length > 0 && (

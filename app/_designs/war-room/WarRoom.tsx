@@ -1,9 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
+import { PortraitImage } from "@/app/_components/PortraitImage";
 import { DESIGN_NAMES, pick } from "@/lib/site-content";
 import {
   languageHref,
   n,
+  projectHref,
   projectImages,
   projectLinks,
   publishedProjects,
@@ -50,14 +52,7 @@ export default function WarRoom(props: DesignProps) {
         </section>
         <aside className={s.operator}>
           <div className={s.scan}>
-            <Image
-              src={content.profile.portrait}
-              alt={content.profile.name}
-              width={900}
-              height={1200}
-              priority
-              unoptimized
-            />
+            <PortraitImage content={content} fill={false} sizes="(max-width: 760px) 100vw, 30vw" priority />
             <i />
           </div>
           <p>
@@ -128,6 +123,7 @@ export default function WarRoom(props: DesignProps) {
                   <i>OPEN +</i>
                 </summary>
                 <section>
+                  <Link href={projectHref(project, props)} style={{ display: "inline-block", color: "#c8ff41", marginBottom: 18 }}>OPEN FULL DOSSIER ↗</Link>
                   <div className={s.monitor}>
                     <div className={s.monitorBar}>
                       <span>CAM_FEED_{n(i)}</span>

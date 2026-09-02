@@ -1,9 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
+import { PortraitImage } from "@/app/_components/PortraitImage";
 import { DESIGN_NAMES, pick } from "@/lib/site-content";
 import {
   languageHref,
   n,
+  projectHref,
   projectImages,
   projectLinks,
   publishedProjects,
@@ -45,14 +47,7 @@ export default function Reel(props: DesignProps) {
           <span>AUTOMATION</span>
         </div>
         <div className={s.heroPhoto}>
-          <Image
-            src={content.profile.portrait}
-            alt={content.profile.name}
-            width={900}
-            height={1200}
-            priority
-            unoptimized
-          />
+          <PortraitImage content={content} fill={false} sizes="(max-width: 760px) 100vw, 36vw" priority />
         </div>
         <div className={s.heroCopy}>
           <p>{pick(content.profile.role, locale)}</p>
@@ -108,7 +103,7 @@ export default function Reel(props: DesignProps) {
                 </div>
                 <div>
                   <p>{pick(project.eyebrow, locale)}</p>
-                  <h3>{pick(project.title, locale)}</h3>
+                  <Link href={projectHref(project, props)}><h3>{pick(project.title, locale)}</h3></Link>
                   <p>{pick(project.summary, locale)}</p>
                   <ProjectMetrics project={project} locale={locale} />
                   {links.map((link) => (

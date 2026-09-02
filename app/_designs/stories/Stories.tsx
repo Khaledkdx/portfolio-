@@ -1,9 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
+import { PortraitImage } from "@/app/_components/PortraitImage";
 import { DESIGN_NAMES, pick } from "@/lib/site-content";
 import {
   languageHref,
   n,
+  projectHref,
   projectImages,
   projectLinks,
   publishedProjects,
@@ -54,14 +56,7 @@ export default function Stories(props: DesignProps) {
         </div>
         <figure>
           <div>
-            <Image
-              src={content.profile.portrait}
-              alt={content.profile.name}
-              width={900}
-              height={1200}
-              priority
-              unoptimized
-            />
+            <PortraitImage content={content} fill={false} sizes="(max-width: 760px) 100vw, 34vw" priority />
           </div>
           <figcaption>{pick(content.profile.role, locale)}</figcaption>
         </figure>
@@ -116,7 +111,7 @@ export default function Stories(props: DesignProps) {
                   />
                 )}
                 <p>{pick(project.eyebrow, locale)}</p>
-                <h3>{pick(project.title, locale)}</h3>
+                <Link href={projectHref(project, props)}><h3>{pick(project.title, locale)}</h3></Link>
                 <blockquote>{pick(project.summary, locale)}</blockquote>
                 <ProjectMetrics project={project} locale={locale} />
                 <div className={s.chapters}>

@@ -7,7 +7,9 @@ import type { MediaAsset } from "@/lib/data";
 import {
   DESIGN_NAMES,
   DESIGN_SLUGS,
+  normalizeProjectSlug,
   normalizeSiteContent,
+  type CompanyLogo,
   type DesignSlug,
   type Experience,
   type Locale,
@@ -22,6 +24,7 @@ type Tab =
   | "overview"
   | "designs"
   | "projects"
+  | "companies"
   | "services"
   | "experience"
   | "media";
@@ -72,6 +75,28 @@ const designMeta: Record<
     sector: { en: "Startup & Agency", ar: "ستارت أب ووكالات" },
     colors: ["#FFFFFF", "#000000", "#FFD600", "#3455FF"],
   },
+  "arabic-geometry": { sector: { en: "Arabic Contemporary", ar: "عربي معاصر" }, colors: ["#F3E7CF", "#153B32", "#1B3A6F", "#C98B2E"] },
+  "spatial-orbit": { sector: { en: "Immersive 3D", ar: "تجربة ثلاثية الأبعاد" }, colors: ["#090B10", "#E8ECF3", "#49E0FF", "#FF754A"] },
+  "modular-cubes": { sector: { en: "Modular Systems", ar: "أنظمة ومكعبات" }, colors: ["#F5F1E8", "#111111", "#FF6B00", "#2D5BFF"] },
+  "future-signal": { sector: { en: "Future Interface", ar: "واجهة مستقبلية" }, colors: ["#03070C", "#00F0C8", "#DAFF3E", "#F54B64"] },
+  "swiss-grid": { sector: { en: "International Style", ar: "نظام سويسري" }, colors: ["#F7F5EF", "#101010", "#E31B23", "#1B57D7"] },
+  "analog-scrapbook": { sector: { en: "Human Creative", ar: "سكراب بوك إبداعي" }, colors: ["#F3E5CF", "#312720", "#D4553D", "#56765A"] },
+  "art-deco": { sector: { en: "Luxury Executive", ar: "آرت ديكو فاخر" }, colors: ["#0E1A1F", "#E5C07B", "#F6EEDC", "#8F2636"] },
+  "zen-strategy": { sector: { en: "Calm Consulting", ar: "استشارات هادئة" }, colors: ["#F4F1E8", "#22211E", "#8DAD8A", "#C95A46"] },
+  "retro-computer": { sector: { en: "Retro Technology", ar: "كمبيوتر كلاسيكي" }, colors: ["#06110B", "#7CFF6B", "#F1B84B", "#D9E0D8"] },
+  "organic-lab": { sector: { en: "Organic Systems", ar: "أنظمة عضوية" }, colors: ["#EEF3E6", "#173D2C", "#88A96B", "#DB715D"] },
+  "museum-walk": { sector: { en: "Curated Portfolio", ar: "معرض أعمال منسق" }, colors: ["#F4F1EA", "#20201E", "#9D2D24", "#B8A88A"] },
+  "growth-transit": { sector: { en: "Operations & Networks", ar: "عمليات وشبكات نمو" }, colors: ["#F5F2E9", "#153B5B", "#F05A35", "#1A8C72"] },
+  "campaign-comics": { sector: { en: "Campaign Storytelling", ar: "سرد الحملات" }, colors: ["#FFF7D6", "#151515", "#FF4F45", "#2B6BFF"] },
+  "folded-mail": { sector: { en: "CRM & Lifecycle", ar: "CRM ورحلة العميل" }, colors: ["#EDE6D5", "#24362B", "#D36245", "#6E83A4"] },
+  "contact-sheet": { sector: { en: "Content Production", ar: "إنتاج المحتوى" }, colors: ["#101010", "#F4F0E8", "#E2482D", "#99958C"] },
+  "gtm-gameboard": { sector: { en: "Go-to-market", ar: "استراتيجية دخول السوق" }, colors: ["#F7EDC7", "#172D3D", "#F04E30", "#57A773"] },
+  "whiteboard-workshop": { sector: { en: "SME Workshops", ar: "ورش واستشارات" }, colors: ["#F7F7F2", "#20252B", "#3478F6", "#FFCD38"] },
+  "broadcast-studio": { sector: { en: "Broadcast & Social", ar: "بث ومحتوى اجتماعي" }, colors: ["#16121F", "#F7F2E8", "#FF334F", "#29D3C2"] },
+  "type-tunnel": { sector: { en: "Experimental Type", ar: "طباعة تجريبية" }, colors: ["#080808", "#F1EEE6", "#F04432", "#777777"] },
+  "tactile-clay": { sector: { en: "Service Design", ar: "تصميم الخدمات" }, colors: ["#F2E8DF", "#4C3E49", "#ED7B61", "#91B7A3"] },
+  "rain-credential": { sector: { en: "Immersive Personal Brand", ar: "هوية شخصية غامرة" }, colors: ["#05090D", "#C8F4FF", "#4FC3F7", "#E8EEF2"] },
+  "stagger-proof": { sector: { en: "Proof-led Marketing", ar: "تسويق قائم على الإثبات" }, colors: ["#FDF2F8", "#831843", "#0891B2", "#F9A8D4"] },
 };
 
 const copy = {
@@ -80,6 +105,7 @@ const copy = {
       overview: "Profile & content",
       designs: "Designs",
       projects: "Case studies",
+      companies: "Companies & logos",
       services: "Services & skills",
       experience: "Experience",
       media: "Media library",
@@ -107,6 +133,12 @@ const copy = {
     linkedin: "LinkedIn URL · optional",
     portrait: "Portrait",
     profileImage: "Profile image",
+    focalPoint: "Portrait focal point",
+    focalHelp: "Move the focus separately for desktop and mobile crops.",
+    desktopCrop: "Desktop crop",
+    mobileCrop: "Mobile crop",
+    horizontal: "Horizontal",
+    vertical: "Vertical",
     replace: "Upload replacement",
     uploading: "Uploading…",
     labels: "Section labels & calls to action",
@@ -119,9 +151,14 @@ const copy = {
     eyebrow: "Eyebrow",
     title: "Title",
     summary: "Summary",
+    slug: "Project URL slug",
+    slugHelp: "Lowercase letters, numbers and hyphens only.",
+    fullDescription: "Full description",
     challenge: "Challenge",
     response: "Response",
+    implementation: "Implementation",
     value: "Business value",
+    openProject: "Open project ↗",
     tools: "Tools · comma separated",
     order: "Display order",
     gallery: "Project gallery",
@@ -134,6 +171,7 @@ const copy = {
     moveUp: "Move up",
     moveDown: "Move down",
     alt: "Image alt text",
+    caption: "Visible image caption",
     library: "Choose from media library",
     add: "Add",
     links: "Project links",
@@ -149,6 +187,19 @@ const copy = {
     metricName: "Metric label",
     metricValue: "Verified value",
     noMetrics: "No verified metrics yet.",
+    companies: "Companies & client logos",
+    companiesIntro: "Control the companies shown in the logo rail. Each item can show its logo alone or the logo beside its name.",
+    companiesHeading: "Public section heading",
+    addCompany: "＋ Add company",
+    companyName: "Company name",
+    companyLogo: "Company logo",
+    companyAlt: "Logo alt text",
+    companyWebsite: "Company website · optional",
+    chooseLogo: "Choose a logo from the media library",
+    uploadLogo: "Upload logo",
+    showCompanyName: "Show the company name beside the logo",
+    showCompany: "Show this company publicly",
+    noCompanies: "No companies added yet. Add one, choose its logo, then make it visible.",
     services: "Services",
     bring: "What you bring",
     addService: "＋ Add service",
@@ -202,6 +253,7 @@ const copy = {
       overview: "الملف والمحتوى",
       designs: "التصاميم",
       projects: "دراسات الحالة",
+      companies: "الشركات والشعارات",
       services: "الخدمات والمهارات",
       experience: "الخبرات",
       media: "مكتبة الوسائط",
@@ -229,6 +281,12 @@ const copy = {
     linkedin: "رابط LinkedIn · اختياري",
     portrait: "الصورة الشخصية",
     profileImage: "صورة الملف",
+    focalPoint: "نقطة تركيز الصورة",
+    focalHelp: "اضبط موضع التركيز بشكل منفصل لقص سطح المكتب والموبايل.",
+    desktopCrop: "قص سطح المكتب",
+    mobileCrop: "قص الموبايل",
+    horizontal: "أفقي",
+    vertical: "رأسي",
     replace: "رفع صورة بديلة",
     uploading: "جارٍ الرفع…",
     labels: "عناوين الأقسام والدعوات",
@@ -241,9 +299,14 @@ const copy = {
     eyebrow: "العنوان العلوي",
     title: "العنوان",
     summary: "الملخص",
+    slug: "رابط المشروع",
+    slugHelp: "حروف إنجليزية صغيرة وأرقام وشرطة فقط.",
+    fullDescription: "الوصف الكامل",
     challenge: "التحدي",
     response: "الحل",
+    implementation: "تفاصيل التنفيذ",
     value: "القيمة للأعمال",
+    openProject: "فتح المشروع ↗",
     tools: "الأدوات · افصل بفاصلة",
     order: "ترتيب العرض",
     gallery: "معرض المشروع",
@@ -256,6 +319,7 @@ const copy = {
     moveUp: "تحريك لأعلى",
     moveDown: "تحريك لأسفل",
     alt: "النص البديل للصورة",
+    caption: "شرح الصورة الظاهر",
     library: "اختيار من مكتبة الوسائط",
     add: "إضافة",
     links: "روابط المشروع",
@@ -271,6 +335,19 @@ const copy = {
     metricName: "اسم المؤشر",
     metricValue: "القيمة الموثقة",
     noMetrics: "لا توجد مؤشرات موثقة بعد.",
+    companies: "الشركات وشعارات العملاء",
+    companiesIntro: "تحكم في الشركات الظاهرة داخل شريط الشعارات. يمكن عرض اللوجو فقط أو اللوجو بجانب اسم الشركة.",
+    companiesHeading: "عنوان القسم في الموقع",
+    addCompany: "＋ إضافة شركة",
+    companyName: "اسم الشركة",
+    companyLogo: "لوجو الشركة",
+    companyAlt: "النص البديل للوجو",
+    companyWebsite: "موقع الشركة · اختياري",
+    chooseLogo: "اختيار لوجو من مكتبة الوسائط",
+    uploadLogo: "رفع لوجو",
+    showCompanyName: "إظهار اسم الشركة بجانب اللوجو",
+    showCompany: "إظهار الشركة للعامة",
+    noCompanies: "لم تتم إضافة شركات بعد. أضف شركة واختر اللوجو ثم فعّل ظهورها.",
     services: "الخدمات",
     bring: "ما الذي تقدمه",
     addService: "＋ إضافة خدمة",
@@ -387,15 +464,19 @@ function LocalizedField({
 }
 
 function newProject(order: number): Project {
+  const id = crypto.randomUUID();
   return {
-    id: crypto.randomUUID(),
+    id,
+    slug: `project-${id.slice(0, 8)}`,
     status: "draft",
     order,
     eyebrow: { en: "NEW CASE STUDY", ar: "دراسة حالة جديدة" },
     title: { en: "Untitled project", ar: "مشروع بدون عنوان" },
     summary: { en: "", ar: "" },
+    description: { en: "", ar: "" },
     challenge: { en: "", ar: "" },
     solution: { en: "", ar: "" },
+    implementation: { en: "", ar: "" },
     outcome: { en: "", ar: "" },
     tools: [],
     metrics: [],
@@ -420,6 +501,18 @@ function newExperience(): Experience {
     company: "",
     period: "",
     summary: { en: "", ar: "" },
+  };
+}
+
+function newCompany(): CompanyLogo {
+  return {
+    id: crypto.randomUUID(),
+    name: { en: "", ar: "" },
+    logoUrl: "",
+    alt: { en: "", ar: "" },
+    website: "",
+    showName: true,
+    visible: false,
   };
 }
 
@@ -539,7 +632,32 @@ export function AdminEditor({
       if (item.images.some((image) => image.url === asset.url))
         usages.push(item.title[locale] || item.id);
     });
+    content.companies.items.forEach((company) => {
+      if (company.logoUrl === asset.url)
+        usages.push(company.name[locale] || (locale === "ar" ? "لوجو شركة" : "Company logo"));
+    });
     return usages;
+  }
+
+  function assignCompanyLogo(index: number, asset: MediaAsset) {
+    setContent((current) => ({
+      ...current,
+      companies: {
+        ...current.companies,
+        items: current.companies.items.map((company, companyIndex) =>
+          companyIndex === index
+            ? {
+                ...company,
+                logoUrl: asset.url,
+                alt: {
+                  en: company.alt.en || asset.altEn || company.name.en,
+                  ar: company.alt.ar || asset.altAr || company.name.ar,
+                },
+              }
+            : company,
+        ),
+      },
+    }));
   }
 
   async function save() {
@@ -629,6 +747,7 @@ export function AdminEditor({
         en: asset.altEn || project.title.en,
         ar: asset.altAr || project.title.ar,
       },
+      caption: { en: "", ar: "" },
     };
     updateProject({ images: [...project.images, image] });
     setNotice(t.added);
@@ -636,18 +755,20 @@ export function AdminEditor({
 
   async function uploadFiles(
     files: File[],
-    target: "portrait" | "project" | "library",
+    target: "portrait" | "project" | "library" | "company",
+    companyIndex?: number,
   ) {
     if (!files.length) return;
     setUploading(true);
     setNotice("");
     const uploaded: MediaAsset[] = [];
-    const limit = target === "project" ? Math.max(0, 6 - (project?.images.length ?? 0)) : files.length;
+    const company = companyIndex === undefined ? undefined : content.companies.items[companyIndex];
+    const limit = target === "project" ? Math.max(0, 6 - (project?.images.length ?? 0)) : target === "company" ? 1 : files.length;
     for (const file of files.slice(0, limit)) {
       const form = new FormData();
       form.append("file", file);
-      form.append("altEn", target === "portrait" ? "Khalid Mohamad" : (project?.title.en ?? file.name));
-      form.append("altAr", target === "portrait" ? "خالد محمد" : (project?.title.ar ?? file.name));
+      form.append("altEn", target === "portrait" ? "Khalid Mohamad" : target === "company" ? (company?.name.en || file.name) : (project?.title.en ?? file.name));
+      form.append("altAr", target === "portrait" ? "خالد محمد" : target === "company" ? (company?.name.ar || file.name) : (project?.title.ar ?? file.name));
       const response = await fetch("/api/admin/media", { method: "POST", body: form });
       const result = (await response.json()) as MediaAsset & { error?: string };
       if (!response.ok) {
@@ -667,9 +788,12 @@ export function AdminEditor({
         id: crypto.randomUUID(),
         url: asset.url,
         alt: { en: asset.altEn || project.title.en, ar: asset.altAr || project.title.ar },
+        caption: { en: "", ar: "" },
       }));
       updateProject({ images: [...project.images, ...additions].slice(0, 6) });
     }
+    if (target === "company" && companyIndex !== undefined && uploaded[0])
+      assignCompanyLogo(companyIndex, uploaded[0]);
     if (uploaded.length) setNotice(t.uploaded);
     setUploading(false);
   }
@@ -772,8 +896,19 @@ export function AdminEditor({
             </div>
             <div className="admin-panel portrait-panel">
               <header><div><span>{t.portrait.toUpperCase()}</span><h2>{t.profileImage}</h2></div></header>
-              <Image src={content.profile.portrait} width={360} height={460} alt={content.profile.name} unoptimized className="admin-portrait" />
+              <Image src={content.profile.portrait} width={360} height={460} alt={content.profile.name} unoptimized className="admin-portrait" style={{ objectPosition: `${content.profile.portraitFocalPoint.desktop.x}% ${content.profile.portraitFocalPoint.desktop.y}%` }} />
               <label className="upload-button">{uploading ? t.uploading : t.replace}<input type="file" accept="image/jpeg,image/png,image/webp" disabled={uploading} onChange={(event) => uploadFiles(Array.from(event.target.files ?? []), "portrait")} /></label>
+              <div className="portrait-focus-editor">
+                <h3>{t.focalPoint}</h3><p>{t.focalHelp}</p>
+                {(["desktop", "mobile"] as const).map((device) => (
+                  <fieldset key={device}>
+                    <legend>{device === "desktop" ? t.desktopCrop : t.mobileCrop}</legend>
+                    <label>{t.horizontal}<input type="range" min="0" max="100" value={content.profile.portraitFocalPoint[device].x} onChange={(event) => setContent({ ...content, profile: { ...content.profile, portraitFocalPoint: { ...content.profile.portraitFocalPoint, [device]: { ...content.profile.portraitFocalPoint[device], x: Number(event.target.value) } } } })} /></label>
+                    <label>{t.vertical}<input type="range" min="0" max="100" value={content.profile.portraitFocalPoint[device].y} onChange={(event) => setContent({ ...content, profile: { ...content.profile, portraitFocalPoint: { ...content.profile.portraitFocalPoint, [device]: { ...content.profile.portraitFocalPoint[device], y: Number(event.target.value) } } } })} /></label>
+                    <div className={`portrait-crop-preview ${device}`}><Image src={content.profile.portrait} alt="" fill sizes="220px" unoptimized style={{ objectFit: "cover", objectPosition: `${content.profile.portraitFocalPoint[device].x}% ${content.profile.portraitFocalPoint[device].y}%` }} /></div>
+                  </fieldset>
+                ))}
+              </div>
             </div>
             <div className="admin-panel wide">
               <header><div><span>{t.labels.toUpperCase()}</span><h2>{t.labels}</h2></div></header>
@@ -806,6 +941,7 @@ export function AdminEditor({
               {DESIGN_SLUGS.map((design, index) => (
                 <article className={`design-admin-card ${content.activeDesign === design ? "active" : ""}`} key={design}>
                   <div className="design-card-number">{String(index + 1).padStart(2, "0")}</div>
+                  <div className={`design-card-mini design-card-mini-${index + 1}`} aria-hidden="true"><i /><i /><i /></div>
                   <div className="design-swatches">{designMeta[design].colors.map((color) => <i key={color} style={{ background: color }} />)}</div>
                   <p>{designMeta[design].sector[locale]}</p>
                   <h2>{DESIGN_NAMES[design]}</h2>
@@ -847,15 +983,19 @@ export function AdminEditor({
                       <button disabled={selectedProject === 0} onClick={() => reorderProject(selectedProject - 1)}>↑</button>
                       <button disabled={selectedProject === content.projects.length - 1} onClick={() => reorderProject(selectedProject + 1)}>↓</button>
                       <select value={project.status} onChange={(event) => updateProject({ status: event.target.value as Project["status"] })}>{(["published", "draft", "archived"] as const).map((status) => <option key={status} value={status}>{t.status[status]}</option>)}</select>
+                      {project.status === "published" && project.slug ? <Link target="_blank" href={`/${locale}/projects/${project.slug}`}>{t.openProject}</Link> : null}
                       <button className="danger-button" onClick={deleteProject}>{t.delete}</button>
                     </div>
                   </header>
                   <div className="field-grid">
                     <LocalizedField label={t.eyebrow} value={project.eyebrow} locale={locale} onChange={(value) => updateProject({ eyebrow: localized(project.eyebrow, value) })} />
                     <LocalizedField label={t.title} value={project.title} locale={locale} onChange={(value) => updateProject({ title: localized(project.title, value) })} />
+                    <Field label={t.slug} value={project.slug} dir="ltr" placeholder={t.slugHelp} onChange={(slug) => updateProject({ slug: normalizeProjectSlug(slug) })} />
                     <div className="full"><LocalizedField label={t.summary} value={project.summary} locale={locale} multiline onChange={(value) => updateProject({ summary: localized(project.summary, value) })} /></div>
+                    <div className="full"><LocalizedField label={t.fullDescription} value={project.description} locale={locale} multiline onChange={(value) => updateProject({ description: localized(project.description, value) })} /></div>
                     <div className="full"><LocalizedField label={t.challenge} value={project.challenge} locale={locale} multiline onChange={(value) => updateProject({ challenge: localized(project.challenge, value) })} /></div>
                     <div className="full"><LocalizedField label={t.response} value={project.solution} locale={locale} multiline onChange={(value) => updateProject({ solution: localized(project.solution, value) })} /></div>
+                    <div className="full"><LocalizedField label={t.implementation} value={project.implementation} locale={locale} multiline onChange={(value) => updateProject({ implementation: localized(project.implementation, value) })} /></div>
                     <div className="full"><LocalizedField label={t.value} value={project.outcome} locale={locale} multiline onChange={(value) => updateProject({ outcome: localized(project.outcome, value) })} /></div>
                     <div className="full"><Field label={t.tools} value={project.tools.join(", ")} onChange={(value) => updateProject({ tools: value.split(",").map((tool) => tool.trim()).filter(Boolean) })} /></div>
                     <Field label={t.order} value={String(project.order)} onChange={(order) => updateProject({ order: Number(order) || 1 })} />
@@ -869,6 +1009,7 @@ export function AdminEditor({
                       <article className="gallery-card" key={image.id}>
                         <div className="gallery-preview"><Image src={image.url} alt={image.alt[locale] || project.title[locale]} fill sizes="240px" unoptimized />{index === 0 && <b>{t.cover}</b>}</div>
                         <LocalizedField label={t.alt} value={image.alt} locale={locale} onChange={(value) => updateProject({ images: project.images.map((item, i) => i === index ? { ...item, alt: localized(item.alt, value) } : item) })} />
+                        <LocalizedField label={t.caption} value={image.caption} locale={locale} multiline onChange={(value) => updateProject({ images: project.images.map((item, i) => i === index ? { ...item, caption: localized(item.caption, value) } : item) })} />
                         <div className="gallery-actions">
                           <button disabled={index === 0} onClick={() => updateProject({ images: move(project.images, index, index - 1) })}>↑ {t.moveUp}</button>
                           <button disabled={index === project.images.length - 1} onClick={() => updateProject({ images: move(project.images, index, index + 1) })}>↓ {t.moveDown}</button>
@@ -906,6 +1047,54 @@ export function AdminEditor({
                 </div>
               </div>
             )}
+          </div>
+        )}
+
+        {tab === "companies" && (
+          <div className="admin-stack">
+            <div className="admin-panel company-editor-panel">
+              <header>
+                <div><span>{t.companies.toUpperCase()}</span><h2>{t.companies}</h2><p>{t.companiesIntro}</p></div>
+                <button className="upload-button" disabled={content.companies.items.length >= 30} onClick={() => setContent({ ...content, companies: { ...content.companies, items: [...content.companies.items, newCompany()] } })}>{t.addCompany}</button>
+              </header>
+              <div className="company-heading-field">
+                <LocalizedField label={t.companiesHeading} value={content.companies.heading} locale={locale} onChange={(value) => setContent({ ...content, companies: { ...content.companies, heading: localized(content.companies.heading, value) } })} />
+              </div>
+              {content.companies.items.length === 0 ? <p className="empty-state">{t.noCompanies}</p> : (
+                <div className="company-editor-grid">
+                  {content.companies.items.map((company, index) => (
+                    <article className="company-editor-card" key={company.id}>
+                      <header>
+                        <span>{String(index + 1).padStart(2, "0")}</span>
+                        <b>{company.visible ? (locale === "ar" ? "ظاهر" : "Visible") : (locale === "ar" ? "مخفي" : "Hidden")}</b>
+                      </header>
+                      <div className="company-logo-preview">
+                        {company.logoUrl ? <Image src={company.logoUrl} alt={company.alt[locale] || company.name[locale]} width={220} height={100} unoptimized /> : <span>{locale === "ar" ? "اختر اللوجو" : "Choose a logo"}</span>}
+                        {company.showName && company.name[locale] ? <strong>{company.name[locale]}</strong> : null}
+                      </div>
+                      <div className="field-grid">
+                        <LocalizedField label={t.companyName} value={company.name} locale={locale} onChange={(value) => setContent({ ...content, companies: { ...content.companies, items: content.companies.items.map((item, itemIndex) => itemIndex === index ? { ...item, name: localized(item.name, value) } : item) } })} />
+                        <LocalizedField label={t.companyAlt} value={company.alt} locale={locale} onChange={(value) => setContent({ ...content, companies: { ...content.companies, items: content.companies.items.map((item, itemIndex) => itemIndex === index ? { ...item, alt: localized(item.alt, value) } : item) } })} />
+                        <div className="full"><Field type="url" label={t.companyWebsite} value={company.website} dir="ltr" onChange={(website) => setContent({ ...content, companies: { ...content.companies, items: content.companies.items.map((item, itemIndex) => itemIndex === index ? { ...item, website } : item) } })} /></div>
+                      </div>
+                      <label className="admin-field company-logo-select"><span>{t.chooseLogo}</span><select value={company.logoUrl} onChange={(event) => {
+                        const asset = media.find((item) => item.url === event.target.value);
+                        if (asset) assignCompanyLogo(index, asset);
+                        else setContent({ ...content, companies: { ...content.companies, items: content.companies.items.map((item, itemIndex) => itemIndex === index ? { ...item, logoUrl: "" } : item) } });
+                      }}><option value="">—</option>{media.map((asset) => <option key={asset.id} value={asset.url}>{asset.filename}</option>)}</select></label>
+                      <div className="company-option-row">
+                        <label><input type="checkbox" checked={company.showName} onChange={(event) => setContent({ ...content, companies: { ...content.companies, items: content.companies.items.map((item, itemIndex) => itemIndex === index ? { ...item, showName: event.target.checked } : item) } })} /> <span>{t.showCompanyName}</span></label>
+                        <label><input type="checkbox" checked={company.visible} onChange={(event) => setContent({ ...content, companies: { ...content.companies, items: content.companies.items.map((item, itemIndex) => itemIndex === index ? { ...item, visible: event.target.checked } : item) } })} /> <span>{t.showCompany}</span></label>
+                      </div>
+                      <div className="company-card-actions">
+                        <label className="upload-button">{uploading ? t.uploading : t.uploadLogo}<input type="file" accept="image/jpeg,image/png,image/webp" disabled={uploading} onChange={(event) => uploadFiles(Array.from(event.target.files ?? []), "company", index)} /></label>
+                        {repeaterActions(index, content.companies.items.length, (to) => setContent({ ...content, companies: { ...content.companies, items: move(content.companies.items, index, to) } }), () => window.confirm(t.confirmDelete) && setContent({ ...content, companies: { ...content.companies, items: content.companies.items.filter((_, itemIndex) => itemIndex !== index) } }))}
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         )}
 

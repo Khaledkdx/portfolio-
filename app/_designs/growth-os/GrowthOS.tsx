@@ -1,9 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
+import { PortraitImage } from "@/app/_components/PortraitImage";
 import { DESIGN_NAMES, pick } from "@/lib/site-content";
 import {
   languageHref,
   n,
+  projectHref,
   projectImages,
   projectLinks,
   publishedProjects,
@@ -87,14 +89,7 @@ export default function GrowthOS(props: DesignProps) {
             </span>
           </div>
           <div className={s.profile}>
-            <Image
-              src={content.profile.portrait}
-              alt={content.profile.name}
-              width={900}
-              height={1200}
-              priority
-              unoptimized
-            />
+            <PortraitImage content={content} fill={false} sizes="(max-width: 760px) 100vw, 30vw" priority />
             <div>
               <small>OPERATOR PROFILE</small>
               <b>{content.profile.name}</b>
@@ -162,6 +157,7 @@ export default function GrowthOS(props: DesignProps) {
                   <i>+</i>
                 </summary>
                 <div className={s.case}>
+                  <Link href={projectHref(project, props)} style={{ display: "inline-block", color: "#16d9a4", marginBottom: 20 }}>VIEW FULL CASE ↗</Link>
                   {images[0] && (
                     <Image
                       style={{

@@ -41,13 +41,18 @@ async function isLocalPreview(): Promise<boolean> {
   return host.startsWith("localhost:") || host.startsWith("127.0.0.1:");
 }
 
-function bytes(value: string): Uint8Array {
-  return new TextEncoder().encode(value);
+function bytes(value: string): ArrayBuffer {
+  const encoded = new TextEncoder().encode(value);
+  return encoded.buffer.slice(
+    encoded.byteOffset,
+    encoded.byteOffset + encoded.byteLength,
+  ) as ArrayBuffer;
 }
 
-function base64Url(value: Uint8Array): string {
+function base64Url(value: ArrayBuffer | Uint8Array<ArrayBuffer>): string {
+  const encoded = value instanceof Uint8Array ? value : new Uint8Array(value);
   let binary = "";
-  for (const byte of value) binary += String.fromCharCode(byte);
+  for (const byte of encoded) binary += String.fromCharCode(byte);
   return btoa(binary)
     .replace(/\+/g, "-")
     .replace(/\//g, "_")

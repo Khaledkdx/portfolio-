@@ -1,0 +1,7 @@
+import Link from "next/link";
+import { ProjectPicture } from "@/app/_components/ProjectPicture";
+import { pick } from "@/lib/site-content";
+import { projectDetailData, type ProjectDetailProps } from "../types";
+import s from "./project.module.css";
+
+export default function MuseumProject(props:ProjectDetailProps){const{content,locale,project}=props;const d=projectDetailData(props);return <main className={s.page} dir={d.dir}><nav><Link href={`${d.base}${d.query}`}>← EXHIBITION</Link><b>ROOM {String(d.index+1).padStart(2,"0")}</b></nav><header><div><span>{pick(project.eyebrow,locale)}</span><h1>{pick(project.title,locale)}</h1><p>{pick(project.description,locale)}</p></div>{d.images[0]?<ProjectPicture image={d.images[0]} locale={locale} priority className={s.masterpiece}/>:null}</header><section className={s.labels}>{[[content.labels.challenge,project.challenge],[content.labels.solution,project.solution],[content.labels.outcome,project.outcome]].map(([label,text],i)=><article key={i}><span>PLAQUE 0{i+1}</span><h2>{pick(label,locale)}</h2><p>{pick(text,locale)}</p></article>)}</section>{d.images.length>1?<section className={s.gallery}>{d.images.slice(1).map(image=><ProjectPicture key={image.id} image={image} locale={locale}/>)}</section>:null}<footer>{d.previous?<Link href={d.projectUrl(d.previous.slug)}>← {pick(d.previous.title,locale)}</Link>:<span/>}{d.next?<Link href={d.projectUrl(d.next.slug)}>{pick(d.next.title,locale)} →</Link>:<Link href={`${d.base}${d.query}`}>EXIT →</Link>}</footer></main>}
