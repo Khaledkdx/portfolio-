@@ -16,6 +16,7 @@ import {
   type Project,
   type ProjectImage,
   type ProjectLink,
+  type Review,
   type Service,
   type SiteContent,
 } from "@/lib/site-content";
@@ -25,6 +26,7 @@ type Tab =
   | "designs"
   | "projects"
   | "companies"
+  | "reviews"
   | "services"
   | "experience"
   | "media";
@@ -106,6 +108,7 @@ const copy = {
       designs: "Designs",
       projects: "Case studies",
       companies: "Companies & logos",
+      reviews: "Reviews",
       services: "Services & skills",
       experience: "Experience",
       media: "Media library",
@@ -200,6 +203,22 @@ const copy = {
     showCompanyName: "Show the company name beside the logo",
     showCompany: "Show this company publicly",
     noCompanies: "No companies added yet. Add one, choose its logo, then make it visible.",
+    reviews: "Reviews & proof",
+    reviewsIntro: "Add real client, manager or teammate quotes. Visible reviews appear across every design in the new stagger proof section.",
+    reviewsHeading: "Public reviews heading",
+    reviewsIntroLabel: "Public reviews intro",
+    addReview: "＋ Add review",
+    reviewQuote: "Review quote",
+    reviewAuthor: "Person name",
+    reviewRole: "Role / context",
+    reviewCompany: "Company · optional",
+    reviewProject: "Linked project · optional",
+    reviewAvatar: "Avatar / proof image",
+    chooseAvatar: "Choose avatar from media library",
+    uploadAvatar: "Upload avatar",
+    showReview: "Show this review publicly",
+    noReviews: "No reviews added yet. Add a real quote, then make it visible when approved.",
+    maxReviews: "The reviews section can contain up to 20 entries.",
     services: "Services",
     bring: "What you bring",
     addService: "＋ Add service",
@@ -254,6 +273,7 @@ const copy = {
       designs: "التصاميم",
       projects: "دراسات الحالة",
       companies: "الشركات والشعارات",
+      reviews: "الآراء",
       services: "الخدمات والمهارات",
       experience: "الخبرات",
       media: "مكتبة الوسائط",
@@ -348,6 +368,22 @@ const copy = {
     showCompanyName: "إظهار اسم الشركة بجانب اللوجو",
     showCompany: "إظهار الشركة للعامة",
     noCompanies: "لم تتم إضافة شركات بعد. أضف شركة واختر اللوجو ثم فعّل ظهورها.",
+    reviews: "الآراء والإثباتات",
+    reviewsIntro: "أضف آراء حقيقية من عميل أو مدير أو زميل. الآراء المفعلة تظهر في كل التصميمات داخل قسم Stagger Proof الجديد.",
+    reviewsHeading: "عنوان قسم الآراء في الموقع",
+    reviewsIntroLabel: "مقدمة قسم الآراء في الموقع",
+    addReview: "＋ إضافة رأي",
+    reviewQuote: "نص الرأي",
+    reviewAuthor: "اسم الشخص",
+    reviewRole: "المنصب / السياق",
+    reviewCompany: "الشركة · اختياري",
+    reviewProject: "ربط بمشروع · اختياري",
+    reviewAvatar: "الصورة / إثبات بصري",
+    chooseAvatar: "اختيار صورة من مكتبة الوسائط",
+    uploadAvatar: "رفع صورة",
+    showReview: "إظهار هذا الرأي للعامة",
+    noReviews: "لا توجد آراء بعد. أضف رأيًا حقيقيًا ثم فعّل ظهوره بعد الموافقة.",
+    maxReviews: "قسم الآراء يقبل حتى 20 عنصرًا.",
     services: "الخدمات",
     bring: "ما الذي تقدمه",
     addService: "＋ إضافة خدمة",
@@ -516,6 +552,21 @@ function newCompany(): CompanyLogo {
   };
 }
 
+function newReview(order: number): Review {
+  return {
+    id: crypto.randomUUID(),
+    quote: { en: "", ar: "" },
+    author: { en: "", ar: "" },
+    role: { en: "", ar: "" },
+    company: "",
+    avatarUrl: "",
+    avatarAlt: { en: "", ar: "" },
+    projectSlug: "",
+    visible: false,
+    order,
+  };
+}
+
 function move<T>(items: T[], from: number, to: number): T[] {
   if (to < 0 || to >= items.length || from === to) return items;
   const next = [...items];
@@ -636,6 +687,10 @@ export function AdminEditor({
       if (company.logoUrl === asset.url)
         usages.push(company.name[locale] || (locale === "ar" ? "لوجو شركة" : "Company logo"));
     });
+    content.reviews.items.forEach((review) => {
+      if (review.avatarUrl === asset.url)
+        usages.push(review.author[locale] || (locale === "ar" ? "صورة رأي" : "Review avatar"));
+    });
     return usages;
   }
 
@@ -655,6 +710,27 @@ export function AdminEditor({
                 },
               }
             : company,
+        ),
+      },
+    }));
+  }
+
+  function assignReviewAvatar(index: number, asset: MediaAsset) {
+    setContent((current) => ({
+      ...current,
+      reviews: {
+        ...current.reviews,
+        items: current.reviews.items.map((review, reviewIndex) =>
+          reviewIndex === index
+            ? {
+                ...review,
+                avatarUrl: asset.url,
+                avatarAlt: {
+                  en: review.avatarAlt.en || asset.altEn || review.author.en,
+                  ar: review.avatarAlt.ar || asset.altAr || review.author.ar,
+                },
+              }
+            : review,
         ),
       },
     }));
@@ -755,20 +831,21 @@ export function AdminEditor({
 
   async function uploadFiles(
     files: File[],
-    target: "portrait" | "project" | "library" | "company",
-    companyIndex?: number,
+    target: "portrait" | "project" | "library" | "company" | "review",
+    itemIndex?: number,
   ) {
     if (!files.length) return;
     setUploading(true);
     setNotice("");
     const uploaded: MediaAsset[] = [];
-    const company = companyIndex === undefined ? undefined : content.companies.items[companyIndex];
-    const limit = target === "project" ? Math.max(0, 6 - (project?.images.length ?? 0)) : target === "company" ? 1 : files.length;
+    const company = itemIndex === undefined ? undefined : content.companies.items[itemIndex];
+    const review = itemIndex === undefined ? undefined : content.reviews.items[itemIndex];
+    const limit = target === "project" ? Math.max(0, 6 - (project?.images.length ?? 0)) : target === "company" || target === "review" ? 1 : files.length;
     for (const file of files.slice(0, limit)) {
       const form = new FormData();
       form.append("file", file);
-      form.append("altEn", target === "portrait" ? "Khalid Mohamad" : target === "company" ? (company?.name.en || file.name) : (project?.title.en ?? file.name));
-      form.append("altAr", target === "portrait" ? "خالد محمد" : target === "company" ? (company?.name.ar || file.name) : (project?.title.ar ?? file.name));
+      form.append("altEn", target === "portrait" ? "Khalid Mohamad" : target === "company" ? (company?.name.en || file.name) : target === "review" ? (review?.author.en || file.name) : (project?.title.en ?? file.name));
+      form.append("altAr", target === "portrait" ? "خالد محمد" : target === "company" ? (company?.name.ar || file.name) : target === "review" ? (review?.author.ar || file.name) : (project?.title.ar ?? file.name));
       const response = await fetch("/api/admin/media", { method: "POST", body: form });
       const result = (await response.json()) as MediaAsset & { error?: string };
       if (!response.ok) {
@@ -792,8 +869,10 @@ export function AdminEditor({
       }));
       updateProject({ images: [...project.images, ...additions].slice(0, 6) });
     }
-    if (target === "company" && companyIndex !== undefined && uploaded[0])
-      assignCompanyLogo(companyIndex, uploaded[0]);
+    if (target === "company" && itemIndex !== undefined && uploaded[0])
+      assignCompanyLogo(itemIndex, uploaded[0]);
+    if (target === "review" && itemIndex !== undefined && uploaded[0])
+      assignReviewAvatar(itemIndex, uploaded[0]);
     if (uploaded.length) setNotice(t.uploaded);
     setUploading(false);
   }
@@ -1089,6 +1168,89 @@ export function AdminEditor({
                       <div className="company-card-actions">
                         <label className="upload-button">{uploading ? t.uploading : t.uploadLogo}<input type="file" accept="image/jpeg,image/png,image/webp" disabled={uploading} onChange={(event) => uploadFiles(Array.from(event.target.files ?? []), "company", index)} /></label>
                         {repeaterActions(index, content.companies.items.length, (to) => setContent({ ...content, companies: { ...content.companies, items: move(content.companies.items, index, to) } }), () => window.confirm(t.confirmDelete) && setContent({ ...content, companies: { ...content.companies, items: content.companies.items.filter((_, itemIndex) => itemIndex !== index) } }))}
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {tab === "reviews" && (
+          <div className="admin-stack">
+            <div className="admin-panel review-editor-panel">
+              <header>
+                <div><span>{t.reviews.toUpperCase()}</span><h2>{t.reviews}</h2><p>{t.reviewsIntro}</p></div>
+                <button
+                  className="upload-button"
+                  disabled={content.reviews.items.length >= 20}
+                  onClick={() => {
+                    if (content.reviews.items.length >= 20) return setNotice(t.maxReviews);
+                    setContent({
+                      ...content,
+                      reviews: {
+                        ...content.reviews,
+                        items: [...content.reviews.items, newReview(content.reviews.items.length + 1)],
+                      },
+                    });
+                  }}
+                >
+                  {t.addReview}
+                </button>
+              </header>
+              <div className="field-grid">
+                <LocalizedField
+                  label={t.reviewsHeading}
+                  value={content.reviews.heading}
+                  locale={locale}
+                  onChange={(value) => setContent({ ...content, reviews: { ...content.reviews, heading: localized(content.reviews.heading, value) } })}
+                />
+                <LocalizedField
+                  label={t.reviewsIntroLabel}
+                  value={content.reviews.intro}
+                  locale={locale}
+                  multiline
+                  onChange={(value) => setContent({ ...content, reviews: { ...content.reviews, intro: localized(content.reviews.intro, value) } })}
+                />
+              </div>
+              {content.reviews.items.length === 0 ? <p className="empty-state">{t.noReviews}</p> : (
+                <div className="review-editor-grid">
+                  {content.reviews.items.map((review, index) => (
+                    <article className="review-editor-card" key={review.id}>
+                      <header>
+                        <span>{String(index + 1).padStart(2, "0")}</span>
+                        <label><input type="checkbox" checked={review.visible} onChange={(event) => setContent({ ...content, reviews: { ...content.reviews, items: content.reviews.items.map((item, itemIndex) => itemIndex === index ? { ...item, visible: event.target.checked } : item) } })} /> {t.showReview}</label>
+                      </header>
+                      <div className="review-preview">
+                        <div>
+                          {review.avatarUrl ? <Image src={review.avatarUrl} alt={review.avatarAlt[locale] || review.author[locale]} width={72} height={72} unoptimized /> : <span>{review.author[locale]?.slice(0, 1) || "?"}</span>}
+                        </div>
+                        <blockquote>{review.quote[locale] || (locale === "ar" ? "اكتب نص الرأي هنا" : "Write the review quote here")}</blockquote>
+                        <b>{review.author[locale] || (locale === "ar" ? "اسم الشخص" : "Person name")}</b>
+                      </div>
+                      <div className="field-grid">
+                        <div className="full"><LocalizedField label={t.reviewQuote} value={review.quote} locale={locale} multiline onChange={(value) => setContent({ ...content, reviews: { ...content.reviews, items: content.reviews.items.map((item, itemIndex) => itemIndex === index ? { ...item, quote: localized(item.quote, value) } : item) } })} /></div>
+                        <LocalizedField label={t.reviewAuthor} value={review.author} locale={locale} onChange={(value) => setContent({ ...content, reviews: { ...content.reviews, items: content.reviews.items.map((item, itemIndex) => itemIndex === index ? { ...item, author: localized(item.author, value) } : item) } })} />
+                        <LocalizedField label={t.reviewRole} value={review.role} locale={locale} onChange={(value) => setContent({ ...content, reviews: { ...content.reviews, items: content.reviews.items.map((item, itemIndex) => itemIndex === index ? { ...item, role: localized(item.role, value) } : item) } })} />
+                        <Field label={t.reviewCompany} value={review.company} onChange={(company) => setContent({ ...content, reviews: { ...content.reviews, items: content.reviews.items.map((item, itemIndex) => itemIndex === index ? { ...item, company } : item) } })} />
+                        <label className="admin-field">
+                          <span>{t.reviewProject}</span>
+                          <select value={review.projectSlug} onChange={(event) => setContent({ ...content, reviews: { ...content.reviews, items: content.reviews.items.map((item, itemIndex) => itemIndex === index ? { ...item, projectSlug: event.target.value } : item) } })}>
+                            <option value="">—</option>
+                            {content.projects.filter((item) => item.status === "published").map((item) => <option key={item.id} value={item.slug}>{item.title[locale]}</option>)}
+                          </select>
+                        </label>
+                        <LocalizedField label={t.alt} value={review.avatarAlt} locale={locale} onChange={(value) => setContent({ ...content, reviews: { ...content.reviews, items: content.reviews.items.map((item, itemIndex) => itemIndex === index ? { ...item, avatarAlt: localized(item.avatarAlt, value) } : item) } })} />
+                      </div>
+                      <label className="admin-field company-logo-select"><span>{t.chooseAvatar}</span><select value={review.avatarUrl} onChange={(event) => {
+                        const asset = media.find((item) => item.url === event.target.value);
+                        if (asset) assignReviewAvatar(index, asset);
+                        else setContent({ ...content, reviews: { ...content.reviews, items: content.reviews.items.map((item, itemIndex) => itemIndex === index ? { ...item, avatarUrl: "" } : item) } });
+                      }}><option value="">—</option>{media.map((asset) => <option key={asset.id} value={asset.url}>{asset.filename}</option>)}</select></label>
+                      <div className="company-card-actions">
+                        <label className="upload-button">{uploading ? t.uploading : t.uploadAvatar}<input type="file" accept="image/jpeg,image/png,image/webp" disabled={uploading} onChange={(event) => uploadFiles(Array.from(event.target.files ?? []), "review", index)} /></label>
+                        {repeaterActions(index, content.reviews.items.length, (to) => setContent({ ...content, reviews: { ...content.reviews, items: move(content.reviews.items, index, to).map((item, itemIndex) => ({ ...item, order: itemIndex + 1 })) } }), () => window.confirm(t.confirmDelete) && setContent({ ...content, reviews: { ...content.reviews, items: content.reviews.items.filter((_, itemIndex) => itemIndex !== index).map((item, itemIndex) => ({ ...item, order: itemIndex + 1 })) } }))}
                       </div>
                     </article>
                   ))}

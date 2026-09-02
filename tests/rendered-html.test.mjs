@@ -48,6 +48,7 @@ test("includes thirty-two complete selectable design directions and independent 
     assert.match(projectSource, /ProjectPicture/);
   }
   assert.match(portfolio, /definition\.load\(\)/);
+  assert.match(portfolio, /ReviewProofWall/);
   assert.match(registry, /loadProject/);
   const route = await readFile(new URL("app/[locale]/page.tsx", root), "utf8");
   assert.match(route, /3\[0-2\]\|\[12\]\[0-9\]/);
@@ -87,12 +88,14 @@ test("protects every admin mutation and includes independent deployment config",
 });
 
 test("admin contains design activation, CMS repeaters, media safety and dirty-state protection", async () => {
-  const [editor, data, designsPage, designPreviewPage, metrics] = await Promise.all([
+  const [editor, data, designsPage, designPreviewPage, metrics, reviewWall, mediaRoute] = await Promise.all([
     readFile(new URL("app/admin/AdminEditor.tsx", root), "utf8"),
     readFile(new URL("lib/data.ts", root), "utf8"),
     readFile(new URL("app/designs/page.tsx", root), "utf8"),
     readFile(new URL("app/designs/[design]/page.tsx", root), "utf8"),
     readFile(new URL("app/_designs/ProjectMetrics.tsx", root), "utf8"),
+    readFile(new URL("app/_components/ReviewProofWall.tsx", root), "utf8"),
+    readFile(new URL("app/api/admin/media/[id]/route.ts", root), "utf8"),
   ]);
   assert.match(editor, /"designs"/);
   assert.match(editor, /beforeunload/);
@@ -103,8 +106,15 @@ test("admin contains design activation, CMS repeaters, media safety and dirty-st
   assert.match(editor, /saveMediaAlt/);
   assert.match(editor, /deleteMedia/);
   assert.match(editor, /companies\.items\.map/);
+  assert.match(editor, /reviews\.items\.map/);
+  assert.match(editor, /assignReviewAvatar/);
+  assert.match(editor, /uploadFiles\(Array\.from\(event\.target\.files \?\? \[\]\), "review"/);
   assert.match(editor, /showCompanyName/);
   assert.match(editor, /assignCompanyLogo/);
+  assert.match(reviewWall, /framer-motion/);
+  assert.match(reviewWall, /useReducedMotion/);
+  assert.match(reviewWall, /reviewProjectHref/);
+  assert.match(mediaRoute, /Review avatar/);
   assert.match(data, /json_set\(content_json, '\$\.activeDesign'/);
   assert.match(designsPage, /redirect\("\/admin\?tab=designs"\)/);
   assert.match(designPreviewPage, /admin\?tab=designs&preview=/);

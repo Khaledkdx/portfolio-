@@ -139,3 +139,34 @@ test("migrates the companies section and validates only visible logos", () => {
   content.companies.items[0].showName = false;
   assert.equal(validateSiteContent(content), null);
 });
+
+test("migrates reviews and validates only visible public reviews", () => {
+  const legacy = clone();
+  delete legacy.reviews;
+  const migrated = normalizeSiteContent(legacy);
+  assert.deepEqual(migrated.reviews.items, []);
+  assert.equal(migrated.reviews.heading.en, "What people can say about the work");
+
+  const content = clone();
+  content.reviews.items = [{
+    id: "review-one",
+    quote: { en: "", ar: "" },
+    author: { en: "", ar: "" },
+    role: { en: "", ar: "" },
+    company: "Example Co",
+    avatarUrl: "/media/review-one",
+    avatarAlt: { en: "", ar: "" },
+    projectSlug: content.projects[0].slug,
+    visible: false,
+    order: 1,
+  }];
+  assert.equal(validateSiteContent(content), null);
+  content.reviews.items[0].visible = true;
+  assert.match(validateSiteContent(content), /Visible reviews require English and Arabic quote/);
+  content.reviews.items[0].quote = { en: "Strong operator.", ar: "منفذ قوي." };
+  content.reviews.items[0].author = { en: "Client Name", ar: "اسم العميل" };
+  content.reviews.items[0].role = { en: "Founder", ar: "مؤسس" };
+  assert.match(validateSiteContent(content), /review avatars/);
+  content.reviews.items[0].avatarAlt = { en: "Client portrait", ar: "صورة العميل" };
+  assert.equal(validateSiteContent(content), null);
+});

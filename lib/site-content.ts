@@ -48,6 +48,19 @@ export type CompanyLogo = {
   visible: boolean;
 };
 
+export type Review = {
+  id: string;
+  quote: LocalizedText;
+  author: LocalizedText;
+  role: LocalizedText;
+  company: string;
+  avatarUrl: string;
+  avatarAlt: LocalizedText;
+  projectSlug: string;
+  visible: boolean;
+  order: number;
+};
+
 export type Project = {
   id: string;
   slug: string;
@@ -96,6 +109,11 @@ export type SiteContent = {
   companies: {
     heading: LocalizedText;
     items: CompanyLogo[];
+  };
+  reviews: {
+    heading: LocalizedText;
+    intro: LocalizedText;
+    items: Review[];
   };
   projects: Project[];
 };
@@ -351,6 +369,14 @@ export const DEFAULT_CONTENT: SiteContent = {
     ),
     items: [],
   },
+  reviews: {
+    heading: t("What people can say about the work", "ماذا يمكن أن يقال عن العمل"),
+    intro: t(
+      "Add verified client or teammate reviews from the admin panel. Nothing appears here until a review is published.",
+      "أضف آراء موثقة من العملاء أو زملاء العمل من لوحة التحكم. لا يظهر هذا القسم للعامة إلا بعد نشر مراجعة.",
+    ),
+    items: [],
+  },
   projects: [
     {
       id: "real-estate-agent",
@@ -603,6 +629,28 @@ export function normalizeSiteContent(content: SiteContent): SiteContent {
         visible: company.visible ?? true,
       })),
     },
+    reviews: {
+      heading: content.reviews?.heading ?? {
+        en: "What people can say about the work",
+        ar: "ماذا يمكن أن يقال عن العمل",
+      },
+      intro: content.reviews?.intro ?? {
+        en: "Add verified client or teammate reviews from the admin panel.",
+        ar: "أضف آراء موثقة من العملاء أو زملاء العمل من لوحة التحكم.",
+      },
+      items: (content.reviews?.items ?? []).map((review, index) => ({
+        ...review,
+        quote: review.quote ?? { en: "", ar: "" },
+        author: review.author ?? { en: "", ar: "" },
+        role: review.role ?? { en: "", ar: "" },
+        company: review.company ?? "",
+        avatarUrl: review.avatarUrl ?? "",
+        avatarAlt: review.avatarAlt ?? { en: "", ar: "" },
+        projectSlug: review.projectSlug ?? "",
+        visible: review.visible ?? false,
+        order: Number.isFinite(review.order) ? review.order : index + 1,
+      })),
+    },
     projects: (content.projects ?? []).map((project) => {
       const normalized: Project = {
         ...project,
@@ -673,6 +721,16 @@ export function validateSiteContent(input: SiteContent): string | null {
     if (!company.alt.en.trim() || !company.alt.ar.trim()) return "Visible company logos require English and Arabic alt text.";
     if (company.showName && (!company.name.en.trim() || !company.name.ar.trim())) return "Companies showing a name require English and Arabic names.";
     if (company.website && !isHttpUrl(company.website)) return "Company websites must use a valid http or https URL.";
+  }
+  if (!content.reviews.heading.en.trim() || !content.reviews.heading.ar.trim()) return "The reviews section requires an English and Arabic heading.";
+  if (!content.reviews.intro.en.trim() || !content.reviews.intro.ar.trim()) return "The reviews section requires English and Arabic intro text.";
+  if (content.reviews.items.length > 20) return "The reviews section can contain up to 20 entries.";
+  for (const review of content.reviews.items) {
+    if (!review.visible) continue;
+    if (!review.quote.en.trim() || !review.quote.ar.trim()) return "Visible reviews require English and Arabic quote text.";
+    if (!review.author.en.trim() || !review.author.ar.trim()) return "Visible reviews require English and Arabic author names.";
+    if (!review.role.en.trim() || !review.role.ar.trim()) return "Visible reviews require English and Arabic roles.";
+    if (review.avatarUrl && (!review.avatarAlt.en.trim() || !review.avatarAlt.ar.trim())) return "Visible review avatars require English and Arabic alt text.";
   }
   if (content.approach.some((item) => !item.title.en.trim() || !item.title.ar.trim() || !item.description.en.trim() || !item.description.ar.trim())) return "Approach items require English and Arabic content.";
   if (content.services.some((item) => !item.title.en.trim() || !item.title.ar.trim() || !item.description.en.trim() || !item.description.ar.trim())) return "Services require English and Arabic content.";
