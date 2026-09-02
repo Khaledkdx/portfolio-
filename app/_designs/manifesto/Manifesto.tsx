@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { PortraitImage } from "@/app/_components/PortraitImage";
+import { ReviewProofWall } from "@/app/_components/ReviewProofWall";
 import { DESIGN_NAMES, pick } from "@/lib/site-content";
 import {
   languageHref,
@@ -153,6 +154,7 @@ export default function Manifesto(props: DesignProps) {
           );
         })}
       </section>
+      <ReviewProofWall content={content} locale={locale} design={design} variantPath={props.variantPath} />
       <section className={s.method}>
         <h2>{pick(content.labels.approach, locale)}</h2>
         {content.approach.map((item, i) => (

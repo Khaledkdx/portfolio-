@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { PortraitImage } from "@/app/_components/PortraitImage";
+import { ReviewProofWall } from "@/app/_components/ReviewProofWall";
 import { DESIGN_NAMES, pick } from "@/lib/site-content";
 import {
   languageHref,
@@ -168,6 +169,7 @@ export default function Gulf(props: DesignProps) {
           })}
         </div>
       </section>
+      <ReviewProofWall content={content} locale={locale} design={design} variantPath={props.variantPath} />
       <section className={s.experience}>
         <h2>{pick(content.labels.experience, locale)}</h2>
         {content.experiences.map((item) => (
