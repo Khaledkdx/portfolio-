@@ -14,11 +14,10 @@ type Props = {
 export async function Portfolio({ content, locale, design = content.activeDesign, preview = false, variantPath }: Props) {
   const definition = DESIGN_DEFINITIONS[design];
   const { default: Design } = await definition.load();
-  const reviewLivesInsideDesign = definition.index <= 8;
   return (
     <DesignMotionFrame design={design} locale={locale}>
       <Design content={content} locale={locale} design={design} preview={preview} variantPath={variantPath} />
-      {!reviewLivesInsideDesign && <ReviewProofWall content={content} locale={locale} design={design} variantPath={variantPath} />}
+      <ReviewProofWall content={content} locale={locale} design={design} variantPath={variantPath} />
     </DesignMotionFrame>
   );
 }

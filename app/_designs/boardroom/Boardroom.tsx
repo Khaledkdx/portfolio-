@@ -1,226 +1,56 @@
 import Image from "next/image";
 import Link from "next/link";
+import { pick, projectImages } from "@/lib/site-content";
 import { PortraitImage } from "@/app/_components/PortraitImage";
-import { ReviewProofWall } from "@/app/_components/ReviewProofWall";
-import { DESIGN_NAMES, pick } from "@/lib/site-content";
-import {
-  languageHref,
-  n,
-  projectHref,
-  projectImages,
-  projectLinks,
-  publishedProjects,
-  whatsappHref,
-  type DesignProps,
-} from "../types";
-import s from "./boardroom.module.css";
-import { ProjectMetrics } from "../ProjectMetrics";
+import type { DesignProps } from "../types";
+import { languageHref, n, projectHref, publishedProjects, whatsappHref } from "../types";
+import styles from "./boardroom.module.css";
 
-export default function Boardroom(props: DesignProps) {
-  const { content, locale, design, preview } = props;
+export default function Boardroom({ content, locale, design, preview, variantPath }: DesignProps) {
   const projects = publishedProjects(content);
+  const languageUrl = languageHref({ content, locale, design, preview, variantPath });
   return (
-    <main
-      className={s.page}
-      dir={locale === "ar" ? "rtl" : "ltr"}
-      lang={locale}
-      id="top"
-    >
-      {preview && (
-        <div className={s.preview}>
-          <Link href="/designs">← Design lab</Link>
-          <span>{DESIGN_NAMES[design]}</span>
-        </div>
-      )}
-      <nav
-        className={s.nav}
-        aria-label={locale === "ar" ? "التنقل الرئيسي" : "Main navigation"}
-      >
-        <a className={s.brand} href="#top">
-          <b>KM</b>
-          <span>
-            {content.profile.name}
-            <small>Growth & automation report</small>
-          </span>
-        </a>
+    <main className={styles.page} dir={locale === "ar" ? "rtl" : "ltr"} data-layout="report">
+      <a className={styles.skip} href="#work">Skip to work</a>
+      <nav className={styles.nav} aria-label="Portfolio">
+        <Link href={variantPath || "/" + locale} className={styles.brand}><span>K/01</span><b>{content.profile.name}</b></Link>
         <div>
-          <a href="#work">{pick(content.labels.work, locale)}</a>
-          <a href="#services">{pick(content.labels.services, locale)}</a>
-          <Link href={languageHref(props)}>
-            {locale === "en" ? "عربي" : "EN"}
-          </Link>
+          <a href="#method">{locale === "ar" ? "المنهج" : "Method"}</a>
+          <a href="#services">{locale === "ar" ? "الخدمات" : "Services"}</a>
+          <a href="#work">{locale === "ar" ? "الأعمال" : "Work"}</a>
+          <Link href={languageUrl}>{locale === "ar" ? "EN" : "AR"}</Link>
         </div>
       </nav>
-      <header className={s.hero}>
-        <div className={s.coverMeta}>
-          <span>ANNUAL CAPABILITY REPORT</span>
-          <span>01—10 / 2026</span>
-        </div>
-        <div className={s.heroCopy}>
-          <p>{pick(content.profile.role, locale)}</p>
-          <h1>{pick(content.profile.headline, locale)}</h1>
-          <div className={s.intro}>
-            <span>EXECUTIVE SUMMARY</span>
-            <p>{pick(content.profile.intro, locale)}</p>
+      <section className={styles.hero} aria-labelledby="hero-title">
+        <div className={styles.heroCopy}>
+          <p className={styles.eyebrow}>Ledger Report · chaptered annual report</p>
+          <h1 id="hero-title">{pick(content.profile.headline, locale)}</h1>
+          <p className={styles.lead}>{pick(content.profile.intro, locale)}</p>
+          <div className={styles.actions}>
+            <a href="#work">{locale === "ar" ? "شوف طريقة الحل" : "See the problem-solving flow"}</a>
+            <a href={whatsappHref(content)} target="_blank" rel="noreferrer">WhatsApp</a>
           </div>
         </div>
-        <div className={s.portrait}>
-          <PortraitImage content={content} fill={false} sizes="(max-width: 760px) 100vw, 32vw" priority />
-          <span>UAE · KSA · REMOTE</span>
-        </div>
-        <ol className={s.contents}>
-          <li>
-            <a href="#method">
-              <b>01</b>
-              {pick(content.labels.approach, locale)}
-            </a>
-          </li>
-          <li>
-            <a href="#services">
-              <b>02</b>
-              {pick(content.labels.services, locale)}
-            </a>
-          </li>
-          <li>
-            <a href="#work">
-              <b>03</b>
-              {pick(content.labels.work, locale)}
-            </a>
-          </li>
-        </ol>
-      </header>
-      <section className={s.method} id="method">
-        <header>
-          <span>CHAPTER 01</span>
-          <h2>{pick(content.labels.approach, locale)}</h2>
-        </header>
-        <div>
-          {content.approach.map((item, i) => (
-            <article key={item.id}>
-              <b>{n(i)}</b>
-              <h3>{pick(item.title, locale)}</h3>
-              <p>{pick(item.description, locale)}</p>
-            </article>
-          ))}
+        <div className={styles.heroVisual} aria-label={content.profile.name}>
+          <div className={styles.portraitShell}>
+            <PortraitImage content={content} className={styles.portraitImage} sizes="(max-width: 760px) 88vw, 42vw" priority />
+          </div>
+          <div className={styles.signature} aria-hidden="true"><span>01</span><b>Boardroom Annual Report</b></div>
         </div>
       </section>
-      <section className={s.capabilities} id="services">
-        <header>
-          <span>CHAPTER 02</span>
-          <h2>{pick(content.labels.services, locale)}</h2>
-        </header>
-        <div className={s.matrix}>
-          {content.services.map((service) => (
-            <article key={service.id}>
-              <span>{service.number}</span>
-              <h3>{pick(service.title, locale)}</h3>
-              <p>{pick(service.description, locale)}</p>
-              <b>CAPABILITY ↗</b>
-            </article>
-          ))}
-        </div>
-        <p className={s.skills}>
-          {content.skills.map((skill) => (
-            <span key={skill}>{skill}</span>
-          ))}
-        </p>
+      <section className={styles.method} id="method">
+        <header><span>{locale === "ar" ? "خطوة بخطوة" : "Step by step"}</span><h2>{locale === "ar" ? "من المشكلة إلى نظام نمو" : "From bottleneck to growth system"}</h2></header>
+        <div className={styles.methodGrid}>{content.approach.map((step, index) => <article key={step.id}><b>{n(index)}</b><h3>{pick(step.title, locale)}</h3><p>{pick(step.description, locale)}</p></article>)}</div>
       </section>
-      <section className={s.work} id="work">
-        <header>
-          <span>CHAPTER 03</span>
-          <h2>{pick(content.labels.work, locale)}</h2>
-        </header>
-        {projects.map((project, i) => {
-          const images = projectImages(project);
-          const links = projectLinks(project);
-          return (
-            <article className={s.case} key={project.id}>
-              <div className={s.caseNo}>
-                <span>CASE</span>
-                <b>{n(i)}</b>
-              </div>
-              <div>
-                {images[0] && (
-                  <Image
-                    style={{
-                      width: "100%",
-                      height: 360,
-                      objectFit: "cover",
-                      marginBottom: 30,
-                    }}
-                    src={images[0].url}
-                    alt={pick(images[0].alt, locale)}
-                    width={1200}
-                    height={650}
-                    unoptimized
-                  />
-                )}
-                <p>{pick(project.eyebrow, locale)}</p>
-                <Link href={projectHref(project, props)}><h3>{pick(project.title, locale)}</h3></Link>
-                <p className={s.summary}>{pick(project.summary, locale)}</p>
-                <ProjectMetrics project={project} locale={locale} />
-                <div className={s.three}>
-                  <section>
-                    <b>{pick(content.labels.challenge, locale)}</b>
-                    <p>{pick(project.challenge, locale)}</p>
-                  </section>
-                  <section>
-                    <b>{pick(content.labels.solution, locale)}</b>
-                    <p>{pick(project.solution, locale)}</p>
-                  </section>
-                  <section>
-                    <b>{pick(content.labels.outcome, locale)}</b>
-                    <p>{pick(project.outcome, locale)}</p>
-                  </section>
-                </div>
-                {links.map((link) => (
-                  <a
-                    style={{
-                      display: "inline-block",
-                      margin: "18px 12px 0 0",
-                      borderBottom: "1px solid",
-                      fontWeight: 700,
-                      fontSize: 12,
-                    }}
-                    key={link.id}
-                    href={link.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {pick(link.label, locale)} ↗
-                  </a>
-                ))}
-              </div>
-            </article>
-          );
-        })}
+      <section className={styles.services} id="services">
+        <header><span>{locale === "ar" ? "قدرات" : "Capabilities"}</span><h2>{pick(content.profile.role, locale)}</h2></header>
+        <div className={styles.serviceGrid}>{content.services.map((service) => <article key={service.id}><b>{service.number}</b><h3>{pick(service.title, locale)}</h3><p>{pick(service.description, locale)}</p></article>)}</div>
       </section>
-      <ReviewProofWall content={content} locale={locale} design={design} variantPath={props.variantPath} />
-      <section className={s.experience} id="experience">
-        <h2>{pick(content.labels.experience, locale)}</h2>
-        {content.experiences.map((item) => (
-          <article key={item.id}>
-            <span>{item.period}</span>
-            <b>{item.company}</b>
-            <h3>{pick(item.role, locale)}</h3>
-            <p>{pick(item.summary, locale)}</p>
-          </article>
-        ))}
+      <section className={styles.work} id="work">
+        <header><span>{locale === "ar" ? "مشاريع" : "Projects"}</span><h2>{locale === "ar" ? "كل مشروع صفحة تحكي الأزمة والحل" : "Every project opens into the problem and the fix"}</h2></header>
+        <div className={styles.projectGrid}>{projects.map((project, index) => { const cover = projectImages(project)[0]; return <article className={styles.projectCard} key={project.id}><Link href={projectHref(project, { locale, variantPath })}>{cover ? <figure className={styles.projectImage}><Image src={cover.url} alt={pick(cover.alt, locale)} fill sizes="(max-width: 760px) 92vw, 30vw" unoptimized /></figure> : null}<span>{n(index)} · {pick(project.eyebrow, locale)}</span><h3>{pick(project.title, locale)}</h3><p>{pick(project.summary, locale)}</p><b>{locale === "ar" ? "افتح المشروع" : "Open case"}</b></Link></article>; })}</div>
       </section>
-      <footer className={s.footer} id="contact">
-        <span>FINAL NOTE</span>
-        <h2>{pick(content.labels.contact, locale)}</h2>
-        <p>{pick(content.labels.contactCopy, locale)}</p>
-        <div>
-          <a href={`mailto:${content.profile.email}`}>
-            {content.profile.email} ↗
-          </a>
-          <a href={whatsappHref(content)} target="_blank" rel="noreferrer">
-            WhatsApp ↗
-          </a>
-        </div>
-        <small>KHALID MOHAMAD — BUSINESS GROWTH & AUTOMATION</small>
-      </footer>
+      <section className={styles.cta} id="contact"><span>{locale === "ar" ? "جاهز للحوار" : "Ready for the brief"}</span><h2>{pick(content.profile.availability, locale)}</h2><div><a href={"mailto:" + content.profile.email}>{content.profile.email}</a><a href={whatsappHref(content)} target="_blank" rel="noreferrer">+{content.profile.whatsapp}</a></div></section>
     </main>
   );
 }

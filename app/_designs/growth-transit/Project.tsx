@@ -1,2 +1,28 @@
-import Link from "next/link";import { ProjectPicture } from "@/app/_components/ProjectPicture";import { pick } from "@/lib/site-content";import { projectDetailData,type ProjectDetailProps } from "../types";import s from "./project.module.css";
-export default function TransitProject(props:ProjectDetailProps){const{content,locale,project}=props;const d=projectDetailData(props);return <main className={s.page} dir={d.dir}><nav><Link href={`${d.base}${d.query}`}>← NETWORK MAP</Link><span>LINE {d.index+1}</span></nav><header><div className={s.route}><i/><i/><i/></div><span>{pick(project.eyebrow,locale)}</span><h1>{pick(project.title,locale)}</h1><p>{pick(project.description,locale)}</p></header>{d.images[0]?<ProjectPicture image={d.images[0]} locale={locale} priority className={s.station}/>:null}<section className={s.stops}><article><b>A</b><h2>{pick(content.labels.challenge,locale)}</h2><p>{pick(project.challenge,locale)}</p></article><article><b>B</b><h2>{pick(content.labels.solution,locale)}</h2><p>{pick(project.solution,locale)}</p></article>{pick(project.implementation,locale)?<article><b>C</b><h2>{locale==="ar"?"التنفيذ":"Implementation"}</h2><p>{pick(project.implementation,locale)}</p></article>:null}<article><b>D</b><h2>{pick(content.labels.outcome,locale)}</h2><p>{pick(project.outcome,locale)}</p></article></section>{d.images.length>1?<section className={s.gallery}>{d.images.slice(1).map((image,i)=><div key={image.id}><span>STOP {i+2}</span><ProjectPicture image={image} locale={locale}/></div>)}</section>:null}<footer>{d.next?<Link href={d.projectUrl(d.next.slug)}>NEXT DESTINATION →</Link>:<Link href={`${d.base}${d.query}`}>END OF LINE →</Link>}</footer></main>}
+import Link from "next/link";
+import { pick } from "@/lib/site-content";
+import { ProjectMetrics } from "../ProjectMetrics";
+import type { ProjectDetailProps } from "../types";
+import { n, projectDetailData } from "../types";
+import { ProjectPicture } from "@/app/_components/ProjectPicture";
+import styles from "./project.module.css";
+
+export default function GrowthTransitProject(props: ProjectDetailProps) {
+  const { content, locale, project } = props;
+  const { images, links, previous, next, projectUrl, dir } = projectDetailData(props);
+  const cover = images[0];
+  return (
+    <main className={styles.page} dir={dir} data-layout="transit">
+      <nav className={styles.nav} aria-label="Project"><Link href={props.variantPath || "/" + locale}>← {locale === "ar" ? "رجوع" : "Back"}</Link><span>Transit Network · 22</span></nav>
+      <section className={styles.hero}>
+        <div className={styles.copy}><p className={styles.eyebrow}>Growth Transit</p><h1>{pick(project.title, locale)}</h1><p>{pick(project.description, locale) || pick(project.summary, locale)}</p></div>
+        {cover ? <ProjectPicture image={cover} locale={locale} className={styles.cover} priority sizes="(max-width: 760px) 94vw, 46vw" /> : null}
+      </section>
+      <section className={styles.body}>{[[locale === "ar" ? "الأزمة" : "Challenge", project.challenge],[locale === "ar" ? "الحل" : "Solution", project.solution],[locale === "ar" ? "التنفيذ" : "Implementation", project.implementation],[locale === "ar" ? "القيمة" : "Business value", project.outcome]].map(([label, text], index) => pick(text, locale).trim() ? <article className={styles.section} key={String(label)}><span>{n(index)}</span><h2>{String(label)}</h2><p>{pick(text, locale)}</p></article> : null)}</section>
+      <div className={styles.metrics}><ProjectMetrics project={project} locale={locale} /></div>
+      {images.length > 1 ? <section className={styles.gallery} aria-label={locale === "ar" ? "صور المشروع" : "Project images"}>{images.slice(1).map((image) => <ProjectPicture key={image.id} image={image} locale={locale} className={styles.galleryImage} />)}</section> : null}
+      <section className={styles.tools}><h2>{locale === "ar" ? "الأدوات والروابط" : "Tools & links"}</h2><div>{project.tools.map((tool) => <span key={tool}>{tool}</span>)}</div>{links.length ? <p>{links.map((link) => <a key={link.id} href={link.url} target="_blank" rel="noreferrer">{pick(link.label, locale)}</a>)}</p> : null}</section>
+      <nav className={styles.projectNav} aria-label="More projects">{previous ? <Link href={projectUrl(previous.slug)}>← {pick(previous.title, locale)}</Link> : <span />}{next ? <Link href={projectUrl(next.slug)}>{pick(next.title, locale)} →</Link> : <span />}</nav>
+      <footer className={styles.cta}><h2>{locale === "ar" ? "عندك مشكلة شبه دي؟" : "Got a similar bottleneck?"}</h2><a href={"mailto:" + content.profile.email}>{content.profile.email}</a></footer>
+    </main>
+  );
+}

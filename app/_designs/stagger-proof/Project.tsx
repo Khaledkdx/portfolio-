@@ -1,125 +1,28 @@
-"use client";
-
 import Link from "next/link";
-import { motion, useReducedMotion, type Variants } from "framer-motion";
-import { ProjectPicture } from "@/app/_components/ProjectPicture";
-import { ProjectMetrics } from "../ProjectMetrics";
 import { pick } from "@/lib/site-content";
-import { projectDetailData, type ProjectDetailProps } from "../types";
-import s from "./project.module.css";
+import { ProjectMetrics } from "../ProjectMetrics";
+import type { ProjectDetailProps } from "../types";
+import { n, projectDetailData } from "../types";
+import { ProjectPicture } from "@/app/_components/ProjectPicture";
+import styles from "./project.module.css";
 
 export default function StaggerProofProject(props: ProjectDetailProps) {
   const { content, locale, project } = props;
-  const d = projectDetailData(props);
-  const reduced = useReducedMotion();
-  const cards = [
-    { tag: "01", title: content.labels.challenge, text: project.challenge },
-    { tag: "02", title: content.labels.solution, text: project.solution },
-    { tag: "03", title: content.labels.outcome, text: project.outcome },
-  ];
-  const group: Variants = reduced
-    ? {}
-    : { show: { transition: { staggerChildren: 0.08, delayChildren: 0.08 } } };
-  const item: Variants = reduced
-    ? {}
-    : {
-        hidden: { opacity: 0, y: 24, rotate: d.dir === "rtl" ? -1.2 : 1.2 },
-        show: {
-          opacity: 1,
-          y: 0,
-          rotate: 0,
-          transition: { duration: 0.44, ease: [0.22, 1, 0.36, 1] },
-        },
-      };
-
+  const { images, links, previous, next, projectUrl, dir } = projectDetailData(props);
+  const cover = images[0];
   return (
-    <main className={s.page} dir={d.dir}>
-      <nav className={s.nav}>
-        <Link href={`${d.base}${d.query}`}>← Stagger Proof</Link>
-        <span>{String(d.index + 1).padStart(2, "0")} / {pick(project.eyebrow, locale)}</span>
-      </nav>
-
-      <header className={s.hero}>
-        <motion.div initial={reduced ? false : { opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.46 }}>
-          <p>{locale === "ar" ? "ملف إثبات العمل" : "Proof file"}</p>
-          <h1>{pick(project.title, locale)}</h1>
-          <div>{pick(project.description, locale)}</div>
-        </motion.div>
-        <motion.aside initial={reduced ? false : "hidden"} animate="show" variants={group}>
-          {d.images[0] ? (
-            <motion.div variants={item}>
-              <ProjectPicture image={d.images[0]} locale={locale} priority className={s.cover} sizes="(max-width: 760px) 90vw, 42vw" />
-            </motion.div>
-          ) : (
-            <motion.div className={s.placeholder} variants={item}>K/{String(d.index + 1).padStart(2, "0")}</motion.div>
-          )}
-          <motion.div className={s.brief} variants={item}>
-            <b>{locale === "ar" ? "الفكرة" : "The point"}</b>
-            <p>{pick(project.summary, locale)}</p>
-          </motion.div>
-        </motion.aside>
-      </header>
-
-      {project.metrics.length ? (
-        <section className={s.metrics}>
-          <ProjectMetrics project={project} locale={locale} />
-        </section>
-      ) : null}
-
-      <motion.section className={s.proof} initial={reduced ? false : "hidden"} whileInView={reduced ? undefined : "show"} viewport={{ once: true, amount: 0.25 }} variants={group}>
-        {cards.map((card) => (
-          <motion.article key={card.tag} variants={item}>
-            <span>{card.tag}</span>
-            <h2>{pick(card.title, locale)}</h2>
-            <p>{pick(card.text, locale)}</p>
-          </motion.article>
-        ))}
-        {pick(project.implementation, locale).trim() ? (
-          <motion.article className={s.wide} variants={item}>
-            <span>04</span>
-            <h2>{locale === "ar" ? "التنفيذ" : "Implementation"}</h2>
-            <p>{pick(project.implementation, locale)}</p>
-          </motion.article>
-        ) : null}
-      </motion.section>
-
-      {d.images.length > 1 ? (
-        <section className={s.gallery}>
-          <header>
-            <span>{locale === "ar" ? "الصور والشرح" : "Image notes"}</span>
-            <h2>{locale === "ar" ? "كل صورة لها سياقها." : "Every image keeps its context."}</h2>
-          </header>
-          <div>
-            {d.images.slice(1).map((image, index) => (
-              <article key={image.id}>
-                <b>{String(index + 2).padStart(2, "0")}</b>
-                <ProjectPicture image={image} locale={locale} sizes="(max-width: 760px) 92vw, 48vw" />
-              </article>
-            ))}
-          </div>
-        </section>
-      ) : null}
-
-      <section className={s.delivery}>
-        <div>
-          <span>{locale === "ar" ? "الأدوات" : "Tools"}</span>
-          <ul>{project.tools.map((tool) => <li key={tool}>{tool}</li>)}</ul>
-        </div>
-        {d.links.length ? (
-          <aside>
-            {d.links.map((link) => (
-              <a key={link.id} href={link.url} target="_blank" rel="noreferrer">
-                {pick(link.label, locale)} ↗
-              </a>
-            ))}
-          </aside>
-        ) : null}
+    <main className={styles.page} dir={dir} data-layout="proof">
+      <nav className={styles.nav} aria-label="Project"><Link href={props.variantPath || "/" + locale}>← {locale === "ar" ? "رجوع" : "Back"}</Link><span>Proof Cascade · 32</span></nav>
+      <section className={styles.hero}>
+        <div className={styles.copy}><p className={styles.eyebrow}>Stagger Proof Studio</p><h1>{pick(project.title, locale)}</h1><p>{pick(project.description, locale) || pick(project.summary, locale)}</p></div>
+        {cover ? <ProjectPicture image={cover} locale={locale} className={styles.cover} priority sizes="(max-width: 760px) 94vw, 46vw" /> : null}
       </section>
-
-      <footer className={s.footer}>
-        {d.previous ? <Link href={d.projectUrl(d.previous.slug)}>← {pick(d.previous.title, locale)}</Link> : <span />}
-        {d.next ? <Link href={d.projectUrl(d.next.slug)}>{pick(d.next.title, locale)} →</Link> : <Link href={`${d.base}${d.query}`}>{locale === "ar" ? "العودة للأعمال" : "Back to work"} →</Link>}
-      </footer>
+      <section className={styles.body}>{[[locale === "ar" ? "الأزمة" : "Challenge", project.challenge],[locale === "ar" ? "الحل" : "Solution", project.solution],[locale === "ar" ? "التنفيذ" : "Implementation", project.implementation],[locale === "ar" ? "القيمة" : "Business value", project.outcome]].map(([label, text], index) => pick(text, locale).trim() ? <article className={styles.section} key={String(label)}><span>{n(index)}</span><h2>{String(label)}</h2><p>{pick(text, locale)}</p></article> : null)}</section>
+      <div className={styles.metrics}><ProjectMetrics project={project} locale={locale} /></div>
+      {images.length > 1 ? <section className={styles.gallery} aria-label={locale === "ar" ? "صور المشروع" : "Project images"}>{images.slice(1).map((image) => <ProjectPicture key={image.id} image={image} locale={locale} className={styles.galleryImage} />)}</section> : null}
+      <section className={styles.tools}><h2>{locale === "ar" ? "الأدوات والروابط" : "Tools & links"}</h2><div>{project.tools.map((tool) => <span key={tool}>{tool}</span>)}</div>{links.length ? <p>{links.map((link) => <a key={link.id} href={link.url} target="_blank" rel="noreferrer">{pick(link.label, locale)}</a>)}</p> : null}</section>
+      <nav className={styles.projectNav} aria-label="More projects">{previous ? <Link href={projectUrl(previous.slug)}>← {pick(previous.title, locale)}</Link> : <span />}{next ? <Link href={projectUrl(next.slug)}>{pick(next.title, locale)} →</Link> : <span />}</nav>
+      <footer className={styles.cta}><h2>{locale === "ar" ? "عندك مشكلة شبه دي؟" : "Got a similar bottleneck?"}</h2><a href={"mailto:" + content.profile.email}>{content.profile.email}</a></footer>
     </main>
   );
 }

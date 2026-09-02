@@ -1,154 +1,56 @@
-"use client";
-
+import Image from "next/image";
 import Link from "next/link";
-import { motion, useReducedMotion } from "framer-motion";
-import { SparkBadge } from "@/components/ui/spark-badge";
-import { Logos3 } from "@/components/ui/logos3";
-import { pick } from "@/lib/site-content";
-import {
-  languageHref,
-  n,
-  projectHref,
-  publishedProjects,
-  whatsappHref,
-  type DesignProps,
-} from "../types";
-import s from "./rain-credential.module.css";
+import { pick, projectImages } from "@/lib/site-content";
+import { PortraitImage } from "@/app/_components/PortraitImage";
+import type { DesignProps } from "../types";
+import { languageHref, n, projectHref, publishedProjects, whatsappHref } from "../types";
+import styles from "./rain-credential.module.css";
 
-export default function RainCredential(props: DesignProps) {
-  const { content, locale } = props;
+export default function RainCredential({ content, locale, design, preview, variantPath }: DesignProps) {
   const projects = publishedProjects(content);
-  const companies = content.companies.items
-    .filter((company) => company.visible && company.logoUrl)
-    .map((company) => ({
-      id: company.id,
-      image: company.logoUrl,
-      description: pick(company.alt, locale),
-      name: pick(company.name, locale),
-      showName: company.showName,
-      href: company.website || undefined,
-    }));
-  const reduced = useReducedMotion();
-  const reveal = reduced
-    ? { initial: false as const, whileInView: undefined }
-    : { initial: { opacity: 0, y: 24 }, whileInView: { opacity: 1, y: 0 } };
-
+  const languageUrl = languageHref({ content, locale, design, preview, variantPath });
   return (
-    <main className={s.page} dir={locale === "ar" ? "rtl" : "ltr"}>
-      <a className={s.skip} href="#main">
-        {locale === "ar" ? "انتقل إلى المحتوى" : "Skip to content"}
-      </a>
-      <nav className={s.nav} aria-label={locale === "ar" ? "التنقل الرئيسي" : "Primary navigation"}>
-        <Link href={props.variantPath ?? `/${locale}`} className={s.brand}>
-          <span>K/</span><b>{content.profile.name}</b>
-        </Link>
-        <div className={s.navLinks}>
-          <a href="#work">{pick(content.labels.work, locale)}</a>
-          <a href="#capabilities">{pick(content.labels.services, locale)}</a>
-          <a href="#contact">{pick(content.labels.contact, locale)}</a>
-          <Link href={languageHref(props)}>{locale === "ar" ? "EN" : "عربي"}</Link>
+    <main className={styles.page} dir={locale === "ar" ? "rtl" : "ltr"} data-layout="rain">
+      <a className={styles.skip} href="#work">Skip to work</a>
+      <nav className={styles.nav} aria-label="Portfolio">
+        <Link href={variantPath || "/" + locale} className={styles.brand}><span>K/31</span><b>{content.profile.name}</b></Link>
+        <div>
+          <a href="#method">{locale === "ar" ? "المنهج" : "Method"}</a>
+          <a href="#services">{locale === "ar" ? "الخدمات" : "Services"}</a>
+          <a href="#work">{locale === "ar" ? "الأعمال" : "Work"}</a>
+          <Link href={languageUrl}>{locale === "ar" ? "EN" : "AR"}</Link>
         </div>
       </nav>
-
-      <section className={s.hero} id="main">
-        <motion.div
-          className={s.heroCopy}
-          initial={reduced ? false : { opacity: 0, x: locale === "ar" ? 28 : -28 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-        >
-          <p className={s.eyebrow}><i /> VERIFIED GROWTH OPERATOR / 031</p>
-          <h1>{pick(content.profile.headline, locale)}</h1>
-          <p className={s.intro}>{pick(content.profile.intro, locale)}</p>
-          <div className={s.heroActions}>
-            <a href="#work">{locale === "ar" ? "افتح ملف الأعمال" : "Open the field record"}<span>↘</span></a>
-            <a href={whatsappHref(content)} target="_blank" rel="noreferrer">WhatsApp ↗</a>
+      <section className={styles.hero} aria-labelledby="hero-title">
+        <div className={styles.heroCopy}>
+          <p className={styles.eyebrow}>Rain Credential · premium animated proof badge</p>
+          <h1 id="hero-title">{pick(content.profile.headline, locale)}</h1>
+          <p className={styles.lead}>{pick(content.profile.intro, locale)}</p>
+          <div className={styles.actions}>
+            <a href="#work">{locale === "ar" ? "شوف طريقة الحل" : "See the problem-solving flow"}</a>
+            <a href={whatsappHref(content)} target="_blank" rel="noreferrer">WhatsApp</a>
           </div>
-        </motion.div>
-
-        <motion.div
-          className={s.badgeStage}
-          initial={reduced ? false : { opacity: 0, scale: 0.92, rotate: -2 }}
-          animate={{ opacity: 1, scale: 1, rotate: 0 }}
-          transition={{ duration: 0.72, delay: 0.12, ease: [0.16, 1, 0.3, 1] }}
-        >
-          <SparkBadge sourceUrl="/spark-badge" />
-          <span className={s.stageIndex}>IDENTITY / AUTHORITY / MOTION</span>
-        </motion.div>
-
-        <aside className={s.heroRail}>
-          <span>{locale === "ar" ? "الموقع" : "LOCATION"}<b>UAE / KSA / REMOTE</b></span>
-          <span>{locale === "ar" ? "النطاق" : "FIELD"}<b>GROWTH × AUTOMATION</b></span>
-          <span>{locale === "ar" ? "الحالة" : "STATUS"}<b className={s.online}>AVAILABLE</b></span>
-        </aside>
-      </section>
-
-      <Logos3
-        className="rain-company-rail"
-        eyebrow={locale === "ar" ? "شركاء في العمل" : "TRUSTED IN THE FIELD"}
-        heading={pick(content.companies.heading, locale)}
-        logos={companies}
-        locale={locale}
-      />
-
-      <section className={s.trace} aria-label={locale === "ar" ? "منهج العمل" : "Operating method"}>
-        <header><span>01 / SIGNAL TRACE</span><h2>{locale === "ar" ? "من المشكلة إلى نظام يعمل." : "From friction to a system that moves."}</h2></header>
-        <div className={s.traceGrid}>
-          {content.approach.map((step, index) => (
-            <motion.article
-              key={step.id}
-              {...reveal}
-              viewport={{ once: true, amount: 0.35 }}
-              transition={{ duration: 0.42, delay: index * 0.07 }}
-            >
-              <div><span>{n(index)}</span><i /></div>
-              <h3>{pick(step.title, locale)}</h3>
-              <p>{pick(step.description, locale)}</p>
-            </motion.article>
-          ))}
+        </div>
+        <div className={styles.heroVisual} aria-label={content.profile.name}>
+          <div className={styles.portraitShell}>
+            <PortraitImage content={content} className={styles.portraitImage} sizes="(max-width: 760px) 88vw, 42vw" priority />
+          </div>
+          <div className={styles.signature} aria-hidden="true"><span>31</span><b>Rain Credential</b></div>
         </div>
       </section>
-
-      <section className={s.work} id="work">
-        <header><span>02 / FIELD RECORDS</span><h2>{pick(content.labels.work, locale)}</h2><p>{locale === "ar" ? "أعمال موثقة حول المشكلة والقرار والقيمة التجارية." : "Documented work: the friction, the decision and the business value."}</p></header>
-        <div className={s.records}>
-          {projects.map((project, index) => (
-            <motion.article key={project.id} {...reveal} viewport={{ once: true, amount: 0.2 }} transition={{ duration: 0.45 }}>
-              <Link href={projectHref(project, props)}>
-                <div className={s.recordMeta}><span>REC-{String(index + 1).padStart(3, "0")}</span><i>{pick(project.eyebrow, locale)}</i></div>
-                <h3>{pick(project.title, locale)}</h3>
-                <p>{pick(project.summary, locale)}</p>
-                <div className={s.recordBottom}><span>{project.tools.slice(0, 3).join(" / ")}</span><b>{locale === "ar" ? "فتح الملف" : "Open record"} ↗</b></div>
-              </Link>
-            </motion.article>
-          ))}
-        </div>
+      <section className={styles.method} id="method">
+        <header><span>{locale === "ar" ? "خطوة بخطوة" : "Step by step"}</span><h2>{locale === "ar" ? "من المشكلة إلى نظام نمو" : "From bottleneck to growth system"}</h2></header>
+        <div className={styles.methodGrid}>{content.approach.map((step, index) => <article key={step.id}><b>{n(index)}</b><h3>{pick(step.title, locale)}</h3><p>{pick(step.description, locale)}</p></article>)}</div>
       </section>
-
-      <section className={s.capabilities} id="capabilities">
-        <header><span>03 / CAPABILITY ARRAY</span><h2>{pick(content.labels.services, locale)}</h2></header>
-        <div className={s.capGrid}>
-          {content.services.map((service, index) => (
-            <article key={service.id}>
-              <span>{n(index)}</span><div><h3>{pick(service.title, locale)}</h3><p>{pick(service.description, locale)}</p></div>
-            </article>
-          ))}
-        </div>
-        <div className={s.toolBand} aria-label={locale === "ar" ? "المهارات والأدوات" : "Skills and tools"}>
-          {content.skills.map((skill) => <span key={skill}>{skill}</span>)}
-        </div>
+      <section className={styles.services} id="services">
+        <header><span>{locale === "ar" ? "قدرات" : "Capabilities"}</span><h2>{pick(content.profile.role, locale)}</h2></header>
+        <div className={styles.serviceGrid}>{content.services.map((service) => <article key={service.id}><b>{service.number}</b><h3>{pick(service.title, locale)}</h3><p>{pick(service.description, locale)}</p></article>)}</div>
       </section>
-
-      <footer className={s.contact} id="contact">
-        <span>04 / OPEN CHANNEL</span>
-        <h2>{pick(content.labels.contact, locale)}</h2>
-        <p>{pick(content.labels.contactCopy, locale)}</p>
-        <div>
-          <a href={`mailto:${content.profile.email}`}>{content.profile.email} ↗</a>
-          <a href={whatsappHref(content)} target="_blank" rel="noreferrer">WHATSAPP ↗</a>
-        </div>
-        <small>KHALID MOHAMAD · BUSINESS GROWTH &amp; AUTOMATION</small>
-      </footer>
+      <section className={styles.work} id="work">
+        <header><span>{locale === "ar" ? "مشاريع" : "Projects"}</span><h2>{locale === "ar" ? "كل مشروع صفحة تحكي الأزمة والحل" : "Every project opens into the problem and the fix"}</h2></header>
+        <div className={styles.projectGrid}>{projects.map((project, index) => { const cover = projectImages(project)[0]; return <article className={styles.projectCard} key={project.id}><Link href={projectHref(project, { locale, variantPath })}>{cover ? <figure className={styles.projectImage}><Image src={cover.url} alt={pick(cover.alt, locale)} fill sizes="(max-width: 760px) 92vw, 30vw" unoptimized /></figure> : null}<span>{n(index)} · {pick(project.eyebrow, locale)}</span><h3>{pick(project.title, locale)}</h3><p>{pick(project.summary, locale)}</p><b>{locale === "ar" ? "افتح المشروع" : "Open case"}</b></Link></article>; })}</div>
+      </section>
+      <section className={styles.cta} id="contact"><span>{locale === "ar" ? "جاهز للحوار" : "Ready for the brief"}</span><h2>{pick(content.profile.availability, locale)}</h2><div><a href={"mailto:" + content.profile.email}>{content.profile.email}</a><a href={whatsappHref(content)} target="_blank" rel="noreferrer">+{content.profile.whatsapp}</a></div></section>
     </main>
   );
 }

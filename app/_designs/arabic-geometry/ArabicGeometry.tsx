@@ -1,23 +1,56 @@
 import Image from "next/image";
-import { PortraitImage } from "@/app/_components/PortraitImage";
 import Link from "next/link";
-import { pick } from "@/lib/site-content";
-import { languageHref, projectHref, projectImages, publishedProjects, whatsappHref, type DesignProps } from "../types";
-import s from "./arabic-geometry.module.css";
+import { pick, projectImages } from "@/lib/site-content";
+import { PortraitImage } from "@/app/_components/PortraitImage";
+import type { DesignProps } from "../types";
+import { languageHref, n, projectHref, publishedProjects, whatsappHref } from "../types";
+import styles from "./arabic-geometry.module.css";
 
-export default function ArabicGeometry(props: DesignProps) {
-  const { content, locale } = props;
+export default function ArabicGeometry({ content, locale, design, preview, variantPath }: DesignProps) {
   const projects = publishedProjects(content);
-  return <main className={s.page} dir={locale === "ar" ? "rtl" : "ltr"}>
-    <nav className={s.nav}><b>خالد · KHALID</b><div><a href="#work">{pick(content.labels.work, locale)}</a><a href="#contact">{pick(content.labels.contact, locale)}</a><Link href={languageHref(props)}>{locale === "ar" ? "EN" : "ع"}</Link></div></nav>
-    <header className={s.hero}>
-      <div className={s.seal}><span>نمو</span><i /></div>
-      <div className={s.copy}><p>{pick(content.profile.role, locale)}</p><h1>{pick(content.profile.headline, locale)}</h1><div className={s.rule}><i /><span>11</span><i /></div><p className={s.intro}>{pick(content.profile.intro, locale)}</p><a href="#work">{locale === "ar" ? "افتح سجل الأعمال" : "Open the work folio"} ↓</a></div>
-      <figure><div className={s.star} /><PortraitImage content={content} priority sizes="(max-width: 760px) 92vw, 36vw" /><figcaption>{content.profile.name}<small>UAE · KSA · REMOTE</small></figcaption></figure>
-    </header>
-    <section className={s.principles}><header><span>باب ٠١</span><h2>{pick(content.labels.approach, locale)}</h2></header><div>{content.approach.map((item, i)=><article key={item.id}><span>٠{i+1}</span><h3>{pick(item.title,locale)}</h3><p>{pick(item.description,locale)}</p></article>)}</div></section>
-    <section className={s.services}><div className={s.vertical}>BUSINESS · MARKETING · AUTOMATION</div><div><span>باب ٠٢</span><h2>{pick(content.labels.services,locale)}</h2>{content.services.map((item)=><article key={item.id}><b>{item.number}</b><h3>{pick(item.title,locale)}</h3><p>{pick(item.description,locale)}</p></article>)}</div></section>
-    <section className={s.work} id="work"><header><span>باب ٠٣</span><h2>{pick(content.labels.work,locale)}</h2></header><div className={s.folios}>{projects.map((project,i)=>{const cover=projectImages(project)[0];return <Link href={projectHref(project,props)} className={s.folio} key={project.id}><span>{String(i+1).padStart(2,"0")}</span><div className={s.cover}>{cover?<Image src={cover.url} alt={pick(cover.alt,locale)} fill sizes="(max-width:760px) 88vw, 38vw" unoptimized/>:<i />}</div><p>{pick(project.eyebrow,locale)}</p><h3>{pick(project.title,locale)}</h3><small>{pick(content.labels.viewCase,locale)} ↗</small></Link>})}</div></section>
-    <footer id="contact"><div className={s.sealSmall}>خ</div><p>{pick(content.labels.contactCopy,locale)}</p><h2>{pick(content.labels.contact,locale)}</h2><div><a href={`mailto:${content.profile.email}`}>{content.profile.email}</a><a href={whatsappHref(content)} target="_blank" rel="noreferrer">WhatsApp ↗</a></div></footer>
-  </main>;
+  const languageUrl = languageHref({ content, locale, design, preview, variantPath });
+  return (
+    <main className={styles.page} dir={locale === "ar" ? "rtl" : "ltr"} data-layout="kufi">
+      <a className={styles.skip} href="#work">Skip to work</a>
+      <nav className={styles.nav} aria-label="Portfolio">
+        <Link href={variantPath || "/" + locale} className={styles.brand}><span>K/11</span><b>{content.profile.name}</b></Link>
+        <div>
+          <a href="#method">{locale === "ar" ? "المنهج" : "Method"}</a>
+          <a href="#services">{locale === "ar" ? "الخدمات" : "Services"}</a>
+          <a href="#work">{locale === "ar" ? "الأعمال" : "Work"}</a>
+          <Link href={languageUrl}>{locale === "ar" ? "EN" : "AR"}</Link>
+        </div>
+      </nav>
+      <section className={styles.hero} aria-labelledby="hero-title">
+        <div className={styles.heroCopy}>
+          <p className={styles.eyebrow}>Kufi Manuscript · modern Arabic geometry manuscript</p>
+          <h1 id="hero-title">{pick(content.profile.headline, locale)}</h1>
+          <p className={styles.lead}>{pick(content.profile.intro, locale)}</p>
+          <div className={styles.actions}>
+            <a href="#work">{locale === "ar" ? "شوف طريقة الحل" : "See the problem-solving flow"}</a>
+            <a href={whatsappHref(content)} target="_blank" rel="noreferrer">WhatsApp</a>
+          </div>
+        </div>
+        <div className={styles.heroVisual} aria-label={content.profile.name}>
+          <div className={styles.portraitShell}>
+            <PortraitImage content={content} className={styles.portraitImage} sizes="(max-width: 760px) 88vw, 42vw" priority />
+          </div>
+          <div className={styles.signature} aria-hidden="true"><span>11</span><b>Arabic Geometry</b></div>
+        </div>
+      </section>
+      <section className={styles.method} id="method">
+        <header><span>{locale === "ar" ? "خطوة بخطوة" : "Step by step"}</span><h2>{locale === "ar" ? "من المشكلة إلى نظام نمو" : "From bottleneck to growth system"}</h2></header>
+        <div className={styles.methodGrid}>{content.approach.map((step, index) => <article key={step.id}><b>{n(index)}</b><h3>{pick(step.title, locale)}</h3><p>{pick(step.description, locale)}</p></article>)}</div>
+      </section>
+      <section className={styles.services} id="services">
+        <header><span>{locale === "ar" ? "قدرات" : "Capabilities"}</span><h2>{pick(content.profile.role, locale)}</h2></header>
+        <div className={styles.serviceGrid}>{content.services.map((service) => <article key={service.id}><b>{service.number}</b><h3>{pick(service.title, locale)}</h3><p>{pick(service.description, locale)}</p></article>)}</div>
+      </section>
+      <section className={styles.work} id="work">
+        <header><span>{locale === "ar" ? "مشاريع" : "Projects"}</span><h2>{locale === "ar" ? "كل مشروع صفحة تحكي الأزمة والحل" : "Every project opens into the problem and the fix"}</h2></header>
+        <div className={styles.projectGrid}>{projects.map((project, index) => { const cover = projectImages(project)[0]; return <article className={styles.projectCard} key={project.id}><Link href={projectHref(project, { locale, variantPath })}>{cover ? <figure className={styles.projectImage}><Image src={cover.url} alt={pick(cover.alt, locale)} fill sizes="(max-width: 760px) 92vw, 30vw" unoptimized /></figure> : null}<span>{n(index)} · {pick(project.eyebrow, locale)}</span><h3>{pick(project.title, locale)}</h3><p>{pick(project.summary, locale)}</p><b>{locale === "ar" ? "افتح المشروع" : "Open case"}</b></Link></article>; })}</div>
+      </section>
+      <section className={styles.cta} id="contact"><span>{locale === "ar" ? "جاهز للحوار" : "Ready for the brief"}</span><h2>{pick(content.profile.availability, locale)}</h2><div><a href={"mailto:" + content.profile.email}>{content.profile.email}</a><a href={whatsappHref(content)} target="_blank" rel="noreferrer">+{content.profile.whatsapp}</a></div></section>
+    </main>
+  );
 }

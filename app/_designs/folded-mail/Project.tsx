@@ -1,2 +1,28 @@
-import Link from "next/link";import { ProjectPicture } from "@/app/_components/ProjectPicture";import { pick } from "@/lib/site-content";import { projectDetailData,type ProjectDetailProps } from "../types";import s from "./project.module.css";
-export default function MailProject(props:ProjectDetailProps){const{content,locale,project}=props;const d=projectDetailData(props);return <main className={s.page} dir={d.dir}><nav><Link href={`${d.base}${d.query}`}>← RETURN TO SENDER</Link><span>ENCLOSURE 0{d.index+1}</span></nav><header><div><span>{pick(project.eyebrow,locale)}</span><h1>{pick(project.title,locale)}</h1></div><p>{pick(project.description,locale)}</p>{d.images[0]?<ProjectPicture image={d.images[0]} locale={locale} priority className={s.cover}/>:null}</header><section className={s.folds}><article><span>FOLD A</span><h2>{pick(content.labels.challenge,locale)}</h2><p>{pick(project.challenge,locale)}</p></article><article><span>FOLD B</span><h2>{pick(content.labels.solution,locale)}</h2><p>{pick(project.solution,locale)}</p></article><article><span>FOLD C</span><h2>{pick(content.labels.outcome,locale)}</h2><p>{pick(project.outcome,locale)}</p></article></section>{d.images.length>1?<section className={s.enclosures}>{d.images.slice(1).map(image=><ProjectPicture key={image.id} image={image} locale={locale}/>)}</section>:null}<footer><div>REPLY<br/>PAID</div>{d.links.map(link=><a href={link.url} target="_blank" rel="noreferrer" key={link.id}>{pick(link.label,locale)} ↗</a>)}{d.next?<Link href={d.projectUrl(d.next.slug)}>NEXT MAILER →</Link>:null}</footer></main>}
+import Link from "next/link";
+import { pick } from "@/lib/site-content";
+import { ProjectMetrics } from "../ProjectMetrics";
+import type { ProjectDetailProps } from "../types";
+import { n, projectDetailData } from "../types";
+import { ProjectPicture } from "@/app/_components/ProjectPicture";
+import styles from "./project.module.css";
+
+export default function FoldedMailProject(props: ProjectDetailProps) {
+  const { content, locale, project } = props;
+  const { images, links, previous, next, projectUrl, dir } = projectDetailData(props);
+  const cover = images[0];
+  return (
+    <main className={styles.page} dir={dir} data-layout="fold">
+      <nav className={styles.nav} aria-label="Project"><Link href={props.variantPath || "/" + locale}>← {locale === "ar" ? "رجوع" : "Back"}</Link><span>Folded CRM · 24</span></nav>
+      <section className={styles.hero}>
+        <div className={styles.copy}><p className={styles.eyebrow}>Folded Direct Mail</p><h1>{pick(project.title, locale)}</h1><p>{pick(project.description, locale) || pick(project.summary, locale)}</p></div>
+        {cover ? <ProjectPicture image={cover} locale={locale} className={styles.cover} priority sizes="(max-width: 760px) 94vw, 46vw" /> : null}
+      </section>
+      <section className={styles.body}>{[[locale === "ar" ? "الأزمة" : "Challenge", project.challenge],[locale === "ar" ? "الحل" : "Solution", project.solution],[locale === "ar" ? "التنفيذ" : "Implementation", project.implementation],[locale === "ar" ? "القيمة" : "Business value", project.outcome]].map(([label, text], index) => pick(text, locale).trim() ? <article className={styles.section} key={String(label)}><span>{n(index)}</span><h2>{String(label)}</h2><p>{pick(text, locale)}</p></article> : null)}</section>
+      <div className={styles.metrics}><ProjectMetrics project={project} locale={locale} /></div>
+      {images.length > 1 ? <section className={styles.gallery} aria-label={locale === "ar" ? "صور المشروع" : "Project images"}>{images.slice(1).map((image) => <ProjectPicture key={image.id} image={image} locale={locale} className={styles.galleryImage} />)}</section> : null}
+      <section className={styles.tools}><h2>{locale === "ar" ? "الأدوات والروابط" : "Tools & links"}</h2><div>{project.tools.map((tool) => <span key={tool}>{tool}</span>)}</div>{links.length ? <p>{links.map((link) => <a key={link.id} href={link.url} target="_blank" rel="noreferrer">{pick(link.label, locale)}</a>)}</p> : null}</section>
+      <nav className={styles.projectNav} aria-label="More projects">{previous ? <Link href={projectUrl(previous.slug)}>← {pick(previous.title, locale)}</Link> : <span />}{next ? <Link href={projectUrl(next.slug)}>{pick(next.title, locale)} →</Link> : <span />}</nav>
+      <footer className={styles.cta}><h2>{locale === "ar" ? "عندك مشكلة شبه دي؟" : "Got a similar bottleneck?"}</h2><a href={"mailto:" + content.profile.email}>{content.profile.email}</a></footer>
+    </main>
+  );
+}

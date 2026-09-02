@@ -1,216 +1,56 @@
 import Image from "next/image";
 import Link from "next/link";
+import { pick, projectImages } from "@/lib/site-content";
 import { PortraitImage } from "@/app/_components/PortraitImage";
-import { DESIGN_NAMES, pick } from "@/lib/site-content";
-import {
-  languageHref,
-  n,
-  projectHref,
-  projectImages,
-  projectLinks,
-  publishedProjects,
-  whatsappHref,
-  type DesignProps,
-} from "../types";
-import s from "./pitch.module.css";
-import { ProjectMetrics } from "../ProjectMetrics";
+import type { DesignProps } from "../types";
+import { languageHref, n, projectHref, publishedProjects, whatsappHref } from "../types";
+import styles from "./pitch.module.css";
 
-export default function Pitch(props: DesignProps) {
-  const { content, locale, design, preview } = props;
+export default function Pitch({ content, locale, design, preview, variantPath }: DesignProps) {
   const projects = publishedProjects(content);
+  const languageUrl = languageHref({ content, locale, design, preview, variantPath });
   return (
-    <main
-      className={s.page}
-      dir={locale === "ar" ? "rtl" : "ltr"}
-      lang={locale}
-      id="top"
-    >
-      {preview && (
-        <div className={s.preview}>
-          <Link href="/designs">← LAB</Link>
-          <span>{DESIGN_NAMES[design]}</span>
-        </div>
-      )}
-      <nav className={s.nav}>
-        <a href="#top">KM™</a>
+    <main className={styles.page} dir={locale === "ar" ? "rtl" : "ltr"} data-layout="deck">
+      <a className={styles.skip} href="#work">Skip to work</a>
+      <nav className={styles.nav} aria-label="Portfolio">
+        <Link href={variantPath || "/" + locale} className={styles.brand}><span>K/10</span><b>{content.profile.name}</b></Link>
         <div>
-          <span>{String(6 + projects.length).padStart(2, "0")} SLIDES</span>
-          <a href="#work">{locale === "ar" ? "الأعمال" : "WORK"}</a>
-          <Link href={languageHref(props)}>
-            {locale === "en" ? "AR" : "EN"}
-          </Link>
+          <a href="#method">{locale === "ar" ? "المنهج" : "Method"}</a>
+          <a href="#services">{locale === "ar" ? "الخدمات" : "Services"}</a>
+          <a href="#work">{locale === "ar" ? "الأعمال" : "Work"}</a>
+          <Link href={languageUrl}>{locale === "ar" ? "EN" : "AR"}</Link>
         </div>
       </nav>
-      <div
-        className={s.slideRail}
-        aria-label={locale === "ar" ? "مؤشر الشرائح" : "Slide index"}
-      >
-        <a href="#top">01</a>
-        <a href="#services">02</a>
-        <a href="#work">04—{String(3 + projects.length).padStart(2, "0")}</a>
-        <a href="#contact">END</a>
-      </div>
-      <header className={`${s.slide} ${s.hero}`}>
-        <div className={s.slideNo}>SLIDE 01</div>
-        <div className={s.heroCopy}>
-          <p>{pick(content.profile.role, locale)}</p>
-          <h1>{pick(content.profile.headline, locale)}</h1>
-          <a href="#work">
-            {locale === "ar" ? "شاهد الأعمال" : "SHOW ME THE WORK"} ↓
-          </a>
+      <section className={styles.hero} aria-labelledby="hero-title">
+        <div className={styles.heroCopy}>
+          <p className={styles.eyebrow}>Pitch Slides · hard-cut startup deck</p>
+          <h1 id="hero-title">{pick(content.profile.headline, locale)}</h1>
+          <p className={styles.lead}>{pick(content.profile.intro, locale)}</p>
+          <div className={styles.actions}>
+            <a href="#work">{locale === "ar" ? "شوف طريقة الحل" : "See the problem-solving flow"}</a>
+            <a href={whatsappHref(content)} target="_blank" rel="noreferrer">WhatsApp</a>
+          </div>
         </div>
-        <div className={s.cutout}>
-          <PortraitImage content={content} fill={false} sizes="(max-width: 760px) 100vw, 24vw" priority />
-          <b>
-            GROW
-            <br />
-            BUILD
-            <br />
-            FIX
-          </b>
-        </div>
-      </header>
-      <section className={`${s.slide} ${s.services}`} id="services">
-        <span className={s.slideNo}>SLIDE 02</span>
-        <h2>{pick(content.labels.services, locale)}</h2>
-        <div>
-          {content.services.map((service) => (
-            <article key={service.id}>
-              <span>{service.number}</span>
-              <h3>{pick(service.title, locale)}</h3>
-              <p>{pick(service.description, locale)}</p>
-            </article>
-          ))}
+        <div className={styles.heroVisual} aria-label={content.profile.name}>
+          <div className={styles.portraitShell}>
+            <PortraitImage content={content} className={styles.portraitImage} sizes="(max-width: 760px) 88vw, 42vw" priority />
+          </div>
+          <div className={styles.signature} aria-hidden="true"><span>10</span><b>Neo-Brutalist Pitch Deck</b></div>
         </div>
       </section>
-      <section className={`${s.slide} ${s.method}`}>
-        <span className={s.slideNo}>SLIDE 03</span>
-        <h2>{pick(content.labels.approach, locale)}</h2>
-        <div>
-          {content.approach.map((item, i) => (
-            <article key={item.id}>
-              <b>{n(i)}</b>
-              <h3>{pick(item.title, locale)}</h3>
-              <p>{pick(item.description, locale)}</p>
-            </article>
-          ))}
-        </div>
+      <section className={styles.method} id="method">
+        <header><span>{locale === "ar" ? "خطوة بخطوة" : "Step by step"}</span><h2>{locale === "ar" ? "من المشكلة إلى نظام نمو" : "From bottleneck to growth system"}</h2></header>
+        <div className={styles.methodGrid}>{content.approach.map((step, index) => <article key={step.id}><b>{n(index)}</b><h3>{pick(step.title, locale)}</h3><p>{pick(step.description, locale)}</p></article>)}</div>
       </section>
-      <section className={s.work} id="work">
-        <header className={s.slide}>
-          <span className={s.slideNo}>
-            SLIDES 04—{String(3 + projects.length).padStart(2, "0")}
-          </span>
-          <h2>{pick(content.labels.work, locale)}</h2>
-          <p>SWIPE / SCROLL →</p>
-        </header>
-        <div className={s.deck}>
-          {projects.map((project, i) => {
-            const images = projectImages(project);
-            const links = projectLinks(project);
-            return (
-              <article key={project.id}>
-                <span className={s.slideNo}>
-                  CASE {n(i)} / {String(i + 4).padStart(2, "0")}
-                </span>
-                <div className={s.visuals}>
-                  <div className={s.caseArt}>
-                    <b>{n(i)}</b>
-                    {images[0] && (
-                      <Image
-                        src={images[0].url}
-                        alt={pick(images[0].alt, locale)}
-                        width={1200}
-                        height={900}
-                        unoptimized
-                      />
-                    )}
-                  </div>
-                  {images.length > 1 && (
-                    <div className={s.filmstrip}>
-                      {images.map((image, index) => (
-                        <figure key={image.id}>
-                          <Image
-                            src={image.url}
-                            alt={pick(image.alt, locale)}
-                            width={260}
-                            height={180}
-                            unoptimized
-                          />
-                          <figcaption>
-                            {String(index + 1).padStart(2, "0")}
-                          </figcaption>
-                        </figure>
-                      ))}
-                    </div>
-                  )}
-                </div>
-                <div className={s.caseCopy}>
-                  <p>{pick(project.eyebrow, locale)}</p>
-                  <Link href={projectHref(project, props)}><h3>{pick(project.title, locale)}</h3></Link>
-                  <p>{pick(project.summary, locale)}</p>
-                  <ProjectMetrics project={project} locale={locale} />
-                  {links.length > 0 && (
-                    <div className={s.pitchLinks}>
-                      {links.map((link) => (
-                        <a
-                          key={link.id}
-                          href={link.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          {pick(link.label, locale)} ↗
-                        </a>
-                      ))}
-                    </div>
-                  )}
-                  <details>
-                    <summary>OPEN CASE +</summary>
-                    <div>
-                      <p>
-                        <b>{pick(content.labels.challenge, locale)}</b>
-                        {pick(project.challenge, locale)}
-                      </p>
-                      <p>
-                        <b>{pick(content.labels.solution, locale)}</b>
-                        {pick(project.solution, locale)}
-                      </p>
-                      <p>
-                        <b>{pick(content.labels.outcome, locale)}</b>
-                        {pick(project.outcome, locale)}
-                      </p>
-                    </div>
-                  </details>
-                </div>
-              </article>
-            );
-          })}
-        </div>
+      <section className={styles.services} id="services">
+        <header><span>{locale === "ar" ? "قدرات" : "Capabilities"}</span><h2>{pick(content.profile.role, locale)}</h2></header>
+        <div className={styles.serviceGrid}>{content.services.map((service) => <article key={service.id}><b>{service.number}</b><h3>{pick(service.title, locale)}</h3><p>{pick(service.description, locale)}</p></article>)}</div>
       </section>
-      <section className={`${s.slide} ${s.skills}`}>
-        <span className={s.slideNo}>SLIDE 08</span>
-        <h2>
-          {locale === "ar"
-            ? "الأدوات التي تحرّك العمل"
-            : "Tools that move the work"}
-        </h2>
-        <div>
-          {content.skills.map((skill) => (
-            <span key={skill}>{skill}</span>
-          ))}
-        </div>
+      <section className={styles.work} id="work">
+        <header><span>{locale === "ar" ? "مشاريع" : "Projects"}</span><h2>{locale === "ar" ? "كل مشروع صفحة تحكي الأزمة والحل" : "Every project opens into the problem and the fix"}</h2></header>
+        <div className={styles.projectGrid}>{projects.map((project, index) => { const cover = projectImages(project)[0]; return <article className={styles.projectCard} key={project.id}><Link href={projectHref(project, { locale, variantPath })}>{cover ? <figure className={styles.projectImage}><Image src={cover.url} alt={pick(cover.alt, locale)} fill sizes="(max-width: 760px) 92vw, 30vw" unoptimized /></figure> : null}<span>{n(index)} · {pick(project.eyebrow, locale)}</span><h3>{pick(project.title, locale)}</h3><p>{pick(project.summary, locale)}</p><b>{locale === "ar" ? "افتح المشروع" : "Open case"}</b></Link></article>; })}</div>
       </section>
-      <footer className={`${s.slide} ${s.footer}`} id="contact">
-        <span className={s.slideNo}>FINAL SLIDE</span>
-        <h2>{pick(content.labels.contact, locale)}</h2>
-        <p>{pick(content.labels.contactCopy, locale)}</p>
-        <div>
-          <a href={`mailto:${content.profile.email}`}>EMAIL ME ↗</a>
-          <a href={whatsappHref(content)} target="_blank" rel="noreferrer">
-            WHATSAPP ↗
-          </a>
-        </div>
-      </footer>
+      <section className={styles.cta} id="contact"><span>{locale === "ar" ? "جاهز للحوار" : "Ready for the brief"}</span><h2>{pick(content.profile.availability, locale)}</h2><div><a href={"mailto:" + content.profile.email}>{content.profile.email}</a><a href={whatsappHref(content)} target="_blank" rel="noreferrer">+{content.profile.whatsapp}</a></div></section>
     </main>
   );
 }

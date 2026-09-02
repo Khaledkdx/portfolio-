@@ -1,203 +1,56 @@
-"use client";
-
+import Image from "next/image";
 import Link from "next/link";
-import { motion, useReducedMotion, type Variants } from "framer-motion";
-import { Logos3 } from "@/components/ui/logos3";
+import { pick, projectImages } from "@/lib/site-content";
 import { PortraitImage } from "@/app/_components/PortraitImage";
-import { pick } from "@/lib/site-content";
-import {
-  languageHref,
-  n,
-  projectHref,
-  publishedProjects,
-  whatsappHref,
-  type DesignProps,
-} from "../types";
-import s from "./stagger-proof.module.css";
+import type { DesignProps } from "../types";
+import { languageHref, n, projectHref, publishedProjects, whatsappHref } from "../types";
+import styles from "./stagger-proof.module.css";
 
-const storyKeys = ["challenge", "solution", "outcome"] as const;
-
-export default function StaggerProof(props: DesignProps) {
-  const { content, locale } = props;
+export default function StaggerProof({ content, locale, design, preview, variantPath }: DesignProps) {
   const projects = publishedProjects(content);
-  const reduced = useReducedMotion();
-  const dir = locale === "ar" ? "rtl" : "ltr";
-  const proofCards = [
-    {
-      label: locale === "ar" ? "الأزمة" : "Friction",
-      title: pick(content.labels.challenge, locale),
-      text: projects[0] ? pick(projects[0].challenge, locale) : pick(content.profile.intro, locale),
-    },
-    {
-      label: locale === "ar" ? "النظام" : "System",
-      title: pick(content.labels.solution, locale),
-      text: projects[0] ? pick(projects[0].solution, locale) : pick(content.labels.contactCopy, locale),
-    },
-    {
-      label: locale === "ar" ? "الإثبات" : "Proof",
-      title: pick(content.labels.outcome, locale),
-      text: projects[0] ? pick(projects[0].outcome, locale) : pick(content.profile.availability, locale),
-    },
-  ];
-  const companies = content.companies.items
-    .filter((company) => company.visible && company.logoUrl)
-    .map((company) => ({
-      id: company.id,
-      image: company.logoUrl,
-      description: pick(company.alt, locale),
-      name: pick(company.name, locale),
-      showName: company.showName,
-      href: company.website || undefined,
-    }));
-  const group: Variants = reduced
-    ? {}
-    : { show: { transition: { staggerChildren: 0.09, delayChildren: 0.08 } } };
-  const item: Variants = reduced
-    ? {}
-    : {
-        hidden: { opacity: 0, y: 28, rotate: dir === "rtl" ? -1.5 : 1.5 },
-        show: {
-          opacity: 1,
-          y: 0,
-          rotate: 0,
-          transition: { duration: 0.48, ease: [0.22, 1, 0.36, 1] },
-        },
-      };
-
+  const languageUrl = languageHref({ content, locale, design, preview, variantPath });
   return (
-    <main className={s.page} dir={dir}>
-      <a className={s.skip} href="#main">
-        {locale === "ar" ? "انتقل إلى المحتوى" : "Skip to content"}
-      </a>
-
-      <nav className={s.nav} aria-label={locale === "ar" ? "التنقل الرئيسي" : "Primary navigation"}>
-        <Link href={props.variantPath ?? `/${locale}`} className={s.mark}>
-          <span>K</span>
-          <b>{content.profile.name}</b>
-        </Link>
+    <main className={styles.page} dir={locale === "ar" ? "rtl" : "ltr"} data-layout="proof">
+      <a className={styles.skip} href="#work">Skip to work</a>
+      <nav className={styles.nav} aria-label="Portfolio">
+        <Link href={variantPath || "/" + locale} className={styles.brand}><span>K/32</span><b>{content.profile.name}</b></Link>
         <div>
-          <a href="#story">{locale === "ar" ? "القصة" : "Story"}</a>
-          <a href="#work">{pick(content.labels.work, locale)}</a>
-          <a href="#contact">{pick(content.labels.contact, locale)}</a>
-          <Link href={languageHref(props)}>{locale === "ar" ? "EN" : "عربي"}</Link>
+          <a href="#method">{locale === "ar" ? "المنهج" : "Method"}</a>
+          <a href="#services">{locale === "ar" ? "الخدمات" : "Services"}</a>
+          <a href="#work">{locale === "ar" ? "الأعمال" : "Work"}</a>
+          <Link href={languageUrl}>{locale === "ar" ? "EN" : "AR"}</Link>
         </div>
       </nav>
-
-      <section className={s.hero} id="main">
-        <motion.div
-          className={s.heroCopy}
-          initial={reduced ? false : { opacity: 0, y: 26 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-        >
-          <p className={s.kicker}>{locale === "ar" ? "استوديو إثبات النمو / 032" : "Stagger Proof Studio / 032"}</p>
-          <h1>{content.profile.name}</h1>
-          <p className={s.lead}>{pick(content.profile.headline, locale)}</p>
-          <div className={s.actions}>
-            <a href="#work">{pick(content.labels.viewCase, locale)}</a>
+      <section className={styles.hero} aria-labelledby="hero-title">
+        <div className={styles.heroCopy}>
+          <p className={styles.eyebrow}>Proof Cascade · staggered testimonial proof studio</p>
+          <h1 id="hero-title">{pick(content.profile.headline, locale)}</h1>
+          <p className={styles.lead}>{pick(content.profile.intro, locale)}</p>
+          <div className={styles.actions}>
+            <a href="#work">{locale === "ar" ? "شوف طريقة الحل" : "See the problem-solving flow"}</a>
             <a href={whatsappHref(content)} target="_blank" rel="noreferrer">WhatsApp</a>
           </div>
-        </motion.div>
-
-        <motion.div
-          className={s.stack}
-          initial={reduced ? false : "hidden"}
-          animate="show"
-          variants={group}
-          aria-label={locale === "ar" ? "قصة مختصرة عن طريقة العمل" : "Short proof story"}
-        >
-          <motion.figure className={s.portraitCard} variants={item}>
-            <PortraitImage content={content} sizes="(max-width: 760px) 82vw, 36vw" priority />
-          </motion.figure>
-          {proofCards.map((card, index) => (
-            <motion.article
-              key={card.label}
-              className={s.proofCard}
-              variants={item}
-              whileHover={reduced ? undefined : { y: -8, rotate: dir === "rtl" ? -1 : 1 }}
-            >
-              <span>{n(index)} / {card.label}</span>
-              <h2>{card.title}</h2>
-              <p>{card.text}</p>
-            </motion.article>
-          ))}
-        </motion.div>
-      </section>
-
-      <section className={s.story} id="story">
-        <header>
-          <span>{locale === "ar" ? "قصة النمو" : "Growth story"}</span>
-          <h2>{locale === "ar" ? "الموقع يمشي كدليل: مشكلة، قرار، نظام." : "The page reads like proof: problem, decision, system."}</h2>
-        </header>
-        <div className={s.storyRail}>
-          {storyKeys.map((key, index) => (
-            <motion.article
-              key={key}
-              initial={reduced ? false : { opacity: 0, x: dir === "rtl" ? -32 : 32 }}
-              whileInView={reduced ? undefined : { opacity: 1, x: 0 }}
-              viewport={{ once: true, amount: 0.35 }}
-              transition={{ duration: 0.44, delay: index * 0.08 }}
-            >
-              <span>{String(index + 1).padStart(2, "0")}</span>
-              <h3>{pick(content.labels[key], locale)}</h3>
-              <p>{projects[index] ? pick(projects[index][key === "outcome" ? "outcome" : key], locale) : pick(content.approach[index]?.description ?? content.profile.intro, locale)}</p>
-            </motion.article>
-          ))}
+        </div>
+        <div className={styles.heroVisual} aria-label={content.profile.name}>
+          <div className={styles.portraitShell}>
+            <PortraitImage content={content} className={styles.portraitImage} sizes="(max-width: 760px) 88vw, 42vw" priority />
+          </div>
+          <div className={styles.signature} aria-hidden="true"><span>32</span><b>Stagger Proof Studio</b></div>
         </div>
       </section>
-
-      <section className={s.services} aria-labelledby="stagger-services">
-        <header>
-          <span>{locale === "ar" ? "القدرات" : "Capabilities"}</span>
-          <h2 id="stagger-services">{pick(content.labels.services, locale)}</h2>
-        </header>
-        <div>
-          {content.services.map((service, index) => (
-            <article key={service.id}>
-              <b>{String(index + 1).padStart(2, "0")}</b>
-              <h3>{pick(service.title, locale)}</h3>
-              <p>{pick(service.description, locale)}</p>
-            </article>
-          ))}
-        </div>
+      <section className={styles.method} id="method">
+        <header><span>{locale === "ar" ? "خطوة بخطوة" : "Step by step"}</span><h2>{locale === "ar" ? "من المشكلة إلى نظام نمو" : "From bottleneck to growth system"}</h2></header>
+        <div className={styles.methodGrid}>{content.approach.map((step, index) => <article key={step.id}><b>{n(index)}</b><h3>{pick(step.title, locale)}</h3><p>{pick(step.description, locale)}</p></article>)}</div>
       </section>
-
-      <section className={s.work} id="work">
-        <header>
-          <span>{locale === "ar" ? "إثبات العمل" : "Proof wall"}</span>
-          <h2>{pick(content.labels.work, locale)}</h2>
-        </header>
-        <motion.div className={s.workGrid} initial={reduced ? false : "hidden"} whileInView={reduced ? undefined : "show"} viewport={{ once: true, amount: 0.15 }} variants={group}>
-          {projects.map((project, index) => (
-            <motion.article key={project.id} variants={item} className={index % 3 === 1 ? s.tallCard : ""}>
-              <Link href={projectHref(project, props)}>
-                <span>{String(index + 1).padStart(2, "0")} / {pick(project.eyebrow, locale)}</span>
-                <h3>{pick(project.title, locale)}</h3>
-                <p>{pick(project.summary, locale)}</p>
-                <b>{pick(content.labels.viewCase, locale)} ↗</b>
-              </Link>
-            </motion.article>
-          ))}
-        </motion.div>
+      <section className={styles.services} id="services">
+        <header><span>{locale === "ar" ? "قدرات" : "Capabilities"}</span><h2>{pick(content.profile.role, locale)}</h2></header>
+        <div className={styles.serviceGrid}>{content.services.map((service) => <article key={service.id}><b>{service.number}</b><h3>{pick(service.title, locale)}</h3><p>{pick(service.description, locale)}</p></article>)}</div>
       </section>
-
-      <Logos3
-        className="stagger-company-rail"
-        eyebrow={locale === "ar" ? "الشركات والشعارات" : "LOGOS & TRUST"}
-        heading={pick(content.companies.heading, locale)}
-        logos={companies}
-        locale={locale}
-      />
-
-      <footer className={s.contact} id="contact">
-        <span>{locale === "ar" ? "افتح قناة" : "Open channel"}</span>
-        <h2>{pick(content.labels.contact, locale)}</h2>
-        <p>{pick(content.labels.contactCopy, locale)}</p>
-        <div>
-          <a href={`mailto:${content.profile.email}`}>{content.profile.email}</a>
-          <a href={whatsappHref(content)} target="_blank" rel="noreferrer">{pick(content.labels.whatsapp, locale)}</a>
-        </div>
-      </footer>
+      <section className={styles.work} id="work">
+        <header><span>{locale === "ar" ? "مشاريع" : "Projects"}</span><h2>{locale === "ar" ? "كل مشروع صفحة تحكي الأزمة والحل" : "Every project opens into the problem and the fix"}</h2></header>
+        <div className={styles.projectGrid}>{projects.map((project, index) => { const cover = projectImages(project)[0]; return <article className={styles.projectCard} key={project.id}><Link href={projectHref(project, { locale, variantPath })}>{cover ? <figure className={styles.projectImage}><Image src={cover.url} alt={pick(cover.alt, locale)} fill sizes="(max-width: 760px) 92vw, 30vw" unoptimized /></figure> : null}<span>{n(index)} · {pick(project.eyebrow, locale)}</span><h3>{pick(project.title, locale)}</h3><p>{pick(project.summary, locale)}</p><b>{locale === "ar" ? "افتح المشروع" : "Open case"}</b></Link></article>; })}</div>
+      </section>
+      <section className={styles.cta} id="contact"><span>{locale === "ar" ? "جاهز للحوار" : "Ready for the brief"}</span><h2>{pick(content.profile.availability, locale)}</h2><div><a href={"mailto:" + content.profile.email}>{content.profile.email}</a><a href={whatsappHref(content)} target="_blank" rel="noreferrer">+{content.profile.whatsapp}</a></div></section>
     </main>
   );
 }
