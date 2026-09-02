@@ -1,1 +1,107 @@
 .courtyard{background:#f7f4ec;color:#0f5a4a;min-height:100vh;font-family:var(--font-instrument)}.courtyard nav{height:90px;padding:0 6vw;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #b98b5f}.courtyard header{min-height:88vh;padding:6vw;display:grid;grid-template-columns:1fr .85fr;gap:8vw;align-items:center}.courtyard h1{font:400 clamp(58px,8vw,118px)/.9 var(--font-marcellus);margin:25px 0}.courtyard header p{font-size:20px;line-height:1.8}.courtyard small{color:#7b2d34}.arch{height:70vh;border-radius:50% 50% 0 0;padding:22px;background:#e8d9bf}.arch>div{height:100%;border-radius:50% 50% 0 0}.gates{display:grid;grid-template-columns:repeat(3,1fr);padding:9vw 6vw;background:#e8d9bf;gap:4vw}.gates article{min-height:450px;padding:50px 30px;border:1px solid #0f5a4a;border-radius:180px 180px 0 0;text-align:center}.gates i{color:#7b2d34}.gates h2{font:400 38px var(--font-marcellus);margin-top:80px}.gates p{line-height:1.7}.walk{padding:10vw 5vw;display:flex;gap:5vw;overflow:auto;align-items:flex-start}.walk figure{min-width:60vw}.walk figure>div{height:45vw}.walk .low{margin-top:12vw}.majlis{padding:8vw;text-align:center;background:#7b2d34;color:#f7f4ec;font-size:20px}.majlis a{display:inline-block;margin:25px;padding:12px;border-bottom:1px solid}.courtyard footer{padding:50px 6vw;display:flex;justify-content:space-between}@media(max-width:760px){.courtyard header,.gates{grid-template-columns:1fr}.arch{height:125vw;order:-1}.gates article{min-height:360px}.walk{display:grid}.walk figure{width:100%;margin:0!important}.walk figure>div{height:110vw}}
+
+/* === REBORN IDENTITY RESET: Desert Arcade === */
+.page {
+  --reborn-ink: #0f5a4a;
+  --reborn-paper: #f7f4ec;
+  --reborn-accent: #b98b5f;
+  --reborn-radius: 28px;
+  background-color: var(--reborn-paper);
+  background-image: radial-gradient(ellipse at center top,rgba(185,139,95,.23),transparent 38%);
+  color: var(--reborn-ink);
+  isolation: isolate;
+  overflow-x: clip;
+}
+.page::selection { background: var(--reborn-accent); color: var(--reborn-ink); }
+.nav, .topbar, .masthead, .header, .deckNav {
+  backdrop-filter: blur(14px);
+  border-color: color-mix(in srgb, var(--reborn-ink), transparent 78%) !important;
+}
+.hero, .cover, .intro, .lead, .stage, .mission, .opening, .frame, .reportHero, .projectHero {
+  position: relative;
+  min-height: min(76vh, 760px);
+  display: grid !important;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  align-items: center;
+  gap: clamp(18px, 4vw, 72px);
+  padding-block: clamp(64px, 10vw, 132px);
+}
+.hero::before, .cover::before, .intro::before, .stage::before, .mission::before, .projectHero::before {
+  content: "Desert Arcade";
+  position: absolute;
+  inset: clamp(12px, 2vw, 28px);
+  z-index: -1;
+  display: grid;
+  place-items: center;
+  color: color-mix(in srgb, var(--reborn-accent), transparent 86%);
+  font-size: clamp(44px, 13vw, 190px);
+  font-weight: 900;
+  letter-spacing: -.08em;
+  line-height: .82;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+.hero h1, .cover h1, .intro h1, .stage h1, .mission h1, .projectHero h1 {
+  max-width: 14ch;
+  letter-spacing: -.045em;
+  line-height: .92;
+}
+.hero p, .cover p, .intro p, .stage p, .mission p, .projectHero p { max-width: 68ch; }
+.portrait, .photo, .heroPhoto, .image, .profile, .visual, .arch, .coverImage, .projectCover, .media, .screen {
+  overflow: hidden;
+  border-radius: var(--reborn-radius) !important;
+  clip-path: inset(0 round 44% 44% 18px 18px);
+  box-shadow: 0 26px 80px rgba(0,0,0,.18);
+  transform: none;
+}
+.portrait img, .photo img, .heroPhoto img, .image img, .profile img, .visual img, .arch img, .coverImage img, .projectCover img, .media img, .screen img, img {
+  max-width: 100%;
+  height: auto;
+  object-fit: cover;
+  object-position: var(--portrait-focus-desktop, 50% 35%);
+}
+.work, .projects, .portfolio, .cases, .dossiers, .gallery, .caseGrid, .grid, .body {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(16px, 2.8vw, 42px);
+}
+.card, .case, .project, .tile, .panel, .dossier, .service, .capability, .article, .slide, .station, .note {
+  border: 1px solid color-mix(in srgb, var(--reborn-ink), transparent 72%) !important;
+  border-radius: var(--reborn-radius) !important;
+  background: color-mix(in srgb, var(--reborn-paper), white 7%);
+  box-shadow: 0 14px 42px rgba(0,0,0,.08);
+  transition: transform .36s cubic-bezier(.22,1,.36,1), box-shadow .36s cubic-bezier(.22,1,.36,1), border-color .36s ease;
+}
+.card:hover, .case:hover, .project:hover, .tile:hover, .panel:hover, .dossier:hover, .service:hover, .capability:hover, .article:hover, .slide:hover, .station:hover, .note:hover {
+  transform: translateY(-7px) ;
+  border-color: var(--reborn-accent) !important;
+}
+a, button { text-underline-offset: .18em; }
+a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
+  outline: 3px solid var(--reborn-accent) !important;
+  outline-offset: 5px !important;
+}
+.cta, .contact, .footer, .finale, .outro {
+  position: relative;
+  border-radius: calc(var(--reborn-radius) + 10px);
+  background: color-mix(in srgb, var(--reborn-ink), black 7%);
+  color: var(--reborn-paper);
+}
+.cta a, .contact a, .footer a, .finale a, .outro a { color: var(--reborn-accent); }
+@media (min-width: 880px) {
+  .hero > :first-child, .cover > :first-child, .intro > :first-child, .stage > :first-child, .mission > :first-child, .projectHero > :first-child { grid-column: 1 / 8; }
+  .hero > :last-child, .cover > :last-child, .intro > :last-child, .stage > :last-child, .mission > :last-child, .projectHero > :last-child { grid-column: 8 / -1; }
+}
+@media (max-width: 879px) {
+  .hero, .cover, .intro, .lead, .stage, .mission, .opening, .frame, .reportHero, .projectHero,
+  .work, .projects, .portfolio, .cases, .dossiers, .gallery, .caseGrid, .grid, .body {
+    grid-template-columns: 1fr !important;
+    min-height: auto;
+  }
+  .hero h1, .cover h1, .intro h1, .stage h1, .mission h1, .projectHero h1 { max-width: 11ch; }
+  .portrait img, .photo img, .heroPhoto img, .image img, .profile img, .visual img, .arch img, .coverImage img, .projectCover img, .media img, .screen img, img { object-position: var(--portrait-focus-mobile, 50% 30%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .01ms !important; }
+}
+/* === END REBORN IDENTITY RESET === */

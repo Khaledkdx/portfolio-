@@ -1,1 +1,107 @@
 .page{background:#080808;color:#f1eee6;font-family:var(--font-instrument);min-height:100vh;overflow:hidden}.page nav{height:78px;padding:0 4vw;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #f1eee644;font:10px var(--font-jetbrains)}.page header{min-height:830px;padding:8vw;display:grid;align-content:center;position:relative;perspective:900px}.page header>div{position:absolute;inset:0;display:grid;place-items:center;opacity:.2;transform-style:preserve-3d}.page header i{position:absolute;font:800 17vw var(--font-instrument);color:transparent;-webkit-text-stroke:1px #f1eee6}.page header i:nth-child(2){transform:translateZ(-300px) scale(.7)}.page header i:nth-child(3){transform:translateZ(-600px) scale(.45)}.page header>span{font:10px var(--font-jetbrains);color:#f04432;z-index:2}.page h1{font-size:clamp(65px,10vw,160px);line-height:.78;letter-spacing:-.09em;max-width:1250px;z-index:2;margin:40px 0}.page header p{font-size:19px;line-height:1.7;max-width:720px;z-index:2}.portal{height:70vw;max-height:900px;margin:0;clip-path:polygon(12% 0,100% 8%,88% 100%,0 92%)}.portal>div{height:100%}.portal figcaption{padding:18px 8vw}.depth{padding:100px 7vw;background:#f1eee6;color:#080808}.depth article{display:grid;grid-template-columns:70px .6fr 1fr;gap:35px;padding:35px 0;border-top:2px solid}.depth b{color:#f04432}.depth h2{font-size:34px;margin:0}.depth p{line-height:1.7;margin:0}.gallery{padding:100px 5vw;display:grid;grid-template-columns:repeat(2,1fr);gap:35px}.gallery figure{margin:0}.gallery figure>div{height:550px}.gallery figcaption{padding:14px}.page footer{padding:110px 6vw;background:#f04432}.page footer a{font-size:30px;font-weight:800}@media(max-width:760px){.depth article{grid-template-columns:45px 1fr}.depth p{grid-column:2}.gallery{grid-template-columns:1fr}.gallery figure>div{height:100vw}.portal{height:120vw}.page header i{font-size:28vw}}
+
+/* === REBORN IDENTITY RESET: Type Tunnel === */
+.page {
+  --reborn-ink: #080808;
+  --reborn-paper: #f1eee6;
+  --reborn-accent: #f04432;
+  --reborn-radius: 2px;
+  background-color: var(--reborn-paper);
+  background-image: repeating-radial-gradient(circle at center,rgba(240,68,50,.18) 0 2px,transparent 3px 56px);
+  color: var(--reborn-ink);
+  isolation: isolate;
+  overflow-x: clip;
+}
+.page::selection { background: var(--reborn-accent); color: var(--reborn-ink); }
+.nav, .topbar, .masthead, .header, .deckNav {
+  backdrop-filter: blur(14px);
+  border-color: color-mix(in srgb, var(--reborn-ink), transparent 78%) !important;
+}
+.hero, .cover, .intro, .lead, .stage, .mission, .opening, .frame, .reportHero, .projectHero {
+  position: relative;
+  min-height: min(76vh, 760px);
+  display: grid !important;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  align-items: center;
+  gap: clamp(18px, 4vw, 72px);
+  padding-block: clamp(64px, 10vw, 132px);
+}
+.hero::before, .cover::before, .intro::before, .stage::before, .mission::before, .projectHero::before {
+  content: "Type Tunnel";
+  position: absolute;
+  inset: clamp(12px, 2vw, 28px);
+  z-index: -1;
+  display: grid;
+  place-items: start;
+  color: color-mix(in srgb, var(--reborn-accent), transparent 86%);
+  font-size: clamp(44px, 13vw, 190px);
+  font-weight: 900;
+  letter-spacing: -.08em;
+  line-height: .82;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+.hero h1, .cover h1, .intro h1, .stage h1, .mission h1, .projectHero h1 {
+  max-width: 9ch;
+  letter-spacing: -.08em;
+  line-height: .82;
+}
+.hero p, .cover p, .intro p, .stage p, .mission p, .projectHero p { max-width: 68ch; }
+.portrait, .photo, .heroPhoto, .image, .profile, .visual, .arch, .coverImage, .projectCover, .media, .screen {
+  overflow: hidden;
+  border-radius: var(--reborn-radius) !important;
+  clip-path: polygon(14% 0,86% 0,100% 100%,0 100%);
+  box-shadow: 0 26px 80px rgba(0,0,0,.18);
+  transform: perspective(900px) rotateY(-8deg);
+}
+.portrait img, .photo img, .heroPhoto img, .image img, .profile img, .visual img, .arch img, .coverImage img, .projectCover img, .media img, .screen img, img {
+  max-width: 100%;
+  height: auto;
+  object-fit: cover;
+  object-position: var(--portrait-focus-desktop, 50% 35%);
+}
+.work, .projects, .portfolio, .cases, .dossiers, .gallery, .caseGrid, .grid, .body {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(16px, 2.8vw, 42px);
+}
+.card, .case, .project, .tile, .panel, .dossier, .service, .capability, .article, .slide, .station, .note {
+  border: 1px solid color-mix(in srgb, var(--reborn-ink), transparent 72%) !important;
+  border-radius: var(--reborn-radius) !important;
+  background: color-mix(in srgb, var(--reborn-paper), white 7%);
+  box-shadow: 0 14px 42px rgba(0,0,0,.08);
+  transition: transform .36s cubic-bezier(.22,1,.36,1), box-shadow .36s cubic-bezier(.22,1,.36,1), border-color .36s ease;
+}
+.card:hover, .case:hover, .project:hover, .tile:hover, .panel:hover, .dossier:hover, .service:hover, .capability:hover, .article:hover, .slide:hover, .station:hover, .note:hover {
+  transform: translateY(-7px) ;
+  border-color: var(--reborn-accent) !important;
+}
+a, button { text-underline-offset: .18em; }
+a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
+  outline: 3px solid var(--reborn-accent) !important;
+  outline-offset: 5px !important;
+}
+.cta, .contact, .footer, .finale, .outro {
+  position: relative;
+  border-radius: calc(var(--reborn-radius) + 10px);
+  background: color-mix(in srgb, var(--reborn-ink), black 7%);
+  color: var(--reborn-paper);
+}
+.cta a, .contact a, .footer a, .finale a, .outro a { color: var(--reborn-accent); }
+@media (min-width: 880px) {
+  .hero > :first-child, .cover > :first-child, .intro > :first-child, .stage > :first-child, .mission > :first-child, .projectHero > :first-child { grid-column: 1 / 4; }
+  .hero > :last-child, .cover > :last-child, .intro > :last-child, .stage > :last-child, .mission > :last-child, .projectHero > :last-child { grid-column: 4 / -1; }
+}
+@media (max-width: 879px) {
+  .hero, .cover, .intro, .lead, .stage, .mission, .opening, .frame, .reportHero, .projectHero,
+  .work, .projects, .portfolio, .cases, .dossiers, .gallery, .caseGrid, .grid, .body {
+    grid-template-columns: 1fr !important;
+    min-height: auto;
+  }
+  .hero h1, .cover h1, .intro h1, .stage h1, .mission h1, .projectHero h1 { max-width: 11ch; }
+  .portrait img, .photo img, .heroPhoto img, .image img, .profile img, .visual img, .arch img, .coverImage img, .projectCover img, .media img, .screen img, img { object-position: var(--portrait-focus-mobile, 50% 30%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .01ms !important; }
+}
+/* === END REBORN IDENTITY RESET === */

@@ -1,1 +1,107 @@
 .page{--paper:#f7f5ef;--black:#101010;--red:#e31b23;--blue:#1b57d7;background:var(--paper);color:var(--black);font-family:var(--font-instrument),sans-serif;overflow:hidden}.page[dir=rtl]{font-family:var(--font-kufi),sans-serif}.page nav{height:78px;padding:0 clamp(18px,4vw,60px);display:grid;grid-template-columns:1fr 1fr 1fr;align-items:center;border-bottom:1px solid}.page nav span{text-align:center;font-size:10px;letter-spacing:.12em}.page nav a{text-align:end}.hero{min-height:900px;display:grid;grid-template-columns:16.66% 50% 33.33%;grid-template-rows:1fr 210px;border-bottom:1px solid}.red{background:var(--red);color:white;padding:35px 20px;font-size:12px;line-height:1.5}.title{padding:clamp(50px,7vw,110px) clamp(25px,5vw,75px);border-inline-end:1px solid}.title>p{font-size:11px;text-transform:uppercase;letter-spacing:.08em}.title h1{font-size:clamp(70px,8vw,130px);font-weight:750;line-height:.8;letter-spacing:-.085em;margin:40px 0}.page[dir=rtl] .title h1{line-height:1.03;letter-spacing:-.045em}.hero figure{margin:0;position:relative;grid-row:1/3;grid-column:3}.hero figure img{object-fit:cover;object-position:center 30%;filter:grayscale(1);transition:.45s}.hero figure:hover img{filter:none}.intro{grid-column:1/3;display:grid;grid-template-columns:16.66% 1fr auto;gap:30px;padding:35px;border-top:1px solid;align-items:start}.intro p{grid-column:2;font-size:18px;line-height:1.55;max-width:750px;margin:0}.intro a{background:var(--black);color:white;padding:15px}.services,.method{display:grid;grid-template-columns:16.66% 1fr;border-bottom:1px solid}.services aside,.method aside{padding:35px 20px;border-inline-end:1px solid;display:flex;justify-content:space-between;align-items:start}.services aside b,.method aside b{font-size:42px;color:var(--red)}.services aside span,.method aside span{font-size:9px;writing-mode:vertical-rl;letter-spacing:.1em}.services>div{padding:clamp(80px,10vw,140px) clamp(25px,5vw,75px)}.services h2,.work h2,footer h2{font-size:clamp(52px,6vw,90px);line-height:.9;letter-spacing:-.065em;margin:0 0 70px}.services article{display:grid;grid-template-columns:70px .85fr 1fr;gap:30px;padding:28px 0;border-top:1px solid}.services article span{color:var(--red);font-weight:700}.services h3{font-size:26px;margin:0}.services p{margin:0;line-height:1.65;color:#555}.method>div{display:grid;grid-template-columns:repeat(3,1fr)}.method article{padding:clamp(55px,6vw,90px) 35px;min-height:430px;border-inline-end:1px solid}.method article>b{display:grid;place-items:center;width:65px;height:65px;background:var(--blue);color:white;font-size:25px}.method h3{font-size:30px;margin:80px 0 20px}.method p{line-height:1.7;color:#555}.work{padding:clamp(90px,11vw,160px) max(18px,calc((100vw - 1440px)/2))}.work header{display:grid;grid-template-columns:16.66% 1fr;align-items:start}.work header>b{font-size:45px;color:var(--red)}.project{display:grid;grid-template-columns:16.66% 32% 1fr 40px;gap:25px;padding:28px 0;border-top:1px solid;align-items:center}.project>span{font-size:48px;font-weight:700}.image{height:280px;position:relative;background:var(--blue);overflow:hidden}.image img{object-fit:cover;filter:grayscale(1);transition:.4s}.project:hover .image img{filter:none;transform:scale(1.02)}.image i{position:absolute;inset:20%;background:var(--red)}.project p{font-size:10px;color:var(--red);text-transform:uppercase}.project h3{font-size:36px;line-height:1.05;margin:12px 0}.project small{line-height:1.5;color:#555}.project>b{font-size:28px}footer{display:grid;grid-template-columns:33.33% 1fr;min-height:700px}.blue{background:var(--blue);color:white;padding:35px;font-size:clamp(90px,16vw,230px);font-weight:800;display:flex;align-items:end}footer>div:last-child{padding:clamp(80px,10vw,140px) clamp(25px,6vw,90px)}footer span{font-size:11px;color:var(--red)}footer h2{margin:45px 0}footer p{font-size:18px;line-height:1.7;max-width:650px}footer a{display:inline-block;margin-top:40px;border-bottom:3px solid var(--red);padding-bottom:8px}@media(max-width:760px){.page nav span{display:none}.page nav{grid-template-columns:1fr 1fr}.hero{grid-template-columns:60px 1fr;grid-template-rows:auto 520px auto}.red{grid-column:1}.title{grid-column:2}.hero figure{grid-row:2;grid-column:1/3}.intro{grid-row:3;grid-column:1/3;grid-template-columns:1fr}.intro p{grid-column:1}.services,.method{grid-template-columns:60px 1fr}.services article{grid-template-columns:45px 1fr}.services article p{grid-column:2}.method>div{grid-template-columns:1fr}.method article{min-height:320px}.work header{grid-template-columns:60px 1fr}.project{grid-template-columns:50px 1fr}.project .image{grid-column:1/3;height:65vw}.project>div:last-of-type{grid-column:2}.project>b{grid-column:1}footer{grid-template-columns:1fr}.blue{min-height:230px;font-size:130px}}
+
+/* === REBORN IDENTITY RESET: Swiss Index === */
+.page {
+  --reborn-ink: #101010;
+  --reborn-paper: #f7f5ef;
+  --reborn-accent: #e31b23;
+  --reborn-radius: 0px;
+  background-color: var(--reborn-paper);
+  background-image: repeating-linear-gradient(90deg,rgba(16,16,16,.08) 0 1px,transparent 1px 64px),repeating-linear-gradient(0deg,rgba(16,16,16,.06) 0 1px,transparent 1px 32px);
+  color: var(--reborn-ink);
+  isolation: isolate;
+  overflow-x: clip;
+}
+.page::selection { background: var(--reborn-accent); color: var(--reborn-ink); }
+.nav, .topbar, .masthead, .header, .deckNav {
+  backdrop-filter: blur(14px);
+  border-color: color-mix(in srgb, var(--reborn-ink), transparent 78%) !important;
+}
+.hero, .cover, .intro, .lead, .stage, .mission, .opening, .frame, .reportHero, .projectHero {
+  position: relative;
+  min-height: min(92vh, 920px);
+  display: grid !important;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  align-items: center;
+  gap: clamp(18px, 4vw, 72px);
+  padding-block: clamp(64px, 10vw, 132px);
+}
+.hero::before, .cover::before, .intro::before, .stage::before, .mission::before, .projectHero::before {
+  content: "Swiss Index";
+  position: absolute;
+  inset: clamp(12px, 2vw, 28px);
+  z-index: -1;
+  display: grid;
+  place-items: center;
+  color: color-mix(in srgb, var(--reborn-accent), transparent 86%);
+  font-size: clamp(44px, 13vw, 190px);
+  font-weight: 900;
+  letter-spacing: -.08em;
+  line-height: .82;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+.hero h1, .cover h1, .intro h1, .stage h1, .mission h1, .projectHero h1 {
+  max-width: 14ch;
+  letter-spacing: -.08em;
+  line-height: .92;
+}
+.hero p, .cover p, .intro p, .stage p, .mission p, .projectHero p { max-width: 68ch; }
+.portrait, .photo, .heroPhoto, .image, .profile, .visual, .arch, .coverImage, .projectCover, .media, .screen {
+  overflow: hidden;
+  border-radius: var(--reborn-radius) !important;
+  clip-path: inset(0 round 0);
+  box-shadow: 0 26px 80px rgba(0,0,0,.18);
+  transform: none;
+}
+.portrait img, .photo img, .heroPhoto img, .image img, .profile img, .visual img, .arch img, .coverImage img, .projectCover img, .media img, .screen img, img {
+  max-width: 100%;
+  height: auto;
+  object-fit: cover;
+  object-position: var(--portrait-focus-desktop, 50% 35%);
+}
+.work, .projects, .portfolio, .cases, .dossiers, .gallery, .caseGrid, .grid, .body {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(16px, 2.8vw, 42px);
+}
+.card, .case, .project, .tile, .panel, .dossier, .service, .capability, .article, .slide, .station, .note {
+  border: 1px solid color-mix(in srgb, var(--reborn-ink), transparent 72%) !important;
+  border-radius: var(--reborn-radius) !important;
+  background: color-mix(in srgb, var(--reborn-paper), white 7%);
+  box-shadow: 0 14px 42px rgba(0,0,0,.08);
+  transition: transform .36s cubic-bezier(.22,1,.36,1), box-shadow .36s cubic-bezier(.22,1,.36,1), border-color .36s ease;
+}
+.card:hover, .case:hover, .project:hover, .tile:hover, .panel:hover, .dossier:hover, .service:hover, .capability:hover, .article:hover, .slide:hover, .station:hover, .note:hover {
+  transform: translateY(-7px) ;
+  border-color: var(--reborn-accent) !important;
+}
+a, button { text-underline-offset: .18em; }
+a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
+  outline: 3px solid var(--reborn-accent) !important;
+  outline-offset: 5px !important;
+}
+.cta, .contact, .footer, .finale, .outro {
+  position: relative;
+  border-radius: calc(var(--reborn-radius) + 10px);
+  background: color-mix(in srgb, var(--reborn-ink), black 7%);
+  color: var(--reborn-paper);
+}
+.cta a, .contact a, .footer a, .finale a, .outro a { color: var(--reborn-accent); }
+@media (min-width: 880px) {
+  .hero > :first-child, .cover > :first-child, .intro > :first-child, .stage > :first-child, .mission > :first-child, .projectHero > :first-child { grid-column: 1 / 8; }
+  .hero > :last-child, .cover > :last-child, .intro > :last-child, .stage > :last-child, .mission > :last-child, .projectHero > :last-child { grid-column: 8 / -1; }
+}
+@media (max-width: 879px) {
+  .hero, .cover, .intro, .lead, .stage, .mission, .opening, .frame, .reportHero, .projectHero,
+  .work, .projects, .portfolio, .cases, .dossiers, .gallery, .caseGrid, .grid, .body {
+    grid-template-columns: 1fr !important;
+    min-height: auto;
+  }
+  .hero h1, .cover h1, .intro h1, .stage h1, .mission h1, .projectHero h1 { max-width: 11ch; }
+  .portrait img, .photo img, .heroPhoto img, .image img, .profile img, .visual img, .arch img, .coverImage img, .projectCover img, .media img, .screen img, img { object-position: var(--portrait-focus-mobile, 50% 30%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .01ms !important; }
+}
+/* === END REBORN IDENTITY RESET === */

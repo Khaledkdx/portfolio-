@@ -501,3 +501,109 @@
 .work{background:var(--paper);background-image:radial-gradient(#0a0a0a 1px,transparent 1px);background-size:18px 18px}.poster{transform:rotate(-.6deg);background:var(--paper)}.poster:nth-of-type(even){transform:rotate(.7deg)}.poster:hover{transform:rotate(0) translateY(-6px)}.art{background:var(--tone,var(--coral));min-height:560px}.art:after{content:"CASE FILE";position:absolute;inset:auto 18px 18px auto;background:var(--paper);border:3px solid;padding:8px 10px;font:12px var(--font-archivo)}.collage{filter:saturate(1.08) contrast(1.06);border:4px solid #0a0a0a}
 .method{background:var(--blue);color:white}.method article{background:var(--paper);color:var(--black);box-shadow:10px 10px 0 var(--black);transform:rotate(-1deg)}.method article:nth-child(even){transform:rotate(1deg)}
 @media(max-width:760px){.hero{grid-template-columns:1fr}.hero:before{display:none}.services details{box-shadow:5px 5px 0 var(--black)}.art{min-height:420px}.method article,.method article:nth-child(even){transform:none}}
+
+/* === REBORN IDENTITY RESET: Street Poster === */
+.page {
+  --reborn-ink: #090909;
+  --reborn-paper: #fffbed;
+  --reborn-accent: #f4ff57;
+  --reborn-radius: 0px;
+  background-color: var(--reborn-paper);
+  background-image: radial-gradient(circle at 20% 20%,#ff5a36 0 10%,transparent 11%),linear-gradient(135deg,rgba(32,21,255,.22),transparent 45%);
+  color: var(--reborn-ink);
+  isolation: isolate;
+  overflow-x: clip;
+}
+.page::selection { background: var(--reborn-accent); color: var(--reborn-ink); }
+.nav, .topbar, .masthead, .header, .deckNav {
+  backdrop-filter: blur(14px);
+  border-color: color-mix(in srgb, var(--reborn-ink), transparent 78%) !important;
+}
+.hero, .cover, .intro, .lead, .stage, .mission, .opening, .frame, .reportHero, .projectHero {
+  position: relative;
+  min-height: min(92vh, 920px);
+  display: grid !important;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  align-items: center;
+  gap: clamp(18px, 4vw, 72px);
+  padding-block: clamp(64px, 10vw, 132px);
+}
+.hero::before, .cover::before, .intro::before, .stage::before, .mission::before, .projectHero::before {
+  content: "Street Poster";
+  position: absolute;
+  inset: clamp(12px, 2vw, 28px);
+  z-index: -1;
+  display: grid;
+  place-items: start;
+  color: color-mix(in srgb, var(--reborn-accent), transparent 86%);
+  font-size: clamp(44px, 13vw, 190px);
+  font-weight: 900;
+  letter-spacing: -.08em;
+  line-height: .82;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+.hero h1, .cover h1, .intro h1, .stage h1, .mission h1, .projectHero h1 {
+  max-width: 9ch;
+  letter-spacing: -.045em;
+  line-height: .82;
+}
+.hero p, .cover p, .intro p, .stage p, .mission p, .projectHero p { max-width: 68ch; }
+.portrait, .photo, .heroPhoto, .image, .profile, .visual, .arch, .coverImage, .projectCover, .media, .screen {
+  overflow: hidden;
+  border-radius: var(--reborn-radius) !important;
+  clip-path: polygon(4% 0,100% 7%,96% 100%,0 93%);
+  box-shadow: 0 26px 80px rgba(0,0,0,.18);
+  transform: rotate(-2deg);
+}
+.portrait img, .photo img, .heroPhoto img, .image img, .profile img, .visual img, .arch img, .coverImage img, .projectCover img, .media img, .screen img, img {
+  max-width: 100%;
+  height: auto;
+  object-fit: cover;
+  object-position: var(--portrait-focus-desktop, 50% 35%);
+}
+.work, .projects, .portfolio, .cases, .dossiers, .gallery, .caseGrid, .grid, .body {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(16px, 2.8vw, 42px);
+}
+.card, .case, .project, .tile, .panel, .dossier, .service, .capability, .article, .slide, .station, .note {
+  border: 1px solid color-mix(in srgb, var(--reborn-ink), transparent 72%) !important;
+  border-radius: var(--reborn-radius) !important;
+  background: color-mix(in srgb, var(--reborn-paper), white 7%);
+  box-shadow: 10px 10px 0 var(--reborn-ink);
+  transition: transform .36s cubic-bezier(.22,1,.36,1), box-shadow .36s cubic-bezier(.22,1,.36,1), border-color .36s ease;
+}
+.card:hover, .case:hover, .project:hover, .tile:hover, .panel:hover, .dossier:hover, .service:hover, .capability:hover, .article:hover, .slide:hover, .station:hover, .note:hover {
+  transform: translateY(-7px) ;
+  border-color: var(--reborn-accent) !important;
+}
+a, button { text-underline-offset: .18em; }
+a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
+  outline: 3px solid var(--reborn-accent) !important;
+  outline-offset: 5px !important;
+}
+.cta, .contact, .footer, .finale, .outro {
+  position: relative;
+  border-radius: calc(var(--reborn-radius) + 10px);
+  background: color-mix(in srgb, var(--reborn-ink), black 7%);
+  color: var(--reborn-paper);
+}
+.cta a, .contact a, .footer a, .finale a, .outro a { color: var(--reborn-accent); }
+@media (min-width: 880px) {
+  .hero > :first-child, .cover > :first-child, .intro > :first-child, .stage > :first-child, .mission > :first-child, .projectHero > :first-child { grid-column: 1 / 4; }
+  .hero > :last-child, .cover > :last-child, .intro > :last-child, .stage > :last-child, .mission > :last-child, .projectHero > :last-child { grid-column: 4 / -1; }
+}
+@media (max-width: 879px) {
+  .hero, .cover, .intro, .lead, .stage, .mission, .opening, .frame, .reportHero, .projectHero,
+  .work, .projects, .portfolio, .cases, .dossiers, .gallery, .caseGrid, .grid, .body {
+    grid-template-columns: 1fr !important;
+    min-height: auto;
+  }
+  .hero h1, .cover h1, .intro h1, .stage h1, .mission h1, .projectHero h1 { max-width: 11ch; }
+  .portrait img, .photo img, .heroPhoto img, .image img, .profile img, .visual img, .arch img, .coverImage img, .projectCover img, .media img, .screen img, img { object-position: var(--portrait-focus-mobile, 50% 30%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .01ms !important; }
+}
+/* === END REBORN IDENTITY RESET === */

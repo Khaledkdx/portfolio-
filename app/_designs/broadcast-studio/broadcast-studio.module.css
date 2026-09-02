@@ -1,1 +1,107 @@
 .page{--night:#16121f;--cream:#f7f2e8;--red:#ff334f;--cyan:#29d3c2;background:var(--night);color:var(--cream);font-family:var(--font-instrument);overflow:hidden}.nav{height:74px;padding:0 4vw;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #f7f2e844;font:11px var(--font-jetbrains)}.nav span{color:var(--red)}.hero{min-height:820px;display:grid;grid-template-columns:1.15fr .85fr;gap:4vw;padding:5vw;align-items:center}.screen{height:650px;position:relative;border:12px solid #2a2632;background:#000;box-shadow:0 0 0 2px var(--cyan)}.screen:before{content:"CAM 01";position:absolute;z-index:3;top:18px;left:20px;background:var(--red);padding:7px 10px;font:10px var(--font-jetbrains)}.lower{position:absolute;z-index:2;left:0;bottom:45px;background:linear-gradient(90deg,var(--red) 0 30%,#f7f2e8 30%);color:var(--night);padding:15px 25px 15px 35%;width:80%;display:grid}.lower span{font-size:20px;font-weight:800}.lower b{font-size:10px}.program>span,.channels header span,.footer>span{font:10px var(--font-jetbrains);letter-spacing:.15em;color:var(--cyan)}.program h1{font:800 clamp(56px,6.5vw,98px)/.9 var(--font-barlow);text-transform:uppercase;margin:35px 0}.program p{font-size:17px;line-height:1.7;color:#c5bfca}.program a{display:inline-block;background:var(--red);padding:15px 20px;margin-top:28px}.ticker{overflow:hidden;background:var(--cream);color:var(--night);border-block:8px solid var(--red);white-space:nowrap}.ticker span{display:block;font:800 30px var(--barlow);padding:14px;animation:ticker 18s linear infinite}.channels,.rundown{padding:130px 6vw}.channels header{display:flex;justify-content:space-between;align-items:end}.channels h2,.rundown h2,.footer h2{font:800 clamp(58px,7vw,105px)/.9 var(--font-barlow);text-transform:uppercase;margin:0}.channels>div{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:65px}.channels a{border:3px solid #f7f2e855;padding:12px;background:#211d2a}.channel{font:10px var(--font-jetbrains);color:var(--cyan);padding-bottom:10px}.channels figure{height:260px;position:relative;margin:0;overflow:hidden}.channels figure img{object-fit:cover}.channels figure>b{height:100%;display:grid;place-items:center;color:var(--red)}.channels h3{font-size:25px;line-height:1.05}.channels small{font:9px var(--font-jetbrains);color:#aaa}.rundown{background:var(--cream);color:var(--night)}.rundown article{display:grid;grid-template-columns:110px .8fr 1fr;gap:30px;padding:30px 0;border-top:2px solid}.rundown time{font:12px var(--font-jetbrains);color:var(--red)}.rundown h3{font-size:28px;margin:0}.rundown p{line-height:1.7;margin:0}.footer{background:var(--red);padding:140px 6vw}.footer h2{max-width:1000px;margin:30px 0}.footer a{display:inline-block;background:var(--night);padding:16px 22px}@keyframes ticker{to{transform:translateX(-50%)}}@media(max-width:760px){.hero{grid-template-columns:1fr}.screen{height:530px}.channels>div{grid-template-columns:1fr}.channels figure{height:90vw}.channels header{align-items:start;flex-direction:column}.rundown article{grid-template-columns:70px 1fr}.rundown article p{grid-column:2}}@media(prefers-reduced-motion:reduce){.ticker span{animation:none}}
+
+/* === REBORN IDENTITY RESET: Live Broadcast === */
+.page {
+  --reborn-ink: #16121f;
+  --reborn-paper: #f7f2e8;
+  --reborn-accent: #ff334f;
+  --reborn-radius: 14px;
+  background-color: var(--reborn-paper);
+  background-image: radial-gradient(circle at 50% 0,rgba(255,51,79,.30),transparent 28%),linear-gradient(90deg,rgba(247,242,232,.08),transparent);
+  color: var(--reborn-ink);
+  isolation: isolate;
+  overflow-x: clip;
+}
+.page::selection { background: var(--reborn-accent); color: var(--reborn-ink); }
+.nav, .topbar, .masthead, .header, .deckNav {
+  backdrop-filter: blur(14px);
+  border-color: color-mix(in srgb, var(--reborn-ink), transparent 78%) !important;
+}
+.hero, .cover, .intro, .lead, .stage, .mission, .opening, .frame, .reportHero, .projectHero {
+  position: relative;
+  min-height: min(92vh, 920px);
+  display: grid !important;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  align-items: center;
+  gap: clamp(18px, 4vw, 72px);
+  padding-block: clamp(64px, 10vw, 132px);
+}
+.hero::before, .cover::before, .intro::before, .stage::before, .mission::before, .projectHero::before {
+  content: "Live Broadcast";
+  position: absolute;
+  inset: clamp(12px, 2vw, 28px);
+  z-index: -1;
+  display: grid;
+  place-items: center;
+  color: color-mix(in srgb, var(--reborn-accent), transparent 86%);
+  font-size: clamp(44px, 13vw, 190px);
+  font-weight: 900;
+  letter-spacing: -.08em;
+  line-height: .82;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+.hero h1, .cover h1, .intro h1, .stage h1, .mission h1, .projectHero h1 {
+  max-width: 14ch;
+  letter-spacing: -.045em;
+  line-height: .92;
+}
+.hero p, .cover p, .intro p, .stage p, .mission p, .projectHero p { max-width: 68ch; }
+.portrait, .photo, .heroPhoto, .image, .profile, .visual, .arch, .coverImage, .projectCover, .media, .screen {
+  overflow: hidden;
+  border-radius: var(--reborn-radius) !important;
+  clip-path: polygon(0 0,100% 0,96% 100%,0 88%);
+  box-shadow: 0 26px 80px rgba(0,0,0,.18);
+  transform: none;
+}
+.portrait img, .photo img, .heroPhoto img, .image img, .profile img, .visual img, .arch img, .coverImage img, .projectCover img, .media img, .screen img, img {
+  max-width: 100%;
+  height: auto;
+  object-fit: cover;
+  object-position: var(--portrait-focus-desktop, 50% 35%);
+}
+.work, .projects, .portfolio, .cases, .dossiers, .gallery, .caseGrid, .grid, .body {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: clamp(16px, 2.8vw, 42px);
+}
+.card, .case, .project, .tile, .panel, .dossier, .service, .capability, .article, .slide, .station, .note {
+  border: 1px solid color-mix(in srgb, var(--reborn-ink), transparent 72%) !important;
+  border-radius: var(--reborn-radius) !important;
+  background: color-mix(in srgb, var(--reborn-paper), white 7%);
+  box-shadow: 0 14px 42px rgba(0,0,0,.08);
+  transition: transform .36s cubic-bezier(.22,1,.36,1), box-shadow .36s cubic-bezier(.22,1,.36,1), border-color .36s ease;
+}
+.card:hover, .case:hover, .project:hover, .tile:hover, .panel:hover, .dossier:hover, .service:hover, .capability:hover, .article:hover, .slide:hover, .station:hover, .note:hover {
+  transform: translateY(-7px) ;
+  border-color: var(--reborn-accent) !important;
+}
+a, button { text-underline-offset: .18em; }
+a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
+  outline: 3px solid var(--reborn-accent) !important;
+  outline-offset: 5px !important;
+}
+.cta, .contact, .footer, .finale, .outro {
+  position: relative;
+  border-radius: calc(var(--reborn-radius) + 10px);
+  background: color-mix(in srgb, var(--reborn-ink), black 7%);
+  color: var(--reborn-paper);
+}
+.cta a, .contact a, .footer a, .finale a, .outro a { color: var(--reborn-accent); }
+@media (min-width: 880px) {
+  .hero > :first-child, .cover > :first-child, .intro > :first-child, .stage > :first-child, .mission > :first-child, .projectHero > :first-child { grid-column: 1 / 8; }
+  .hero > :last-child, .cover > :last-child, .intro > :last-child, .stage > :last-child, .mission > :last-child, .projectHero > :last-child { grid-column: 8 / -1; }
+}
+@media (max-width: 879px) {
+  .hero, .cover, .intro, .lead, .stage, .mission, .opening, .frame, .reportHero, .projectHero,
+  .work, .projects, .portfolio, .cases, .dossiers, .gallery, .caseGrid, .grid, .body {
+    grid-template-columns: 1fr !important;
+    min-height: auto;
+  }
+  .hero h1, .cover h1, .intro h1, .stage h1, .mission h1, .projectHero h1 { max-width: 11ch; }
+  .portrait img, .photo img, .heroPhoto img, .image img, .profile img, .visual img, .arch img, .coverImage img, .projectCover img, .media img, .screen img, img { object-position: var(--portrait-focus-mobile, 50% 30%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .01ms !important; }
+}
+/* === END REBORN IDENTITY RESET === */

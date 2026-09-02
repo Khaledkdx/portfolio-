@@ -1,1 +1,107 @@
 .page{--paper:#f5f2e9;--blue:#153b5b;--orange:#f05a35;--green:#1a8c72;background:var(--paper);color:var(--blue);font-family:var(--font-instrument);overflow:hidden}.nav{height:76px;padding:0 4vw;border-bottom:4px solid var(--blue);display:flex;justify-content:space-between;align-items:center;font:11px var(--font-jetbrains)}.nav div{display:flex;gap:25px}.nav div span{color:var(--green)}.hero{min-height:850px;display:grid;grid-template-columns:.9fr 1fr;align-items:center;gap:5vw;padding:6vw}.copy>span,.lines header span,.stations header span{font:10px var(--font-jetbrains);letter-spacing:.15em;color:var(--orange)}.copy h1{font-size:clamp(58px,7vw,106px);line-height:.9;letter-spacing:-.06em;margin:30px 0}.copy p{font-size:18px;line-height:1.7;max-width:620px}.copy a{display:inline-block;background:var(--blue);color:white;padding:16px 22px;margin-top:28px}.map{height:650px;position:relative;background:radial-gradient(circle,#153b5b20 2px,transparent 2px);background-size:26px 26px}.map>i{position:absolute;background:var(--orange);height:12px;border-radius:9px;transform-origin:left center}.map>i:nth-child(1){width:78%;left:8%;top:30%;transform:rotate(17deg)}.map>i:nth-child(2){width:70%;left:15%;top:55%;background:var(--green);transform:rotate(-24deg)}.map>i:nth-child(3){width:60%;left:30%;top:15%;background:var(--blue);transform:rotate(70deg)}.map>i:nth-child(4){width:24px;height:24px;border:6px solid var(--paper);right:12%;bottom:18%;background:var(--orange)}.map figure{position:absolute;width:280px;height:280px;left:35%;top:28%;margin:0;border-radius:50%;border:12px solid var(--paper);overflow:hidden;box-shadow:0 0 0 8px var(--blue)}.map b{position:absolute;left:50%;top:68%;background:var(--orange);color:white;padding:8px 12px;font:10px var(--font-jetbrains)}.lines,.stations{padding:130px 7vw}.lines{background:var(--blue);color:white}.lines header,.stations header{display:flex;justify-content:space-between;align-items:end;border-bottom:1px solid;padding-bottom:25px}.lines h2,.stations h2,.footer h2{font-size:clamp(52px,6vw,90px);letter-spacing:-.05em;margin:0}.lines article{display:grid;grid-template-columns:60px 1fr 2fr;gap:25px;align-items:center;padding:35px 0}.lines article>b{width:45px;height:45px;border-radius:50%;display:grid;place-items:center;background:var(--orange)}.lines article>i{height:8px;background:var(--orange);border-radius:8px}.lines article:nth-of-type(3)>b,.lines article:nth-of-type(3)>i{background:var(--green)}.lines article:nth-of-type(4)>b,.lines article:nth-of-type(4)>i{background:#d7b63d}.lines h3{font-size:28px;margin:0}.lines p{color:#ccd8de;line-height:1.7}.stations>div{display:grid;grid-template-columns:repeat(4,1fr);margin-top:70px}.stations a{padding:22px;border-inline-end:1px solid #153b5b55}.stations a>span{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:var(--orange);color:white}.stations figure{height:280px;position:relative;margin:25px 0}.stations figure img{object-fit:cover}.stations h3{font-size:25px;line-height:1.05}.stations small{font:9px var(--font-jetbrains)}.footer{padding:150px 7vw;background:#dde2d5}.route{display:flex;gap:0;margin-bottom:50px}.route i{height:10px;width:150px;background:var(--orange)}.route i:nth-child(2){background:var(--green)}.route i:nth-child(3){background:var(--blue)}.footer a{display:inline-block;margin-top:35px;border-bottom:2px solid}@media(max-width:760px){.hero{grid-template-columns:1fr}.map{height:480px;order:-1}.map figure{width:220px;height:220px}.lines article{grid-template-columns:50px 1fr}.lines article>i{display:none}.lines article>div{grid-column:2}.stations>div{grid-template-columns:1fr}.stations a{border-bottom:1px solid}.stations figure{height:90vw}}
+
+/* === REBORN IDENTITY RESET: Transit Network === */
+.page {
+  --reborn-ink: #153b5b;
+  --reborn-paper: #f5f2e9;
+  --reborn-accent: #f05a35;
+  --reborn-radius: 24px;
+  background-color: var(--reborn-paper);
+  background-image: linear-gradient(30deg,transparent 0 48%,rgba(240,90,53,.22) 49% 51%,transparent 52%),linear-gradient(-30deg,transparent 0 48%,rgba(21,59,91,.16) 49% 51%,transparent 52%);
+  color: var(--reborn-ink);
+  isolation: isolate;
+  overflow-x: clip;
+}
+.page::selection { background: var(--reborn-accent); color: var(--reborn-ink); }
+.nav, .topbar, .masthead, .header, .deckNav {
+  backdrop-filter: blur(14px);
+  border-color: color-mix(in srgb, var(--reborn-ink), transparent 78%) !important;
+}
+.hero, .cover, .intro, .lead, .stage, .mission, .opening, .frame, .reportHero, .projectHero {
+  position: relative;
+  min-height: min(92vh, 920px);
+  display: grid !important;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  align-items: center;
+  gap: clamp(18px, 4vw, 72px);
+  padding-block: clamp(64px, 10vw, 132px);
+}
+.hero::before, .cover::before, .intro::before, .stage::before, .mission::before, .projectHero::before {
+  content: "Transit Network";
+  position: absolute;
+  inset: clamp(12px, 2vw, 28px);
+  z-index: -1;
+  display: grid;
+  place-items: center;
+  color: color-mix(in srgb, var(--reborn-accent), transparent 86%);
+  font-size: clamp(44px, 13vw, 190px);
+  font-weight: 900;
+  letter-spacing: -.08em;
+  line-height: .82;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+.hero h1, .cover h1, .intro h1, .stage h1, .mission h1, .projectHero h1 {
+  max-width: 14ch;
+  letter-spacing: -.045em;
+  line-height: .92;
+}
+.hero p, .cover p, .intro p, .stage p, .mission p, .projectHero p { max-width: 68ch; }
+.portrait, .photo, .heroPhoto, .image, .profile, .visual, .arch, .coverImage, .projectCover, .media, .screen {
+  overflow: hidden;
+  border-radius: var(--reborn-radius) !important;
+  clip-path: inset(0 round 24px);
+  box-shadow: 0 26px 80px rgba(0,0,0,.18);
+  transform: none;
+}
+.portrait img, .photo img, .heroPhoto img, .image img, .profile img, .visual img, .arch img, .coverImage img, .projectCover img, .media img, .screen img, img {
+  max-width: 100%;
+  height: auto;
+  object-fit: cover;
+  object-position: var(--portrait-focus-desktop, 50% 35%);
+}
+.work, .projects, .portfolio, .cases, .dossiers, .gallery, .caseGrid, .grid, .body {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(16px, 2.8vw, 42px);
+}
+.card, .case, .project, .tile, .panel, .dossier, .service, .capability, .article, .slide, .station, .note {
+  border: 1px solid color-mix(in srgb, var(--reborn-ink), transparent 72%) !important;
+  border-radius: var(--reborn-radius) !important;
+  background: color-mix(in srgb, var(--reborn-paper), white 7%);
+  box-shadow: 0 14px 42px rgba(0,0,0,.08);
+  transition: transform .36s cubic-bezier(.22,1,.36,1), box-shadow .36s cubic-bezier(.22,1,.36,1), border-color .36s ease;
+}
+.card:hover, .case:hover, .project:hover, .tile:hover, .panel:hover, .dossier:hover, .service:hover, .capability:hover, .article:hover, .slide:hover, .station:hover, .note:hover {
+  transform: translateY(-7px) ;
+  border-color: var(--reborn-accent) !important;
+}
+a, button { text-underline-offset: .18em; }
+a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
+  outline: 3px solid var(--reborn-accent) !important;
+  outline-offset: 5px !important;
+}
+.cta, .contact, .footer, .finale, .outro {
+  position: relative;
+  border-radius: calc(var(--reborn-radius) + 10px);
+  background: color-mix(in srgb, var(--reborn-ink), black 7%);
+  color: var(--reborn-paper);
+}
+.cta a, .contact a, .footer a, .finale a, .outro a { color: var(--reborn-accent); }
+@media (min-width: 880px) {
+  .hero > :first-child, .cover > :first-child, .intro > :first-child, .stage > :first-child, .mission > :first-child, .projectHero > :first-child { grid-column: 1 / 8; }
+  .hero > :last-child, .cover > :last-child, .intro > :last-child, .stage > :last-child, .mission > :last-child, .projectHero > :last-child { grid-column: 8 / -1; }
+}
+@media (max-width: 879px) {
+  .hero, .cover, .intro, .lead, .stage, .mission, .opening, .frame, .reportHero, .projectHero,
+  .work, .projects, .portfolio, .cases, .dossiers, .gallery, .caseGrid, .grid, .body {
+    grid-template-columns: 1fr !important;
+    min-height: auto;
+  }
+  .hero h1, .cover h1, .intro h1, .stage h1, .mission h1, .projectHero h1 { max-width: 11ch; }
+  .portrait img, .photo img, .heroPhoto img, .image img, .profile img, .visual img, .arch img, .coverImage img, .projectCover img, .media img, .screen img, img { object-position: var(--portrait-focus-mobile, 50% 30%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .01ms !important; }
+}
+/* === END REBORN IDENTITY RESET === */

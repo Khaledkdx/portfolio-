@@ -1,5 +1,6 @@
 import type { DesignSlug, Locale, SiteContent } from "@/lib/site-content";
 import { DESIGN_DEFINITIONS } from "@/app/_designs/registry";
+import { DesignMotionFrame } from "@/app/_components/DesignMotionFrame";
 import { ReviewProofWall } from "@/app/_components/ReviewProofWall";
 
 type Props = {
@@ -15,9 +16,9 @@ export async function Portfolio({ content, locale, design = content.activeDesign
   const { default: Design } = await definition.load();
   const reviewLivesInsideDesign = definition.index <= 8;
   return (
-    <>
+    <DesignMotionFrame design={design} locale={locale}>
       <Design content={content} locale={locale} design={design} preview={preview} variantPath={variantPath} />
       {!reviewLivesInsideDesign && <ReviewProofWall content={content} locale={locale} design={design} variantPath={variantPath} />}
-    </>
+    </DesignMotionFrame>
   );
 }

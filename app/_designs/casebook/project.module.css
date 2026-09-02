@@ -1,1 +1,107 @@
 .issue{background:#f7f0df;color:#172a3a;min-height:100vh;font-family:var(--font-newsreader)}.mast{padding:22px 4vw;border-block:5px double #172a3a;display:flex;justify-content:space-between;align-items:center}.mast a{font-size:clamp(25px,3vw,46px);font-weight:700}.mast span{font:11px var(--font-instrument)}.issue header{display:grid;grid-template-columns:.8fr 1.2fr;gap:5vw;padding:5vw 4vw;border-bottom:1px solid}.issue h1{font-size:clamp(55px,8vw,120px);line-height:.86;margin:25px 0}.issue header p{font-size:24px;font-style:italic}.issue small{color:#c52b28;font:700 12px var(--font-instrument)}.lead{height:50vw;max-height:720px}.lead>div{height:100%}.copy{padding:7vw 11vw;display:grid;grid-template-columns:180px 1fr;gap:7vw}.copy aside{display:flex;flex-direction:column;gap:10px;font:11px var(--font-instrument);text-transform:uppercase}.copy article{columns:2;column-gap:4vw;font-size:19px;line-height:1.8}.copy h2,.copy blockquote{column-span:all}.copy h2{font-size:46px;border-top:1px solid;padding-top:25px}.copy blockquote{font-size:34px;color:#c52b28;border-block:1px solid;padding:30px;margin:40px 0}.drop:first-letter{float:left;font-size:90px;line-height:.7;padding:10px}.spread{display:grid;grid-template-columns:repeat(2,1fr);gap:2vw;padding:4vw}.spread figure>div{height:45vw}.sources{padding:5vw;border-top:5px double;display:flex;gap:30px;flex-wrap:wrap}.sources a{text-decoration:underline}.issue footer{padding:45px 4vw;background:#172a3a;color:#f7f0df;display:flex;justify-content:space-between;font-family:var(--font-instrument)}@media(max-width:760px){.mast span{display:none}.issue header,.copy{grid-template-columns:minmax(0,1fr)}.copy{padding-inline:7vw;gap:20px;overflow:hidden}.copy>*{min-width:0;max-width:100%}.lead{height:115vw;order:-1}.copy article{columns:1}.spread{grid-template-columns:1fr}.spread figure>div{height:110vw}}
+
+/* === REBORN IDENTITY RESET: Editorial News === */
+.page {
+  --reborn-ink: #172a3a;
+  --reborn-paper: #f7f0df;
+  --reborn-accent: #c52b28;
+  --reborn-radius: 4px;
+  background-color: var(--reborn-paper);
+  background-image: repeating-linear-gradient(0deg,rgba(23,42,58,.055) 0 1px,transparent 1px 9px);
+  color: var(--reborn-ink);
+  isolation: isolate;
+  overflow-x: clip;
+}
+.page::selection { background: var(--reborn-accent); color: var(--reborn-ink); }
+.nav, .topbar, .masthead, .header, .deckNav {
+  backdrop-filter: blur(14px);
+  border-color: color-mix(in srgb, var(--reborn-ink), transparent 78%) !important;
+}
+.hero, .cover, .intro, .lead, .stage, .mission, .opening, .frame, .reportHero, .projectHero {
+  position: relative;
+  min-height: min(76vh, 760px);
+  display: grid !important;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  align-items: center;
+  gap: clamp(18px, 4vw, 72px);
+  padding-block: clamp(64px, 10vw, 132px);
+}
+.hero::before, .cover::before, .intro::before, .stage::before, .mission::before, .projectHero::before {
+  content: "Editorial News";
+  position: absolute;
+  inset: clamp(12px, 2vw, 28px);
+  z-index: -1;
+  display: grid;
+  place-items: center;
+  color: color-mix(in srgb, var(--reborn-accent), transparent 86%);
+  font-size: clamp(44px, 13vw, 190px);
+  font-weight: 900;
+  letter-spacing: -.08em;
+  line-height: .82;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+.hero h1, .cover h1, .intro h1, .stage h1, .mission h1, .projectHero h1 {
+  max-width: 14ch;
+  letter-spacing: -.045em;
+  line-height: .92;
+}
+.hero p, .cover p, .intro p, .stage p, .mission p, .projectHero p { max-width: 68ch; }
+.portrait, .photo, .heroPhoto, .image, .profile, .visual, .arch, .coverImage, .projectCover, .media, .screen {
+  overflow: hidden;
+  border-radius: var(--reborn-radius) !important;
+  clip-path: polygon(0 0,100% 0,100% 88%,92% 100%,0 100%);
+  box-shadow: 0 26px 80px rgba(0,0,0,.18);
+  transform: none;
+}
+.portrait img, .photo img, .heroPhoto img, .image img, .profile img, .visual img, .arch img, .coverImage img, .projectCover img, .media img, .screen img, img {
+  max-width: 100%;
+  height: auto;
+  object-fit: cover;
+  object-position: var(--portrait-focus-desktop, 50% 35%);
+}
+.work, .projects, .portfolio, .cases, .dossiers, .gallery, .caseGrid, .grid, .body {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(16px, 2.8vw, 42px);
+}
+.card, .case, .project, .tile, .panel, .dossier, .service, .capability, .article, .slide, .station, .note {
+  border: 1px solid color-mix(in srgb, var(--reborn-ink), transparent 72%) !important;
+  border-radius: var(--reborn-radius) !important;
+  background: color-mix(in srgb, var(--reborn-paper), white 7%);
+  box-shadow: 0 14px 42px rgba(0,0,0,.08);
+  transition: transform .36s cubic-bezier(.22,1,.36,1), box-shadow .36s cubic-bezier(.22,1,.36,1), border-color .36s ease;
+}
+.card:hover, .case:hover, .project:hover, .tile:hover, .panel:hover, .dossier:hover, .service:hover, .capability:hover, .article:hover, .slide:hover, .station:hover, .note:hover {
+  transform: translateY(-7px) ;
+  border-color: var(--reborn-accent) !important;
+}
+a, button { text-underline-offset: .18em; }
+a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
+  outline: 3px solid var(--reborn-accent) !important;
+  outline-offset: 5px !important;
+}
+.cta, .contact, .footer, .finale, .outro {
+  position: relative;
+  border-radius: calc(var(--reborn-radius) + 10px);
+  background: color-mix(in srgb, var(--reborn-ink), black 7%);
+  color: var(--reborn-paper);
+}
+.cta a, .contact a, .footer a, .finale a, .outro a { color: var(--reborn-accent); }
+@media (min-width: 880px) {
+  .hero > :first-child, .cover > :first-child, .intro > :first-child, .stage > :first-child, .mission > :first-child, .projectHero > :first-child { grid-column: 1 / 8; }
+  .hero > :last-child, .cover > :last-child, .intro > :last-child, .stage > :last-child, .mission > :last-child, .projectHero > :last-child { grid-column: 8 / -1; }
+}
+@media (max-width: 879px) {
+  .hero, .cover, .intro, .lead, .stage, .mission, .opening, .frame, .reportHero, .projectHero,
+  .work, .projects, .portfolio, .cases, .dossiers, .gallery, .caseGrid, .grid, .body {
+    grid-template-columns: 1fr !important;
+    min-height: auto;
+  }
+  .hero h1, .cover h1, .intro h1, .stage h1, .mission h1, .projectHero h1 { max-width: 11ch; }
+  .portrait img, .photo img, .heroPhoto img, .image img, .profile img, .visual img, .arch img, .coverImage img, .projectCover img, .media img, .screen img, img { object-position: var(--portrait-focus-mobile, 50% 30%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .01ms !important; }
+}
+/* === END REBORN IDENTITY RESET === */

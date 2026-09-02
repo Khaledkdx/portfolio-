@@ -1,1 +1,107 @@
 .page{--night:#05090d;--panel:#0b1319;--ice:#c8f4ff;--blue:#4fc3f7;--silver:#e8eef2;--line:rgba(200,244,255,.22);min-height:100vh;overflow:hidden;background:var(--night);color:var(--silver);font-family:var(--font-instrument);background-image:linear-gradient(90deg,rgba(200,244,255,.025) 1px,transparent 1px);background-size:8vw 100%}.page>nav{height:78px;padding:0 4vw;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);font:10px var(--font-jetbrains);letter-spacing:.12em;color:#a9bac1}.hero{min-height:calc(100svh - 78px);display:grid;grid-template-columns:1.05fr .95fr;gap:5vw;align-items:center;padding:6vw 5vw}.copy>p{font:10px var(--font-jetbrains);letter-spacing:.13em;color:var(--ice);display:flex;align-items:center;gap:9px}.copy>p i{width:7px;height:7px;border-radius:50%;background:#72ffc0;box-shadow:0 0 14px #72ffc0}.copy small{display:block;margin-top:10vh;color:var(--blue);font:10px var(--font-jetbrains);letter-spacing:.12em}.copy h1{font-size:clamp(58px,7.5vw,118px);line-height:.84;letter-spacing:-.07em;margin:25px 0}.lead{font-size:20px;line-height:1.75;color:#9dafb6;max-width:690px}.coverShell{height:min(74vh,760px);position:relative;padding:18px;border:1px solid var(--line);background:radial-gradient(circle at 50% 20%,#27495d,#071017 70%);box-shadow:0 35px 80px #000}.coverShell:before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(104deg,transparent 0 24px,rgba(207,242,255,.05) 25px,transparent 27px);pointer-events:none}.cover{height:100%;margin:0;background:#071017;padding-bottom:52px}.cover>div{height:calc(100% - 44px)}.cover figcaption{padding:14px 0;color:#b8c9d0;font:10px/1.5 var(--font-jetbrains)}.placeholder{height:100%;display:grid;place-items:center;border:1px solid var(--line)}.placeholder span{font-size:18vw;opacity:.08}.placeholder b{position:absolute;font:10px var(--font-jetbrains);letter-spacing:.2em}.scanline{position:absolute;left:18px;right:18px;top:20%;height:1px;background:var(--blue);box-shadow:0 0 18px var(--blue);animation:scan 5s linear infinite}.metrics{padding:45px 5vw;border-block:1px solid var(--line);background:#0a151c}.trace,.evidence{padding:10vw 5vw}.trace>header,.evidence>header{display:grid;grid-template-columns:200px 1fr;gap:4vw;margin-bottom:6vw}.trace header span,.evidence header span,.delivery span{font:10px var(--font-jetbrains);letter-spacing:.13em;color:var(--blue)}.trace h2,.evidence h2,.delivery h2{font-size:clamp(46px,6.5vw,96px);line-height:.9;letter-spacing:-.06em;margin:0}.trace>div{display:grid;grid-template-columns:repeat(2,1fr);border:1px solid var(--line)}.trace article{min-height:360px;padding:38px;border-inline-end:1px solid var(--line);border-bottom:1px solid var(--line);display:flex;flex-direction:column}.trace article:nth-child(even){border-inline-end:0}.trace article span{font:9px var(--font-jetbrains);letter-spacing:.1em;color:var(--blue)}.trace h3{font-size:36px;margin:auto 0 20px}.trace p{color:#9dafb6;font-size:18px;line-height:1.75;margin:0}.evidence{background:#dce8ec;color:#071017}.evidence header span{color:#12678c}.evidence>div{display:flex;flex-direction:column;gap:9vw}.evidence article{display:grid;grid-template-columns:130px 1fr;gap:28px;align-items:start}.evidence article:nth-child(even){grid-template-columns:1fr 130px}.evidence article:nth-child(even)>span{order:2}.evidence article>span{font:9px var(--font-jetbrains);letter-spacing:.12em;border-top:1px solid;padding-top:14px}.evidence figure{margin:0;min-width:0}.evidence figure>div{height:58vw;max-height:790px}.evidence figcaption{padding:20px 0;max-width:700px;font-size:16px;line-height:1.7}.delivery{padding:9vw 5vw;display:grid;grid-template-columns:1fr 1fr;gap:5vw;border-top:1px solid var(--line)}.delivery>div{grid-row:span 2}.delivery h2{margin-top:30px}.delivery ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;align-content:start}.delivery li{padding:16px 20px;border:1px solid var(--line);font:10px var(--font-jetbrains)}.delivery aside{display:flex;flex-wrap:wrap;gap:12px}.delivery aside a{min-height:48px;display:flex;align-items:center;padding:0 18px;background:var(--ice);color:var(--night);font:600 10px var(--font-jetbrains)}.page>footer{padding:50px 5vw;background:var(--ice);color:var(--night);display:flex;justify-content:space-between;gap:30px;font-weight:600}@keyframes scan{0%{top:8%;opacity:0}12%,88%{opacity:1}100%{top:88%;opacity:0}}@media(max-width:760px){.page>nav span{display:none}.hero{grid-template-columns:1fr;padding:8vw 5vw 16vw}.coverShell{height:116vw;order:-1}.copy small{margin-top:45px}.copy h1{font-size:17vw;overflow-wrap:anywhere}.trace,.evidence{padding:20vw 5vw}.trace>header,.evidence>header{grid-template-columns:1fr}.trace>div{grid-template-columns:1fr}.trace article{min-height:300px;border-inline-end:0}.evidence article,.evidence article:nth-child(even){grid-template-columns:1fr}.evidence article:nth-child(even)>span{order:0}.evidence figure>div{height:110vw}.delivery{grid-template-columns:1fr;padding:18vw 5vw}.delivery>div{grid-row:auto}.page>footer{flex-direction:column}.scanline{display:none}}@media(prefers-reduced-motion:reduce){.scanline{display:none}}
+
+/* === REBORN IDENTITY RESET: Rain Credential === */
+.page {
+  --reborn-ink: #05090d;
+  --reborn-paper: #e8fbff;
+  --reborn-accent: #4fc3f7;
+  --reborn-radius: 28px;
+  background-color: var(--reborn-paper);
+  background-image: repeating-linear-gradient(100deg,rgba(79,195,247,.18) 0 1px,transparent 1px 18px),radial-gradient(circle at 72% 16%,rgba(200,244,255,.18),transparent 24%);
+  color: var(--reborn-ink);
+  isolation: isolate;
+  overflow-x: clip;
+}
+.page::selection { background: var(--reborn-accent); color: var(--reborn-ink); }
+.nav, .topbar, .masthead, .header, .deckNav {
+  backdrop-filter: blur(14px);
+  border-color: color-mix(in srgb, var(--reborn-ink), transparent 78%) !important;
+}
+.hero, .cover, .intro, .lead, .stage, .mission, .opening, .frame, .reportHero, .projectHero {
+  position: relative;
+  min-height: min(76vh, 760px);
+  display: grid !important;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  align-items: center;
+  gap: clamp(18px, 4vw, 72px);
+  padding-block: clamp(64px, 10vw, 132px);
+}
+.hero::before, .cover::before, .intro::before, .stage::before, .mission::before, .projectHero::before {
+  content: "Rain Credential";
+  position: absolute;
+  inset: clamp(12px, 2vw, 28px);
+  z-index: -1;
+  display: grid;
+  place-items: center;
+  color: color-mix(in srgb, var(--reborn-accent), transparent 86%);
+  font-size: clamp(44px, 13vw, 190px);
+  font-weight: 900;
+  letter-spacing: -.08em;
+  line-height: .82;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+.hero h1, .cover h1, .intro h1, .stage h1, .mission h1, .projectHero h1 {
+  max-width: 14ch;
+  letter-spacing: -.045em;
+  line-height: .92;
+}
+.hero p, .cover p, .intro p, .stage p, .mission p, .projectHero p { max-width: 68ch; }
+.portrait, .photo, .heroPhoto, .image, .profile, .visual, .arch, .coverImage, .projectCover, .media, .screen {
+  overflow: hidden;
+  border-radius: var(--reborn-radius) !important;
+  clip-path: inset(0 round 28px);
+  box-shadow: 0 0 0 1px color-mix(in srgb,var(--reborn-accent),transparent 45%), 0 28px 80px rgba(0,0,0,.42);
+  transform: none;
+}
+.portrait img, .photo img, .heroPhoto img, .image img, .profile img, .visual img, .arch img, .coverImage img, .projectCover img, .media img, .screen img, img {
+  max-width: 100%;
+  height: auto;
+  object-fit: cover;
+  object-position: var(--portrait-focus-desktop, 50% 35%);
+}
+.work, .projects, .portfolio, .cases, .dossiers, .gallery, .caseGrid, .grid, .body {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(16px, 2.8vw, 42px);
+}
+.card, .case, .project, .tile, .panel, .dossier, .service, .capability, .article, .slide, .station, .note {
+  border: 1px solid color-mix(in srgb, var(--reborn-ink), transparent 72%) !important;
+  border-radius: var(--reborn-radius) !important;
+  background: color-mix(in srgb, var(--reborn-paper), white 7%);
+  box-shadow: 0 14px 42px rgba(0,0,0,.08);
+  transition: transform .36s cubic-bezier(.22,1,.36,1), box-shadow .36s cubic-bezier(.22,1,.36,1), border-color .36s ease;
+}
+.card:hover, .case:hover, .project:hover, .tile:hover, .panel:hover, .dossier:hover, .service:hover, .capability:hover, .article:hover, .slide:hover, .station:hover, .note:hover {
+  transform: translateY(-7px) ;
+  border-color: var(--reborn-accent) !important;
+}
+a, button { text-underline-offset: .18em; }
+a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
+  outline: 3px solid var(--reborn-accent) !important;
+  outline-offset: 5px !important;
+}
+.cta, .contact, .footer, .finale, .outro {
+  position: relative;
+  border-radius: calc(var(--reborn-radius) + 10px);
+  background: color-mix(in srgb, var(--reborn-ink), black 7%);
+  color: var(--reborn-paper);
+}
+.cta a, .contact a, .footer a, .finale a, .outro a { color: var(--reborn-accent); }
+@media (min-width: 880px) {
+  .hero > :first-child, .cover > :first-child, .intro > :first-child, .stage > :first-child, .mission > :first-child, .projectHero > :first-child { grid-column: 1 / 8; }
+  .hero > :last-child, .cover > :last-child, .intro > :last-child, .stage > :last-child, .mission > :last-child, .projectHero > :last-child { grid-column: 8 / -1; }
+}
+@media (max-width: 879px) {
+  .hero, .cover, .intro, .lead, .stage, .mission, .opening, .frame, .reportHero, .projectHero,
+  .work, .projects, .portfolio, .cases, .dossiers, .gallery, .caseGrid, .grid, .body {
+    grid-template-columns: 1fr !important;
+    min-height: auto;
+  }
+  .hero h1, .cover h1, .intro h1, .stage h1, .mission h1, .projectHero h1 { max-width: 11ch; }
+  .portrait img, .photo img, .heroPhoto img, .image img, .profile img, .visual img, .arch img, .coverImage img, .projectCover img, .media img, .screen img, img { object-position: var(--portrait-focus-mobile, 50% 30%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .01ms !important; }
+}
+/* === END REBORN IDENTITY RESET === */

@@ -1,1 +1,107 @@
 .page{--paper:#f4f1ea;--ink:#20201e;--red:#9d2d24;--stone:#b8a88a;background:var(--paper);color:var(--ink);font-family:var(--font-instrument);overflow:hidden}.nav{height:82px;padding:0 5vw;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #20201e44;font-size:12px;letter-spacing:.12em}.nav div{display:flex;gap:28px}.hero{min-height:850px;display:grid;grid-template-columns:1.1fr .7fr;gap:8vw;align-items:center;padding:8vw}.wallLabel{border-inline-start:8px solid var(--red);padding-inline-start:45px}.wallLabel>span,.corridor aside,.gallery header span,.footer>span{font-size:11px;letter-spacing:.18em;color:var(--red)}.wallLabel h1{font:500 clamp(60px,7vw,110px)/.92 var(--font-cormorant);margin:35px 0}.wallLabel p{font-size:18px;line-height:1.75;max-width:650px}.wallLabel a{display:inline-block;margin-top:30px;border-bottom:1px solid;padding:8px 0}.portrait{margin:0;background:#ded9cf;padding:38px 38px 75px;position:relative;transform:translateY(30px)}.portrait:before{content:"EXHIBIT A";position:absolute;inset-inline-start:-35px;top:40%;writing-mode:vertical-rl;letter-spacing:.15em}.portrait>img{position:relative!important;width:100%!important;height:auto!important;aspect-ratio:3/4}.portrait figcaption{margin-top:18px;font-size:11px;line-height:1.7}.corridor{background:#ded9cf;display:grid;grid-template-columns:170px 1fr;padding:120px 7vw}.corridor>div{display:grid;grid-template-columns:repeat(2,1fr)}.corridor article{min-height:300px;border:1px solid #20201e33;padding:40px}.corridor article span{color:var(--red)}.corridor h2{font:500 36px var(--font-cormorant)}.corridor p{line-height:1.7}.gallery{padding:140px 7vw}.gallery header{display:grid;grid-template-columns:170px 1fr;align-items:end;margin-bottom:80px}.gallery h2,.footer h2{font:500 clamp(60px,8vw,120px)/.9 var(--font-cormorant);margin:0}.gallery>div{display:grid;gap:120px}.exhibit{display:grid;grid-template-columns:1.2fr .7fr;gap:70px;align-items:center}.exhibit:nth-child(even){grid-template-columns:.7fr 1.2fr}.exhibit:nth-child(even) figure{order:2}.exhibit figure{height:560px;position:relative;margin:0;background:#ddd}.exhibit figure img{object-fit:cover}.exhibit figure>b{display:grid;place-items:center;height:100%;font-size:90px}.exhibit h3{font:500 48px/1 var(--font-cormorant);margin:20px 0}.exhibit p{line-height:1.7}.exhibit span{color:var(--red);font-size:11px;letter-spacing:.14em}.footer{background:var(--ink);color:var(--paper);padding:150px 8vw}.footer h2{max-width:950px;margin:30px 0}.footer p{font-size:18px;line-height:1.7;max-width:700px}.footer a{display:inline-block;margin-top:30px;color:#e7cabd}@media(max-width:760px){.hero,.exhibit,.exhibit:nth-child(even){grid-template-columns:1fr}.portrait{order:-1}.wallLabel{padding-inline-start:25px}.corridor{grid-template-columns:1fr;gap:40px}.corridor>div{grid-template-columns:1fr}.gallery header{grid-template-columns:1fr;gap:15px}.exhibit:nth-child(even) figure{order:0}.exhibit figure{height:105vw}.gallery>div{gap:80px}}@media(prefers-reduced-motion:reduce){.portrait{transform:none}}
+
+/* === REBORN IDENTITY RESET: Curated Museum === */
+.page {
+  --reborn-ink: #20201e;
+  --reborn-paper: #f4f1ea;
+  --reborn-accent: #9d2d24;
+  --reborn-radius: 3px;
+  background-color: var(--reborn-paper);
+  background-image: linear-gradient(90deg,rgba(157,45,36,.13),transparent 20% 80%,rgba(32,32,30,.09));
+  color: var(--reborn-ink);
+  isolation: isolate;
+  overflow-x: clip;
+}
+.page::selection { background: var(--reborn-accent); color: var(--reborn-ink); }
+.nav, .topbar, .masthead, .header, .deckNav {
+  backdrop-filter: blur(14px);
+  border-color: color-mix(in srgb, var(--reborn-ink), transparent 78%) !important;
+}
+.hero, .cover, .intro, .lead, .stage, .mission, .opening, .frame, .reportHero, .projectHero {
+  position: relative;
+  min-height: min(92vh, 920px);
+  display: grid !important;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  align-items: center;
+  gap: clamp(18px, 4vw, 72px);
+  padding-block: clamp(64px, 10vw, 132px);
+}
+.hero::before, .cover::before, .intro::before, .stage::before, .mission::before, .projectHero::before {
+  content: "Curated Museum";
+  position: absolute;
+  inset: clamp(12px, 2vw, 28px);
+  z-index: -1;
+  display: grid;
+  place-items: center;
+  color: color-mix(in srgb, var(--reborn-accent), transparent 86%);
+  font-size: clamp(44px, 13vw, 190px);
+  font-weight: 900;
+  letter-spacing: -.08em;
+  line-height: .82;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+.hero h1, .cover h1, .intro h1, .stage h1, .mission h1, .projectHero h1 {
+  max-width: 14ch;
+  letter-spacing: -.045em;
+  line-height: .92;
+}
+.hero p, .cover p, .intro p, .stage p, .mission p, .projectHero p { max-width: 68ch; }
+.portrait, .photo, .heroPhoto, .image, .profile, .visual, .arch, .coverImage, .projectCover, .media, .screen {
+  overflow: hidden;
+  border-radius: var(--reborn-radius) !important;
+  clip-path: inset(0 round 3px);
+  box-shadow: 0 26px 80px rgba(0,0,0,.18);
+  transform: none;
+}
+.portrait img, .photo img, .heroPhoto img, .image img, .profile img, .visual img, .arch img, .coverImage img, .projectCover img, .media img, .screen img, img {
+  max-width: 100%;
+  height: auto;
+  object-fit: cover;
+  object-position: var(--portrait-focus-desktop, 50% 35%);
+}
+.work, .projects, .portfolio, .cases, .dossiers, .gallery, .caseGrid, .grid, .body {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(16px, 2.8vw, 42px);
+}
+.card, .case, .project, .tile, .panel, .dossier, .service, .capability, .article, .slide, .station, .note {
+  border: 1px solid color-mix(in srgb, var(--reborn-ink), transparent 72%) !important;
+  border-radius: var(--reborn-radius) !important;
+  background: color-mix(in srgb, var(--reborn-paper), white 7%);
+  box-shadow: 0 14px 42px rgba(0,0,0,.08);
+  transition: transform .36s cubic-bezier(.22,1,.36,1), box-shadow .36s cubic-bezier(.22,1,.36,1), border-color .36s ease;
+}
+.card:hover, .case:hover, .project:hover, .tile:hover, .panel:hover, .dossier:hover, .service:hover, .capability:hover, .article:hover, .slide:hover, .station:hover, .note:hover {
+  transform: translateY(-7px) ;
+  border-color: var(--reborn-accent) !important;
+}
+a, button { text-underline-offset: .18em; }
+a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
+  outline: 3px solid var(--reborn-accent) !important;
+  outline-offset: 5px !important;
+}
+.cta, .contact, .footer, .finale, .outro {
+  position: relative;
+  border-radius: calc(var(--reborn-radius) + 10px);
+  background: color-mix(in srgb, var(--reborn-ink), black 7%);
+  color: var(--reborn-paper);
+}
+.cta a, .contact a, .footer a, .finale a, .outro a { color: var(--reborn-accent); }
+@media (min-width: 880px) {
+  .hero > :first-child, .cover > :first-child, .intro > :first-child, .stage > :first-child, .mission > :first-child, .projectHero > :first-child { grid-column: 1 / 8; }
+  .hero > :last-child, .cover > :last-child, .intro > :last-child, .stage > :last-child, .mission > :last-child, .projectHero > :last-child { grid-column: 8 / -1; }
+}
+@media (max-width: 879px) {
+  .hero, .cover, .intro, .lead, .stage, .mission, .opening, .frame, .reportHero, .projectHero,
+  .work, .projects, .portfolio, .cases, .dossiers, .gallery, .caseGrid, .grid, .body {
+    grid-template-columns: 1fr !important;
+    min-height: auto;
+  }
+  .hero h1, .cover h1, .intro h1, .stage h1, .mission h1, .projectHero h1 { max-width: 11ch; }
+  .portrait img, .photo img, .heroPhoto img, .image img, .profile img, .visual img, .arch img, .coverImage img, .projectCover img, .media img, .screen img, img { object-position: var(--portrait-focus-mobile, 50% 30%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .01ms !important; }
+}
+/* === END REBORN IDENTITY RESET === */

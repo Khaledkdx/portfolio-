@@ -1,1 +1,107 @@
 .city{min-height:100vh;background:#f5f1e8;color:#111;font-family:var(--font-instrument)}.city nav{padding:22px 4vw;border:3px solid;border-width:0 0 3px;display:flex;justify-content:space-between}.city header{padding:7vw;display:grid;grid-template-columns:1fr 1fr;gap:8vw;align-items:center;background-image:linear-gradient(30deg,#2d5bff12 12%,transparent 12.5% 87%,#2d5bff12 87.5%)}.city h1{font-size:clamp(58px,9vw,130px);line-height:.82;letter-spacing:-.07em}.city header p{font-size:20px;line-height:1.7}.cube{height:36vw;transform:skewY(-7deg);border:4px solid;box-shadow:35px 35px 0 #ff6b00,-25px -25px 0 #2d5bff}.cube>div{height:100%}.blocks{padding:9vw 6vw;display:grid;grid-template-columns:repeat(3,1fr);gap:30px}.blocks article{min-height:360px;border:4px solid;padding:30px;box-shadow:16px 16px #111}.blocks article:nth-child(2){background:#ff6b00}.blocks article:nth-child(3){background:#2d5bff;color:#fff}.blocks h2{font-size:40px}.blocks p{font-size:17px;line-height:1.7}.voxels{display:grid;grid-template-columns:repeat(3,1fr);grid-auto-rows:24vw;gap:3px;background:#111;border:3px solid}.voxels figure{background:#f5f1e8;margin:0}.voxels figure>div{height:calc(100% - 45px)}.voxels .tall{grid-row:span 2}.build{padding:7vw;display:flex;gap:12px;flex-wrap:wrap}.build>*{padding:15px;border:3px solid;box-shadow:6px 6px #ff6b00}@media(max-width:760px){.city header,.blocks{grid-template-columns:1fr}.cube{height:90vw;order:-1}.voxels{grid-template-columns:1fr;grid-auto-rows:105vw}.voxels .tall{grid-row:span 1}}
+
+/* === REBORN IDENTITY RESET: Voxel Builder === */
+.page {
+  --reborn-ink: #111111;
+  --reborn-paper: #f5f1e8;
+  --reborn-accent: #ff6b00;
+  --reborn-radius: 10px;
+  background-color: var(--reborn-paper);
+  background-image: linear-gradient(30deg,rgba(45,91,255,.16) 12%,transparent 13%),linear-gradient(150deg,rgba(255,107,0,.14) 12%,transparent 13%);
+  color: var(--reborn-ink);
+  isolation: isolate;
+  overflow-x: clip;
+}
+.page::selection { background: var(--reborn-accent); color: var(--reborn-ink); }
+.nav, .topbar, .masthead, .header, .deckNav {
+  backdrop-filter: blur(14px);
+  border-color: color-mix(in srgb, var(--reborn-ink), transparent 78%) !important;
+}
+.hero, .cover, .intro, .lead, .stage, .mission, .opening, .frame, .reportHero, .projectHero {
+  position: relative;
+  min-height: min(76vh, 760px);
+  display: grid !important;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  align-items: center;
+  gap: clamp(18px, 4vw, 72px);
+  padding-block: clamp(64px, 10vw, 132px);
+}
+.hero::before, .cover::before, .intro::before, .stage::before, .mission::before, .projectHero::before {
+  content: "Voxel Builder";
+  position: absolute;
+  inset: clamp(12px, 2vw, 28px);
+  z-index: -1;
+  display: grid;
+  place-items: center;
+  color: color-mix(in srgb, var(--reborn-accent), transparent 86%);
+  font-size: clamp(44px, 13vw, 190px);
+  font-weight: 900;
+  letter-spacing: -.08em;
+  line-height: .82;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+.hero h1, .cover h1, .intro h1, .stage h1, .mission h1, .projectHero h1 {
+  max-width: 14ch;
+  letter-spacing: -.045em;
+  line-height: .92;
+}
+.hero p, .cover p, .intro p, .stage p, .mission p, .projectHero p { max-width: 68ch; }
+.portrait, .photo, .heroPhoto, .image, .profile, .visual, .arch, .coverImage, .projectCover, .media, .screen {
+  overflow: hidden;
+  border-radius: var(--reborn-radius) !important;
+  clip-path: polygon(12% 0,100% 0,88% 100%,0 100%);
+  box-shadow: 0 26px 80px rgba(0,0,0,.18);
+  transform: none;
+}
+.portrait img, .photo img, .heroPhoto img, .image img, .profile img, .visual img, .arch img, .coverImage img, .projectCover img, .media img, .screen img, img {
+  max-width: 100%;
+  height: auto;
+  object-fit: cover;
+  object-position: var(--portrait-focus-desktop, 50% 35%);
+}
+.work, .projects, .portfolio, .cases, .dossiers, .gallery, .caseGrid, .grid, .body {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(16px, 2.8vw, 42px);
+}
+.card, .case, .project, .tile, .panel, .dossier, .service, .capability, .article, .slide, .station, .note {
+  border: 1px solid color-mix(in srgb, var(--reborn-ink), transparent 72%) !important;
+  border-radius: var(--reborn-radius) !important;
+  background: color-mix(in srgb, var(--reborn-paper), white 7%);
+  box-shadow: 0 14px 42px rgba(0,0,0,.08);
+  transition: transform .36s cubic-bezier(.22,1,.36,1), box-shadow .36s cubic-bezier(.22,1,.36,1), border-color .36s ease;
+}
+.card:hover, .case:hover, .project:hover, .tile:hover, .panel:hover, .dossier:hover, .service:hover, .capability:hover, .article:hover, .slide:hover, .station:hover, .note:hover {
+  transform: translateY(-7px) rotateX(3deg) rotateY(-3deg);
+  border-color: var(--reborn-accent) !important;
+}
+a, button { text-underline-offset: .18em; }
+a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
+  outline: 3px solid var(--reborn-accent) !important;
+  outline-offset: 5px !important;
+}
+.cta, .contact, .footer, .finale, .outro {
+  position: relative;
+  border-radius: calc(var(--reborn-radius) + 10px);
+  background: color-mix(in srgb, var(--reborn-ink), black 7%);
+  color: var(--reborn-paper);
+}
+.cta a, .contact a, .footer a, .finale a, .outro a { color: var(--reborn-accent); }
+@media (min-width: 880px) {
+  .hero > :first-child, .cover > :first-child, .intro > :first-child, .stage > :first-child, .mission > :first-child, .projectHero > :first-child { grid-column: 1 / 8; }
+  .hero > :last-child, .cover > :last-child, .intro > :last-child, .stage > :last-child, .mission > :last-child, .projectHero > :last-child { grid-column: 8 / -1; }
+}
+@media (max-width: 879px) {
+  .hero, .cover, .intro, .lead, .stage, .mission, .opening, .frame, .reportHero, .projectHero,
+  .work, .projects, .portfolio, .cases, .dossiers, .gallery, .caseGrid, .grid, .body {
+    grid-template-columns: 1fr !important;
+    min-height: auto;
+  }
+  .hero h1, .cover h1, .intro h1, .stage h1, .mission h1, .projectHero h1 { max-width: 11ch; }
+  .portrait img, .photo img, .heroPhoto img, .image img, .profile img, .visual img, .arch img, .coverImage img, .projectCover img, .media img, .screen img, img { object-position: var(--portrait-focus-mobile, 50% 30%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .01ms !important; }
+}
+/* === END REBORN IDENTITY RESET === */
