@@ -1,8 +1,0 @@
-import Link from "next/link";
-import { pick } from "@/lib/site-content";
-import { PortraitImage } from "@/app/_components/PortraitImage";
-import type { DesignProps } from "../types";
-import { languageHref, n, projectHref, publishedProjects } from "../types";
-import styles from "./spatial-orbit.module.css";
-
-export default function SpatialOrbit({ content, locale, design, preview, variantPath }: DesignProps){const projects=publishedProjects(content);const lang=languageHref({content,locale,design,preview,variantPath});return <main className={styles.page} dir={locale === "ar" ? "rtl" : "ltr"}><a className={styles.skip} href="#satellites">Skip</a><nav className={styles.orbitNav}><Link href={variantPath??`/${locale}`}>Orbit</Link><Link href={lang}>{locale==='ar'?'EN':'AR'}</Link></nav><section className={styles.space}><div className={styles.sun}><PortraitImage content={content} className={styles.portrait} sizes="44vw" priority /></div><article className={styles.transmission}><span>03 / spatial</span><h1>{pick(content.profile.headline,locale)}</h1><p>{pick(content.profile.intro,locale)}</p></article>{content.approach.map((s,i)=><div className={styles.planet} key={s.id}><b>{n(i)}</b><h2>{pick(s.title,locale)}</h2></div>)}</section><section className={styles.belt}>{content.services.map(s=><article key={s.id}><h2>{pick(s.title,locale)}</h2><p>{pick(s.description,locale)}</p></article>)}</section><section id="satellites" className={styles.satellites}>{projects.map((p,i)=><Link key={p.id} href={projectHref(p,{locale,variantPath})}><span>{n(i)}</span><h2>{pick(p.title,locale)}</h2><p>{pick(p.summary,locale)}</p></Link>)}</section></main>}

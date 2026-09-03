@@ -170,3 +170,16 @@ test("migrates reviews and validates only visible public reviews", () => {
   content.reviews.items[0].avatarAlt = { en: "Client portrait", ar: "صورة العميل" };
   assert.equal(validateSiteContent(content), null);
 });
+
+test("migrates legacy design values and growth story content", () => {
+  const legacy = clone();
+  legacy.activeDesign = "arabic-geometry";
+  delete legacy.growthStory;
+  const migrated = normalizeSiteContent(legacy);
+  assert.equal(migrated.activeDesign, "cinematic-growth");
+  assert.equal(migrated.growthStory.problems.length, 4);
+  assert.match(migrated.growthStory.title.en, /business starts falling/);
+
+  migrated.growthStory.result.ar = "";
+  assert.match(validateSiteContent(migrated), /growth story/i);
+});

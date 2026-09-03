@@ -1,8 +1,0 @@
-import Link from "next/link";
-import { pick } from "@/lib/site-content";
-import { PortraitImage } from "@/app/_components/PortraitImage";
-import type { DesignProps } from "../types";
-import { languageHref, n, projectHref, publishedProjects } from "../types";
-import styles from "./retro-computer.module.css";
-
-export default function RetroComputer({ content, locale, design, preview, variantPath }: DesignProps){const projects=publishedProjects(content);const lang=languageHref({content,locale,design,preview,variantPath});return <main className={styles.page} dir={locale === "ar" ? "rtl" : "ltr"}><a className={styles.skip} href="#folders">Skip</a><div className={styles.osbar}><span>KHALID.EXE</span><Link href={lang}>{locale==='ar'?'EN':'AR'}</Link></div><section className={styles.screen}><div className={styles.window}><h1>{pick(content.profile.headline,locale)}</h1><p>{pick(content.profile.intro,locale)}</p></div><figure className={styles.cam}><PortraitImage content={content} className={styles.portrait} sizes="34vw" priority /></figure></section><section className={styles.files}>{content.approach.map((s,i)=><article key={s.id}><b>FILE {n(i)}</b><h2>{pick(s.title,locale)}</h2><p>{pick(s.description,locale)}</p></article>)}</section><section id="folders" className={styles.folders}>{projects.map(p=><Link key={p.id} href={projectHref(p,{locale,variantPath})}><span>▣</span><h2>{pick(p.title,locale)}</h2></Link>)}</section></main>}

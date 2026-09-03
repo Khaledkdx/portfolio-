@@ -1,8 +1,0 @@
-import Link from "next/link";
-import { pick } from "@/lib/site-content";
-import { PortraitImage } from "@/app/_components/PortraitImage";
-import type { DesignProps } from "../types";
-import { languageHref, n, projectHref, publishedProjects } from "../types";
-import styles from "./future-signal.module.css";
-
-export default function FutureSignal({ content, locale, design, preview, variantPath }: DesignProps){const projects=publishedProjects(content);const lang=languageHref({content,locale,design,preview,variantPath});const tracks=[...content.approach,...content.services].slice(0,8);return <main className={styles.page} dir={locale === "ar" ? "rtl" : "ltr"}><a className={styles.skip} href="#timeline">Skip</a><nav className={styles.hud}><span>FS2040</span><Link href={lang}>{locale==='ar'?'EN':'AR'}</Link></nav><section className={styles.scan}><div><small>signal acquired</small><h1>{pick(content.profile.headline,locale)}</h1><p>{pick(content.profile.intro,locale)}</p></div><figure><PortraitImage content={content} className={styles.portrait} sizes="42vw" priority /></figure></section><section id="timeline" className={styles.timeline}>{tracks.map((s,i)=><article key={s.id}><span>{n(i)}</span><h2>{pick(s.title,locale)}</h2><p>{pick(s.description,locale)}</p></article>)}</section><section className={styles.signalCases}>{projects.map(p=><Link key={p.id} href={projectHref(p,{locale,variantPath})}><h2>{pick(p.title,locale)}</h2><p>{pick(p.summary,locale)}</p></Link>)}</section></main>}

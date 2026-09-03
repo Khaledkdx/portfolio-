@@ -61,6 +61,15 @@ export type Review = {
   order: number;
 };
 
+export type GrowthStory = {
+  eyebrow: LocalizedText;
+  title: LocalizedText;
+  intro: LocalizedText;
+  problems: Array<{ id: string; title: LocalizedText; description: LocalizedText }>;
+  intervention: LocalizedText;
+  result: LocalizedText;
+};
+
 export type Project = {
   id: string;
   slug: string;
@@ -115,45 +124,24 @@ export type SiteContent = {
     intro: LocalizedText;
     items: Review[];
   };
+  growthStory: GrowthStory;
   projects: Project[];
 };
 
 export const DESIGN_SLUGS = [
-  "arabic-geometry",
-  "systems-map",
-  "spatial-orbit",
-  "modular-cubes",
-  "future-signal",
-  "swiss-grid",
-  "analog-scrapbook",
-  "art-deco",
-  "retro-computer",
-  "organic-lab",
-  "broadcast-studio",
-  "control-room",
+  "cinematic-growth",
 ] as const;
 
 export type DesignSlug = (typeof DESIGN_SLUGS)[number];
 
 export const DESIGN_NAMES: Record<DesignSlug, string> = {
-  "arabic-geometry": "Arabic Geometry",
-  "systems-map": "SaaS Growth OS",
-  "spatial-orbit": "Spatial 3D Orbit",
-  "modular-cubes": "Modular Cubes",
-  "future-signal": "Future Signal 2040",
-  "swiss-grid": "Swiss Grid System",
-  "analog-scrapbook": "Analog Scrapbook",
-  "art-deco": "Art Deco Executive",
-  "retro-computer": "Retro Growth Computer",
-  "organic-lab": "Organic Growth Lab",
-  "broadcast-studio": "Broadcast Studio",
-  "control-room": "Neo-Brutalist Pitch Deck",
+  "cinematic-growth": "Cinematic Growth",
 };
 
 const t = (en: string, ar: string): LocalizedText => ({ en, ar });
 
 export const DEFAULT_CONTENT: SiteContent = {
-  activeDesign: "arabic-geometry",
+  activeDesign: "cinematic-growth",
   profile: {
     name: "Khalid Mohamad",
     role: t(
@@ -336,6 +324,19 @@ export const DEFAULT_CONTENT: SiteContent = {
       "أضف آراء موثقة من العملاء أو زملاء العمل من لوحة التحكم. لا يظهر هذا القسم للعامة إلا بعد نشر مراجعة.",
     ),
     items: [],
+  },
+  growthStory: {
+    eyebrow: t("FROM FRICTION TO MOMENTUM", "من التعطّل إلى الزخم"),
+    title: t("When a business starts falling, I rebuild the system beneath it.", "عندما يبدأ العمل في التراجع، أعيد بناء النظام الذي يحمله."),
+    intro: t("Growth rarely stops because of one dramatic failure. It slows through disconnected decisions, manual work and unclear signals. This is how I turn that downward motion around.", "نادراً ما يتوقف النمو بسبب مشكلة واحدة كبيرة؛ بل يتباطأ بسبب قرارات منفصلة وعمل يدوي وإشارات غير واضحة. هكذا أحوّل مسار الهبوط إلى صعود."),
+    problems: [
+      { id: "weak-leads", title: t("Weak lead flow", "تدفق عملاء ضعيف"), description: t("Campaigns attract attention without a reliable route to qualified conversations.", "الحملات تجذب الانتباه دون مسار موثوق للوصول إلى محادثات مؤهلة.") },
+      { id: "manual-work", title: t("Manual operations", "عمليات يدوية"), description: t("Repeated tasks consume the team while important follow-up arrives late.", "المهام المتكررة تستهلك الفريق بينما تصل المتابعة المهمة متأخرة.") },
+      { id: "fragmented-data", title: t("Fragmented data", "بيانات مفككة"), description: t("Customer context lives across tools, messages and documents.", "سياق العميل موزع بين الأدوات والرسائل والمستندات.") },
+      { id: "unclear-message", title: t("Unclear message", "رسالة غير واضحة"), description: t("The offer does not connect the real customer problem to business value.", "العرض لا يربط مشكلة العميل الحقيقية بالقيمة التجارية.") },
+    ],
+    intervention: t("Diagnose → Connect → Automate → Optimize", "تشخيص ← ربط ← أتمتة ← تحسين"),
+    result: t("A connected growth system that helps people make faster, clearer decisions.", "نظام نمو مترابط يساعد الفريق على اتخاذ قرارات أسرع وأكثر وضوحاً."),
   },
   projects: [
     {
@@ -559,7 +560,7 @@ export function projectLinks(project: Project): ProjectLink[] {
 }
 
 export function normalizeSiteContent(content: SiteContent): SiteContent {
-  const activeDesign = isDesignSlug(String(content.activeDesign)) ? content.activeDesign : "arabic-geometry";
+  const activeDesign = isDesignSlug(String(content.activeDesign)) ? content.activeDesign : "cinematic-growth";
   return {
     ...content,
     activeDesign,
@@ -612,6 +613,18 @@ export function normalizeSiteContent(content: SiteContent): SiteContent {
         visible: review.visible ?? false,
         order: Number.isFinite(review.order) ? review.order : index + 1,
       })),
+    },
+    growthStory: {
+      eyebrow: content.growthStory?.eyebrow ?? DEFAULT_CONTENT.growthStory.eyebrow,
+      title: content.growthStory?.title ?? DEFAULT_CONTENT.growthStory.title,
+      intro: content.growthStory?.intro ?? DEFAULT_CONTENT.growthStory.intro,
+      problems: (content.growthStory?.problems ?? DEFAULT_CONTENT.growthStory.problems).map((problem, index) => ({
+        id: problem.id || `growth-problem-${index + 1}`,
+        title: problem.title ?? { en: "", ar: "" },
+        description: problem.description ?? { en: "", ar: "" },
+      })),
+      intervention: content.growthStory?.intervention ?? DEFAULT_CONTENT.growthStory.intervention,
+      result: content.growthStory?.result ?? DEFAULT_CONTENT.growthStory.result,
     },
     projects: (content.projects ?? []).map((project) => {
       const normalized: Project = {
@@ -686,6 +699,8 @@ export function validateSiteContent(input: SiteContent): string | null {
   }
   if (!content.reviews.heading.en.trim() || !content.reviews.heading.ar.trim()) return "The reviews section requires an English and Arabic heading.";
   if (!content.reviews.intro.en.trim() || !content.reviews.intro.ar.trim()) return "The reviews section requires English and Arabic intro text.";
+  if (!content.growthStory.eyebrow.en.trim() || !content.growthStory.eyebrow.ar.trim() || !content.growthStory.title.en.trim() || !content.growthStory.title.ar.trim() || !content.growthStory.intro.en.trim() || !content.growthStory.intro.ar.trim() || !content.growthStory.intervention.en.trim() || !content.growthStory.intervention.ar.trim() || !content.growthStory.result.en.trim() || !content.growthStory.result.ar.trim()) return "The growth story requires complete English and Arabic content.";
+  if (content.growthStory.problems.length < 1 || content.growthStory.problems.some((item) => !item.title.en.trim() || !item.title.ar.trim() || !item.description.en.trim() || !item.description.ar.trim())) return "Growth story problems require English and Arabic content.";
   if (content.reviews.items.length > 20) return "The reviews section can contain up to 20 entries.";
   for (const review of content.reviews.items) {
     if (!review.visible) continue;

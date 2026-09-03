@@ -1,7 +1,6 @@
 import { env } from "cloudflare:workers";
 import {
   DEFAULT_CONTENT,
-  type DesignSlug,
   normalizeSiteContent,
   type SiteContent,
 } from "./site-content";
@@ -106,16 +105,6 @@ export async function saveSiteContent(content: SiteContent): Promise<void> {
       JSON.stringify(normalizeSiteContent(content)),
       new Date().toISOString(),
     )
-    .run();
-}
-
-export async function updateActiveDesign(activeDesign: DesignSlug): Promise<void> {
-  const db = bindings().DB;
-  if (!db) throw new Error("Persistent storage is unavailable.");
-  await readSiteContent();
-  await db
-    .prepare("UPDATE site_content SET content_json = json_set(content_json, '$.activeDesign', ?), updated_at = ? WHERE id = 1")
-    .bind(activeDesign, new Date().toISOString())
     .run();
 }
 

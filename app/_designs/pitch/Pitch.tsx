@@ -1,8 +1,0 @@
-import Link from "next/link";
-import { pick } from "@/lib/site-content";
-import { PortraitImage } from "@/app/_components/PortraitImage";
-import type { DesignProps } from "../types";
-import { languageHref, n, projectHref, publishedProjects } from "../types";
-import styles from "./pitch.module.css";
-
-export default function Pitch({ content, locale, design, preview, variantPath }: DesignProps){const projects=publishedProjects(content);const lang=languageHref({content,locale,design,preview,variantPath});return <main className={styles.page} dir={locale === "ar" ? "rtl" : "ltr"}><a className={styles.skip} href="#deck">Skip</a><section className={styles.slideOne}><nav><Link href={variantPath??`/${locale}`}>K/12</Link><Link href={lang}>{locale==='ar'?'EN':'AR'}</Link></nav><div><h1>{pick(content.profile.headline,locale)}</h1><p>{pick(content.profile.intro,locale)}</p></div><figure><PortraitImage content={content} className={styles.portrait} sizes="42vw" priority /></figure></section><section className={styles.problemSlides}>{content.approach.map((s,i)=><article key={s.id}><b>{n(i)}</b><h2>{pick(s.title,locale)}</h2><p>{pick(s.description,locale)}</p></article>)}</section><section className={styles.offer}>{content.services.map(s=><article key={s.id}><span>{s.number}</span><h2>{pick(s.title,locale)}</h2></article>)}</section><section id="deck" className={styles.deck}>{projects.map((p,i)=><Link key={p.id} href={projectHref(p,{locale,variantPath})}><b>SLIDE {n(i)}</b><h2>{pick(p.title,locale)}</h2><p>{pick(p.summary,locale)}</p></Link>)}</section></main>}

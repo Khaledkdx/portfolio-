@@ -1,8 +1,0 @@
-import Link from "next/link";
-import { pick } from "@/lib/site-content";
-import { PortraitImage } from "@/app/_components/PortraitImage";
-import type { DesignProps } from "../types";
-import { languageHref, n, projectHref, publishedProjects } from "../types";
-import styles from "./analog-scrapbook.module.css";
-
-export default function AnalogScrapbook({ content, locale, design, preview, variantPath }: DesignProps){const projects=publishedProjects(content);const lang=languageHref({content,locale,design,preview,variantPath});return <main className={styles.page} dir={locale === "ar" ? "rtl" : "ltr"}><a className={styles.skip} href="#clips">Skip</a><nav className={styles.tape}><Link href={variantPath??`/${locale}`}>Scrapbook</Link><Link href={lang}>{locale==='ar'?'EN':'AR'}</Link></nav><section className={styles.desk}><figure className={styles.polaroid}><PortraitImage content={content} className={styles.portrait} sizes="40vw" priority /><figcaption>{content.profile.name}</figcaption></figure><div className={styles.note}><h1>{pick(content.profile.headline,locale)}</h1><p>{pick(content.profile.intro,locale)}</p></div></section><section className={styles.stickies}>{content.approach.map((s,i)=><article key={s.id}><b>{n(i)}</b><h2>{pick(s.title,locale)}</h2><p>{pick(s.description,locale)}</p></article>)}</section><section id="clips" className={styles.clips}>{projects.map((p,i)=><Link key={p.id} href={projectHref(p,{locale,variantPath})}><span>{n(i)}</span><h2>{pick(p.title,locale)}</h2><p>{pick(p.summary,locale)}</p></Link>)}</section></main>}

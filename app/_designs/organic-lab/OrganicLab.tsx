@@ -1,8 +1,0 @@
-import Link from "next/link";
-import { pick } from "@/lib/site-content";
-import { PortraitImage } from "@/app/_components/PortraitImage";
-import type { DesignProps } from "../types";
-import { languageHref, n, projectHref, publishedProjects } from "../types";
-import styles from "./organic-lab.module.css";
-
-export default function OrganicLab({ content, locale, design, preview, variantPath }: DesignProps){const projects=publishedProjects(content);const lang=languageHref({content,locale,design,preview,variantPath});return <main className={styles.page} dir={locale === "ar" ? "rtl" : "ltr"}><a className={styles.skip} href="#garden">Skip</a><nav className={styles.leafNav}><Link href={variantPath??`/${locale}`}>Organic Lab</Link><Link href={lang}>{locale==='ar'?'EN':'AR'}</Link></nav><section className={styles.seed}><div><h1>{pick(content.profile.headline,locale)}</h1><p>{pick(content.profile.intro,locale)}</p></div><figure><PortraitImage content={content} className={styles.portrait} sizes="40vw" priority /></figure></section><section className={styles.roots}>{content.approach.map((s,i)=><article key={s.id}><span>{n(i)}</span><h2>{pick(s.title,locale)}</h2><p>{pick(s.description,locale)}</p></article>)}</section><section className={styles.canopy}>{content.services.map(s=><article key={s.id}><h2>{pick(s.title,locale)}</h2><p>{pick(s.description,locale)}</p></article>)}</section><section id="garden" className={styles.garden}>{projects.map((p,i)=><Link key={p.id} href={projectHref(p,{locale,variantPath})}><b>{n(i)}</b><h2>{pick(p.title,locale)}</h2><p>{pick(p.summary,locale)}</p></Link>)}</section></main>}

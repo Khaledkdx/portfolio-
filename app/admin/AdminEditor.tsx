@@ -5,12 +5,9 @@ import Link from "next/link";
 import { useEffect, useMemo, useState, type SetStateAction } from "react";
 import type { MediaAsset } from "@/lib/data";
 import {
-  DESIGN_NAMES,
-  DESIGN_SLUGS,
   normalizeProjectSlug,
   normalizeSiteContent,
   type CompanyLogo,
-  type DesignSlug,
   type Experience,
   type Locale,
   type Project,
@@ -23,7 +20,6 @@ import {
 
 type Tab =
   | "overview"
-  | "designs"
   | "projects"
   | "companies"
   | "reviews"
@@ -31,31 +27,11 @@ type Tab =
   | "experience"
   | "media";
 type ProjectFilter = "all" | Project["status"];
-type PreviewDevice = "desktop" | "tablet" | "mobile";
-
-const designMeta: Record<
-  DesignSlug,
-  { sector: { en: string; ar: string }; colors: string[] }
-> = {
-  "arabic-geometry": { sector: { en: "Arabic Luxury", ar: "عربي فاخر" }, colors: ["#F3E7CF", "#153B32", "#1B3A6F", "#C98B2E"] },
-  "systems-map": { sector: { en: "Tech Startup", ar: "تقني وستارت أب" }, colors: ["#07111F", "#1267FF", "#16D9A4", "#E8F0FF"] },
-  "spatial-orbit": { sector: { en: "Immersive 3D", ar: "تجربة ثلاثية الأبعاد" }, colors: ["#090B10", "#E8ECF3", "#49E0FF", "#FF754A"] },
-  "modular-cubes": { sector: { en: "Modular Systems", ar: "أنظمة ومكعبات" }, colors: ["#F5F1E8", "#111111", "#FF6B00", "#2D5BFF"] },
-  "future-signal": { sector: { en: "Future Interface", ar: "واجهة مستقبلية" }, colors: ["#03070C", "#00F0C8", "#DAFF3E", "#F54B64"] },
-  "swiss-grid": { sector: { en: "International Style", ar: "نظام سويسري" }, colors: ["#F7F5EF", "#101010", "#E31B23", "#1B57D7"] },
-  "analog-scrapbook": { sector: { en: "Human Creative", ar: "سكراب بوك إبداعي" }, colors: ["#F3E5CF", "#312720", "#D4553D", "#56765A"] },
-  "art-deco": { sector: { en: "Luxury Executive", ar: "آرت ديكو فاخر" }, colors: ["#0E1A1F", "#E5C07B", "#F6EEDC", "#8F2636"] },
-  "retro-computer": { sector: { en: "Retro Technology", ar: "كمبيوتر كلاسيكي" }, colors: ["#06110B", "#7CFF6B", "#F1B84B", "#D9E0D8"] },
-  "organic-lab": { sector: { en: "Organic Systems", ar: "أنظمة عضوية" }, colors: ["#EEF3E6", "#173D2C", "#88A96B", "#DB715D"] },
-  "broadcast-studio": { sector: { en: "Broadcast & Social", ar: "بث ومحتوى اجتماعي" }, colors: ["#16121F", "#F7F2E8", "#FF334F", "#29D3C2"] },
-  "control-room": { sector: { en: "Startup & Agency", ar: "عرض تقديمي جريء" }, colors: ["#FFFFFF", "#000000", "#FFD600", "#3455FF"] },
-};
 
 const copy = {
   en: {
     tabs: {
       overview: "Profile & content",
-      designs: "Designs",
       projects: "Case studies",
       companies: "Companies & logos",
       reviews: "Reviews",
@@ -97,6 +73,14 @@ const copy = {
     labels: "Section labels & calls to action",
     approach: "Working method",
     addApproach: "＋ Add step",
+    growthStory: "Growth transformation story",
+    growthStoryHelp: "Controls the falling-company scroll scene on the public site.",
+    storyEyebrow: "Story eyebrow",
+    storyIntro: "Story introduction",
+    storyIntervention: "Intervention sequence",
+    storyResult: "Final business result",
+    storyProblems: "Business friction points",
+    addStoryProblem: "＋ Add friction point",
     published: "published",
     addProject: "＋ Add project",
     caseStudy: "Case study",
@@ -220,7 +204,6 @@ const copy = {
   ar: {
     tabs: {
       overview: "الملف والمحتوى",
-      designs: "التصاميم",
       projects: "دراسات الحالة",
       companies: "الشركات والشعارات",
       reviews: "الآراء",
@@ -262,6 +245,14 @@ const copy = {
     labels: "عناوين الأقسام والدعوات",
     approach: "منهج العمل",
     addApproach: "＋ إضافة خطوة",
+    growthStory: "قصة تحول ونمو الشركة",
+    growthStoryHelp: "تتحكم هذه البيانات في مشهد سقوط الشركة وصعودها أثناء التمرير.",
+    storyEyebrow: "العنوان العلوي للقصة",
+    storyIntro: "مقدمة القصة",
+    storyIntervention: "تسلسل التدخل",
+    storyResult: "النتيجة التجارية النهائية",
+    storyProblems: "نقاط تعطيل العمل",
+    addStoryProblem: "＋ إضافة نقطة تعطيل",
     published: "منشور",
     addProject: "＋ إضافة مشروع",
     caseStudy: "دراسة حالة",
@@ -530,13 +521,11 @@ export function AdminEditor({
   initialMedia,
   ownerName,
   initialTab,
-  initialPreview,
 }: {
   initialContent: SiteContent;
   initialMedia: MediaAsset[];
   ownerName: string;
   initialTab?: Tab;
-  initialPreview?: string;
 }) {
   const normalizedInitial = useMemo(
     () => normalizeSiteContent(initialContent),
@@ -554,16 +543,6 @@ export function AdminEditor({
   const [projectSearch, setProjectSearch] = useState("");
   const [projectFilter, setProjectFilter] = useState<ProjectFilter>("all");
   const [mediaSearch, setMediaSearch] = useState("");
-  const validInitialPreview = DESIGN_SLUGS.find(
-    (design) => design === initialPreview,
-  );
-  const [previewDesign, setPreviewDesign] = useState<DesignSlug | null>(
-    validInitialPreview ?? null,
-  );
-  const [previewLocale, setPreviewLocale] = useState<Locale>("en");
-  const [previewDevice, setPreviewDevice] =
-    useState<PreviewDevice>("desktop");
-  const [activating, setActivating] = useState(false);
   const project = content.projects[selectedProject];
   const t = copy[locale];
   const tabList = (Object.keys(t.tabs) as Tab[]).map((id) => ({
@@ -708,28 +687,6 @@ export function AdminEditor({
     }
   }
 
-  async function activateDesign(design: DesignSlug) {
-    if (!window.confirm(t.confirmActivate)) return;
-    setActivating(true);
-    setNotice("");
-    try {
-      const response = await fetch("/api/admin/design", {
-        method: "PATCH",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ activeDesign: design }),
-      });
-      const result = (await response.json().catch(() => ({}))) as {
-        error?: string;
-      };
-      if (!response.ok) throw new Error(result.error ?? t.failed);
-      setContentState((current) => ({ ...current, activeDesign: design }));
-      setNotice(t.designActivated);
-    } catch (error) {
-      setNotice(error instanceof Error ? error.message : t.failed);
-    } finally {
-      setActivating(false);
-    }
-  }
 
   function addProject() {
     const nextIndex = content.projects.length;
@@ -960,27 +917,21 @@ export function AdminEditor({
                 </div>
               ))}
             </div>
-          </div>
-        )}
-
-        {tab === "designs" && (
-          <div className="admin-stack">
-            <p className="designs-intro">{t.designsIntro}</p>
-            <div className="design-admin-grid">
-              {DESIGN_SLUGS.map((design, index) => (
-                <article className={`design-admin-card ${content.activeDesign === design ? "active" : ""}`} key={design}>
-                  <div className="design-card-number">{String(index + 1).padStart(2, "0")}</div>
-                  <div className={`design-card-mini design-card-mini-${index + 1}`} aria-hidden="true"><i /><i /><i /></div>
-                  <div className="design-swatches">{designMeta[design].colors.map((color) => <i key={color} style={{ background: color }} />)}</div>
-                  <p>{designMeta[design].sector[locale]}</p>
-                  <h2>{DESIGN_NAMES[design]}</h2>
-                  {content.activeDesign === design && <b className="active-design-label">● {t.active}</b>}
-                  <div className="design-card-actions">
-                    <button onClick={() => setPreviewDesign(design)}>{t.preview}</button>
-                    <button className="primary" disabled={activating || content.activeDesign === design} onClick={() => activateDesign(design)}>{activating ? t.activating : t.activate}</button>
-                  </div>
-                </article>
-              ))}
+            <div className="admin-panel wide">
+              <header><div><span>CINEMATIC STORY</span><h2>{t.growthStory}</h2><p>{t.growthStoryHelp}</p></div></header>
+              <div className="field-grid">
+                <LocalizedField label={t.storyEyebrow} value={content.growthStory.eyebrow} locale={locale} onChange={(value) => setContent({ ...content, growthStory: { ...content.growthStory, eyebrow: localized(content.growthStory.eyebrow, value) } })} />
+                <LocalizedField label={t.title} value={content.growthStory.title} locale={locale} multiline onChange={(value) => setContent({ ...content, growthStory: { ...content.growthStory, title: localized(content.growthStory.title, value) } })} />
+                <div className="full"><LocalizedField label={t.storyIntro} value={content.growthStory.intro} locale={locale} multiline onChange={(value) => setContent({ ...content, growthStory: { ...content.growthStory, intro: localized(content.growthStory.intro, value) } })} /></div>
+                <LocalizedField label={t.storyIntervention} value={content.growthStory.intervention} locale={locale} onChange={(value) => setContent({ ...content, growthStory: { ...content.growthStory, intervention: localized(content.growthStory.intervention, value) } })} />
+                <LocalizedField label={t.storyResult} value={content.growthStory.result} locale={locale} multiline onChange={(value) => setContent({ ...content, growthStory: { ...content.growthStory, result: localized(content.growthStory.result, value) } })} />
+              </div>
+              <header><div><span>{t.storyProblems.toUpperCase()}</span><h3>{t.storyProblems}</h3></div><button className="upload-button" onClick={() => setContent({ ...content, growthStory: { ...content.growthStory, problems: [...content.growthStory.problems, { id: crypto.randomUUID(), title: { en: "New friction point", ar: "نقطة تعطيل جديدة" }, description: { en: "", ar: "" } }] } })}>{t.addStoryProblem}</button></header>
+              {content.growthStory.problems.map((problem, index) => <div className="repeater" key={problem.id}><span>{String(index + 1).padStart(2, "0")}</span><div className="field-grid">
+                <LocalizedField label={t.title} value={problem.title} locale={locale} onChange={(value) => setContent({ ...content, growthStory: { ...content.growthStory, problems: content.growthStory.problems.map((item, itemIndex) => itemIndex === index ? { ...item, title: localized(item.title, value) } : item) } })} />
+                <LocalizedField label={t.description} value={problem.description} locale={locale} multiline onChange={(value) => setContent({ ...content, growthStory: { ...content.growthStory, problems: content.growthStory.problems.map((item, itemIndex) => itemIndex === index ? { ...item, description: localized(item.description, value) } : item) } })} />
+                <div className="full">{repeaterActions(index, content.growthStory.problems.length, (to) => setContent({ ...content, growthStory: { ...content.growthStory, problems: move(content.growthStory.problems, index, to) } }), () => content.growthStory.problems.length > 1 && window.confirm(t.confirmDelete) && setContent({ ...content, growthStory: { ...content.growthStory, problems: content.growthStory.problems.filter((_, itemIndex) => itemIndex !== index) } }))}</div>
+              </div></div>)}
             </div>
           </div>
         )}
@@ -1263,26 +1214,6 @@ export function AdminEditor({
         )}
       </section>
 
-      {previewDesign && (
-        <div className="design-preview-overlay" role="dialog" aria-modal="true" aria-label={`${t.preview}: ${DESIGN_NAMES[previewDesign]}`}>
-          <div className="design-preview-toolbar">
-            <div><b>{DESIGN_NAMES[previewDesign]}</b><span>{designMeta[previewDesign].sector[locale]}</span></div>
-            <div className="preview-controls">
-              {(["desktop", "tablet", "mobile"] as const).map((device) => <button key={device} className={previewDevice === device ? "active" : ""} onClick={() => setPreviewDevice(device)}>{t[device]}</button>)}
-              <button className={previewLocale === "en" ? "active" : ""} onClick={() => setPreviewLocale("en")}>EN</button>
-              <button className={previewLocale === "ar" ? "active" : ""} onClick={() => setPreviewLocale("ar")}>AR</button>
-            </div>
-            <div className="preview-actions">
-              <Link target="_blank" href={`/${DESIGN_SLUGS.indexOf(previewDesign) + 1}?locale=${previewLocale}`}>{t.openPreview}</Link>
-              <button className="primary" disabled={activating || content.activeDesign === previewDesign} onClick={() => activateDesign(previewDesign)}>{activating ? t.activating : t.activate}</button>
-              <button onClick={() => setPreviewDesign(null)}>{t.closePreview}</button>
-            </div>
-          </div>
-          <div className={`design-preview-stage ${previewDevice}`}>
-            <iframe title={`${DESIGN_NAMES[previewDesign]} ${previewLocale}`} src={`/${DESIGN_SLUGS.indexOf(previewDesign) + 1}?locale=${previewLocale}`} />
-          </div>
-        </div>
-      )}
     </main>
   );
 }

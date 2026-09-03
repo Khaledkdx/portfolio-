@@ -1,8 +1,0 @@
-import Link from "next/link";
-import { pick } from "@/lib/site-content";
-import { PortraitImage } from "@/app/_components/PortraitImage";
-import type { DesignProps } from "../types";
-import { languageHref, n, projectHref, publishedProjects } from "../types";
-import styles from "./broadcast-studio.module.css";
-
-export default function BroadcastStudio({ content, locale, design, preview, variantPath }: DesignProps){const projects=publishedProjects(content);const lang=languageHref({content,locale,design,preview,variantPath});return <main className={styles.page} dir={locale === "ar" ? "rtl" : "ltr"}><a className={styles.skip} href="#channels">Skip</a><nav className={styles.live}><span>● LIVE</span><Link href={lang}>{locale==='ar'?'EN':'AR'}</Link></nav><section className={styles.studio}><div className={styles.lower}><h1>{pick(content.profile.headline,locale)}</h1><p>{pick(content.profile.intro,locale)}</p></div><figure className={styles.monitor}><PortraitImage content={content} className={styles.portrait} sizes="42vw" priority /></figure></section><section className={styles.rundown}>{content.approach.map((s,i)=><article key={s.id}><b>{n(i)}</b><h2>{pick(s.title,locale)}</h2></article>)}</section><section className={styles.panels}>{content.services.map(s=><article key={s.id}><h2>{pick(s.title,locale)}</h2><p>{pick(s.description,locale)}</p></article>)}</section><section id="channels" className={styles.channels}>{projects.map(p=><Link key={p.id} href={projectHref(p,{locale,variantPath})}><span>CHANNEL</span><h2>{pick(p.title,locale)}</h2><p>{pick(p.summary,locale)}</p></Link>)}</section></main>}
