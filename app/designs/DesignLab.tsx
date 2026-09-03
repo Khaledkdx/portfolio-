@@ -5,37 +5,18 @@ import { useState } from "react";
 import { DESIGN_NAMES, DESIGN_SLUGS, type DesignSlug, type SiteContent } from "@/lib/site-content";
 
 const directions: Record<DesignSlug, string> = {
-  "growth-operator": "Corporate report / Navy / Editorial",
-  "executive-brief": "Agency manifesto / Acid / Poster-led",
-  "campaign-desk": "Quiet luxury / Cream / Minimal",
+  "arabic-geometry": "Arabic luxury / Geometry / Cultural",
   "systems-map": "SaaS OS / Cobalt / Bento system",
-  "signal-scale": "Marketing magazine / Paper / Case-led",
-  "gulf-modern": "Gulf architecture / Sand / Arches",
-  "proof-of-work": "Media war room / Dark / Operational",
-  momentum: "Creator reel / Kinetic / Full-screen",
-  "studio-ledger": "Human stories / Warm / Narrative",
-  "control-room": "Pitch deck / Brutalist / Slide-based",
-  "arabic-geometry": "Arabic manuscript / Geometric / Cultural",
   "spatial-orbit": "Immersive space / 3D / Orbital",
   "modular-cubes": "Modular system / Cubes / Constructive",
   "future-signal": "Future interface / Signal / HUD",
   "swiss-grid": "Swiss system / Rational / Typographic",
   "analog-scrapbook": "Scrapbook / Human / Tactile",
   "art-deco": "Art Deco / Gold / Executive",
-  "zen-strategy": "Zen strategy / Calm / Spacious",
   "retro-computer": "Retro computer / CRT / Playful tech",
   "organic-lab": "Organic lab / Living systems / Natural",
-  "museum-walk": "Museum walk / Curated / Spatial",
-  "growth-transit": "Transit network / Routes / Operational",
-  "campaign-comics": "Campaign comics / Sequential / Bold",
-  "folded-mail": "Direct mail / Folded / Lifecycle",
-  "contact-sheet": "Contact sheet / Monochrome / Image-led",
-  "gtm-gameboard": "GTM gameboard / Playful / Strategic",
-  "whiteboard-workshop": "Whiteboard / Workshop / Hands-on",
   "broadcast-studio": "Broadcast / Multicam / Social",
-  "type-tunnel": "Type tunnel / Perspective / Experimental",
-  "tactile-clay": "Clay lab / Tactile / Service design",
-  "rain-credential": "Rain credential / Wet chrome / Immersive authority",
+  "control-room": "Pitch deck / Brutalist / Slide-based",
 };
 
 export function DesignLab({ content }: { content: SiteContent }) {
@@ -63,7 +44,7 @@ export function DesignLab({ content }: { content: SiteContent }) {
   return (
     <main className="design-lab">
       <header className="lab-header">
-        <div><p>PRIVATE DESIGN LAB / 31 DIRECTIONS</p><h1>Choose the public face of the work.</h1></div>
+        <div><p>PRIVATE DESIGN LAB / 12 DIRECTIONS</p><h1>Choose the public face of the work.</h1></div>
         <div className="lab-actions"><Link href="/admin">Open admin</Link><Link href="/en">View live site ↗</Link></div>
       </header>
       {message && <p className="lab-message" role="status">{message}</p>}

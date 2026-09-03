@@ -37,68 +37,18 @@ const designMeta: Record<
   DesignSlug,
   { sector: { en: string; ar: string }; colors: string[] }
 > = {
-  "growth-operator": {
-    sector: { en: "Corporate B2B", ar: "شركات وB2B" },
-    colors: ["#0B1F33", "#F4F0E8", "#1F6B57", "#D8B36A"],
-  },
-  "executive-brief": {
-    sector: { en: "Bold Creative", ar: "وكالة إبداعية" },
-    colors: ["#F4FF57", "#FF5A36", "#2015FF", "#0A0A0A"],
-  },
-  "campaign-desk": {
-    sector: { en: "Premium Minimal", ar: "استشارات فاخرة" },
-    colors: ["#171714", "#F2EEE5", "#A68A64", "#77766C"],
-  },
-  "systems-map": {
-    sector: { en: "Tech Startup", ar: "تقنية وستارت أب" },
-    colors: ["#07111F", "#1267FF", "#16D9A4", "#E8F0FF"],
-  },
-  "signal-scale": {
-    sector: { en: "Marketing Magazine", ar: "مجلة تسويقية" },
-    colors: ["#F7F0DF", "#C52B28", "#172A3A", "#E1B94A"],
-  },
-  "gulf-modern": {
-    sector: { en: "Regional Premium", ar: "هوية خليجية راقية" },
-    colors: ["#E8D9BF", "#0F5A4A", "#7B2D34", "#B98B5F"],
-  },
-  "proof-of-work": {
-    sector: { en: "Data & Media Buying", ar: "بيانات وشراء إعلانات" },
-    colors: ["#080B0D", "#C8FF41", "#FFB000", "#DCE5E2"],
-  },
-  momentum: {
-    sector: { en: "Content & Social", ar: "محتوى وسوشيال" },
-    colors: ["#0A0A0F", "#FF3D8D", "#FF6B3D", "#7A5CFF"],
-  },
-  "studio-ledger": {
-    sector: { en: "Consulting & SMEs", ar: "استشارات ومشاريع صغيرة" },
-    colors: ["#F6E8DA", "#2F5D50", "#295A7A", "#C8654B"],
-  },
-  "control-room": {
-    sector: { en: "Startup & Agency", ar: "ستارت أب ووكالات" },
-    colors: ["#FFFFFF", "#000000", "#FFD600", "#3455FF"],
-  },
-  "arabic-geometry": { sector: { en: "Arabic Contemporary", ar: "عربي معاصر" }, colors: ["#F3E7CF", "#153B32", "#1B3A6F", "#C98B2E"] },
+  "arabic-geometry": { sector: { en: "Arabic Luxury", ar: "عربي فاخر" }, colors: ["#F3E7CF", "#153B32", "#1B3A6F", "#C98B2E"] },
+  "systems-map": { sector: { en: "Tech Startup", ar: "تقني وستارت أب" }, colors: ["#07111F", "#1267FF", "#16D9A4", "#E8F0FF"] },
   "spatial-orbit": { sector: { en: "Immersive 3D", ar: "تجربة ثلاثية الأبعاد" }, colors: ["#090B10", "#E8ECF3", "#49E0FF", "#FF754A"] },
   "modular-cubes": { sector: { en: "Modular Systems", ar: "أنظمة ومكعبات" }, colors: ["#F5F1E8", "#111111", "#FF6B00", "#2D5BFF"] },
   "future-signal": { sector: { en: "Future Interface", ar: "واجهة مستقبلية" }, colors: ["#03070C", "#00F0C8", "#DAFF3E", "#F54B64"] },
   "swiss-grid": { sector: { en: "International Style", ar: "نظام سويسري" }, colors: ["#F7F5EF", "#101010", "#E31B23", "#1B57D7"] },
   "analog-scrapbook": { sector: { en: "Human Creative", ar: "سكراب بوك إبداعي" }, colors: ["#F3E5CF", "#312720", "#D4553D", "#56765A"] },
   "art-deco": { sector: { en: "Luxury Executive", ar: "آرت ديكو فاخر" }, colors: ["#0E1A1F", "#E5C07B", "#F6EEDC", "#8F2636"] },
-  "zen-strategy": { sector: { en: "Calm Consulting", ar: "استشارات هادئة" }, colors: ["#F4F1E8", "#22211E", "#8DAD8A", "#C95A46"] },
   "retro-computer": { sector: { en: "Retro Technology", ar: "كمبيوتر كلاسيكي" }, colors: ["#06110B", "#7CFF6B", "#F1B84B", "#D9E0D8"] },
   "organic-lab": { sector: { en: "Organic Systems", ar: "أنظمة عضوية" }, colors: ["#EEF3E6", "#173D2C", "#88A96B", "#DB715D"] },
-  "museum-walk": { sector: { en: "Curated Portfolio", ar: "معرض أعمال منسق" }, colors: ["#F4F1EA", "#20201E", "#9D2D24", "#B8A88A"] },
-  "growth-transit": { sector: { en: "Operations & Networks", ar: "عمليات وشبكات نمو" }, colors: ["#F5F2E9", "#153B5B", "#F05A35", "#1A8C72"] },
-  "campaign-comics": { sector: { en: "Campaign Storytelling", ar: "سرد الحملات" }, colors: ["#FFF7D6", "#151515", "#FF4F45", "#2B6BFF"] },
-  "folded-mail": { sector: { en: "CRM & Lifecycle", ar: "CRM ورحلة العميل" }, colors: ["#EDE6D5", "#24362B", "#D36245", "#6E83A4"] },
-  "contact-sheet": { sector: { en: "Content Production", ar: "إنتاج المحتوى" }, colors: ["#101010", "#F4F0E8", "#E2482D", "#99958C"] },
-  "gtm-gameboard": { sector: { en: "Go-to-market", ar: "استراتيجية دخول السوق" }, colors: ["#F7EDC7", "#172D3D", "#F04E30", "#57A773"] },
-  "whiteboard-workshop": { sector: { en: "SME Workshops", ar: "ورش واستشارات" }, colors: ["#F7F7F2", "#20252B", "#3478F6", "#FFCD38"] },
   "broadcast-studio": { sector: { en: "Broadcast & Social", ar: "بث ومحتوى اجتماعي" }, colors: ["#16121F", "#F7F2E8", "#FF334F", "#29D3C2"] },
-  "type-tunnel": { sector: { en: "Experimental Type", ar: "طباعة تجريبية" }, colors: ["#080808", "#F1EEE6", "#F04432", "#777777"] },
-  "tactile-clay": { sector: { en: "Service Design", ar: "تصميم الخدمات" }, colors: ["#F2E8DF", "#4C3E49", "#ED7B61", "#91B7A3"] },
-  "rain-credential": { sector: { en: "Immersive Personal Brand", ar: "هوية شخصية غامرة" }, colors: ["#05090D", "#C8F4FF", "#4FC3F7", "#E8EEF2"] },
-  "stagger-proof": { sector: { en: "Proof-led Marketing", ar: "تسويق قائم على الإثبات" }, colors: ["#FDF2F8", "#831843", "#0891B2", "#F9A8D4"] },
+  "control-room": { sector: { en: "Startup & Agency", ar: "عرض تقديمي جريء" }, colors: ["#FFFFFF", "#000000", "#FFD600", "#3455FF"] },
 };
 
 const copy = {

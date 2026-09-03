@@ -20,7 +20,7 @@ export function ProjectPicture({
       <div className="project-picture-frame">
         <Image src={image.url} alt={pick(image.alt, locale)} fill priority={priority} sizes={sizes} unoptimized />
       </div>
-      {caption ? <figcaption>{caption}</figcaption> : null}
+      {caption ? <figcaption className="project-picture-caption">{caption}</figcaption> : null}
     </figure>
   );
 }

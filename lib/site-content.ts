@@ -119,81 +119,41 @@ export type SiteContent = {
 };
 
 export const DESIGN_SLUGS = [
-  "growth-operator",
-  "executive-brief",
-  "campaign-desk",
-  "systems-map",
-  "signal-scale",
-  "gulf-modern",
-  "proof-of-work",
-  "momentum",
-  "studio-ledger",
-  "control-room",
   "arabic-geometry",
+  "systems-map",
   "spatial-orbit",
   "modular-cubes",
   "future-signal",
   "swiss-grid",
   "analog-scrapbook",
   "art-deco",
-  "zen-strategy",
   "retro-computer",
   "organic-lab",
-  "museum-walk",
-  "growth-transit",
-  "campaign-comics",
-  "folded-mail",
-  "contact-sheet",
-  "gtm-gameboard",
-  "whiteboard-workshop",
   "broadcast-studio",
-  "type-tunnel",
-  "tactile-clay",
-  "rain-credential",
-  "stagger-proof",
+  "control-room",
 ] as const;
 
 export type DesignSlug = (typeof DESIGN_SLUGS)[number];
 
 export const DESIGN_NAMES: Record<DesignSlug, string> = {
-  "growth-operator": "Boardroom Annual Report",
-  "executive-brief": "Creative Agency Manifesto",
-  "campaign-desk": "Quiet Luxury Advisor",
-  "systems-map": "SaaS Growth OS",
-  "signal-scale": "Editorial Campaign Casebook",
-  "gulf-modern": "Gulf Architectural Modernism",
-  "proof-of-work": "Performance Marketing War Room",
-  momentum: "Motion-first Creator Reel",
-  "studio-ledger": "Human-Centered Growth Stories",
-  "control-room": "Neo-Brutalist Pitch Deck",
   "arabic-geometry": "Arabic Geometry",
+  "systems-map": "SaaS Growth OS",
   "spatial-orbit": "Spatial 3D Orbit",
   "modular-cubes": "Modular Cubes",
   "future-signal": "Future Signal 2040",
   "swiss-grid": "Swiss Grid System",
   "analog-scrapbook": "Analog Scrapbook",
   "art-deco": "Art Deco Executive",
-  "zen-strategy": "Zen Strategy",
   "retro-computer": "Retro Growth Computer",
   "organic-lab": "Organic Growth Lab",
-  "museum-walk": "Museum Walk",
-  "growth-transit": "Growth Transit",
-  "campaign-comics": "Campaign Comics",
-  "folded-mail": "Folded Direct Mail",
-  "contact-sheet": "Contact Sheet Studio",
-  "gtm-gameboard": "GTM Gameboard",
-  "whiteboard-workshop": "Whiteboard Workshop",
   "broadcast-studio": "Broadcast Studio",
-  "type-tunnel": "Type Tunnel",
-  "tactile-clay": "Tactile Clay Lab",
-  "rain-credential": "Rain Credential",
-  "stagger-proof": "Stagger Proof Studio",
+  "control-room": "Neo-Brutalist Pitch Deck",
 };
 
 const t = (en: string, ar: string): LocalizedText => ({ en, ar });
 
 export const DEFAULT_CONTENT: SiteContent = {
-  activeDesign: "growth-operator",
+  activeDesign: "arabic-geometry",
   profile: {
     name: "Khalid Mohamad",
     role: t(
@@ -599,8 +559,10 @@ export function projectLinks(project: Project): ProjectLink[] {
 }
 
 export function normalizeSiteContent(content: SiteContent): SiteContent {
+  const activeDesign = isDesignSlug(String(content.activeDesign)) ? content.activeDesign : "arabic-geometry";
   return {
     ...content,
+    activeDesign,
     profile: {
       ...content.profile,
       portraitFocalPoint: {

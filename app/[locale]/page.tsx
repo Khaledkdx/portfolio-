@@ -13,7 +13,7 @@ type PageProps = {
 };
 
 function variantIndex(value: string): number | null {
-  if (!/^(3[0-2]|[12][0-9]|[1-9])$/.test(value)) return null;
+  if (!/^(1[0-2]|[1-9])$/.test(value)) return null;
   return Number(value) - 1;
 }
 

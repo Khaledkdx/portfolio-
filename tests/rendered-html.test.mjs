@@ -5,42 +5,40 @@ import test from "node:test";
 const root = new URL("../", import.meta.url);
 
 test("ships bilingual portfolio content without private CV details", async () => {
-  const [content, boardroom, manifesto] = await Promise.all([
+  const [content, arabicGeometry, growthOs] = await Promise.all([
     readFile(new URL("lib/site-content.ts", root), "utf8"),
-    readFile(new URL("app/_designs/boardroom/Boardroom.tsx", root), "utf8"),
-    readFile(new URL("app/_designs/manifesto/Manifesto.tsx", root), "utf8"),
+    readFile(new URL("app/_designs/arabic-geometry/ArabicGeometry.tsx", root), "utf8"),
+    readFile(new URL("app/_designs/growth-os/GrowthOS.tsx", root), "utf8"),
   ]);
   assert.match(content, /I turn business bottlenecks into growth systems\./);
   assert.match(content, /أحوّل اختناقات الأعمال إلى أنظمة نمو/);
   assert.match(content, /saim\.goodm@gmail\.com/);
   assert.match(content, /971506797854/);
   assert.doesNotMatch(content, /Alradwan|Sammanoud|Download CV/);
-  assert.match(boardroom, /dir=\{locale === "ar" \? "rtl" : "ltr"\}/);
-  assert.match(manifesto, /dir=\{locale === "ar" \? "rtl" : "ltr"\}/);
+  assert.match(arabicGeometry, /dir=\{locale === "ar" \? "rtl" : "ltr"\}/);
+  assert.match(growthOs, /dir=\{locale === "ar" \? "rtl" : "ltr"\}/);
 });
 
-test("includes thirty-two complete selectable design directions and independent project views", async () => {
+test("includes twelve complete selectable design directions and independent project views", async () => {
   const [content, portfolio, registry] = await Promise.all([
     readFile(new URL("lib/site-content.ts", root), "utf8"),
     readFile(new URL("app/_components/Portfolio.tsx", root), "utf8"),
     readFile(new URL("app/_designs/registry.ts", root), "utf8"),
   ]);
-  const slugs = ["growth-operator", "executive-brief", "campaign-desk", "systems-map", "signal-scale", "gulf-modern", "proof-of-work", "momentum", "studio-ledger", "control-room", "arabic-geometry", "spatial-orbit", "modular-cubes", "future-signal", "swiss-grid", "analog-scrapbook", "art-deco", "zen-strategy", "retro-computer", "organic-lab", "museum-walk", "growth-transit", "campaign-comics", "folded-mail", "contact-sheet", "gtm-gameboard", "whiteboard-workshop", "broadcast-studio", "type-tunnel", "tactile-clay", "rain-credential", "stagger-proof"];
+  const slugs = ["arabic-geometry", "systems-map", "spatial-orbit", "modular-cubes", "future-signal", "swiss-grid", "analog-scrapbook", "art-deco", "retro-computer", "organic-lab", "broadcast-studio", "control-room"];
   for (const slug of slugs) {
     assert.match(content, new RegExp(slug));
     assert.match(registry, new RegExp(`slug: "${slug}"`));
   }
+  assert.match(content, /activeDesign: "arabic-geometry"/);
+  assert.match(content, /isDesignSlug\(String\(content\.activeDesign\)\) \? content\.activeDesign : "arabic-geometry"/);
   const components = [
-    "boardroom/Boardroom.tsx", "manifesto/Manifesto.tsx", "luxury/Luxury.tsx", "growth-os/GrowthOS.tsx", "casebook/Casebook.tsx",
-    "gulf/Gulf.tsx", "war-room/WarRoom.tsx", "reel/Reel.tsx", "stories/Stories.tsx", "pitch/Pitch.tsx",
-    "arabic-geometry/ArabicGeometry.tsx", "spatial-orbit/SpatialOrbit.tsx", "modular-cubes/ModularCubes.tsx", "future-signal/FutureSignal.tsx", "swiss-grid/SwissGrid.tsx",
-    "analog-scrapbook/AnalogScrapbook.tsx", "art-deco/ArtDeco.tsx", "zen-strategy/ZenStrategy.tsx", "retro-computer/RetroComputer.tsx", "organic-lab/OrganicLab.tsx",
-    "museum-walk/MuseumWalk.tsx", "growth-transit/GrowthTransit.tsx", "campaign-comics/CampaignComics.tsx", "folded-mail/FoldedMail.tsx", "contact-sheet/ContactSheet.tsx",
-    "gtm-gameboard/GtmGameboard.tsx", "whiteboard-workshop/WhiteboardWorkshop.tsx", "broadcast-studio/BroadcastStudio.tsx", "type-tunnel/TypeTunnel.tsx", "tactile-clay/TactileClay.tsx",
-    "rain-credential/RainCredential.tsx", "stagger-proof/StaggerProof.tsx",
+    "arabic-geometry/ArabicGeometry.tsx", "growth-os/GrowthOS.tsx", "spatial-orbit/SpatialOrbit.tsx", "modular-cubes/ModularCubes.tsx",
+    "future-signal/FutureSignal.tsx", "swiss-grid/SwissGrid.tsx", "analog-scrapbook/AnalogScrapbook.tsx", "art-deco/ArtDeco.tsx",
+    "retro-computer/RetroComputer.tsx", "organic-lab/OrganicLab.tsx", "broadcast-studio/BroadcastStudio.tsx", "pitch/Pitch.tsx",
   ];
   for (const component of components) await access(new URL(`app/_designs/${component}`, root));
-  const projectFolders = ["boardroom", "manifesto", "luxury", "growth-os", "casebook", "gulf", "war-room", "reel", "stories", "pitch", "arabic-geometry", "spatial-orbit", "modular-cubes", "future-signal", "swiss-grid", "analog-scrapbook", "art-deco", "zen-strategy", "retro-computer", "organic-lab", "museum-walk", "growth-transit", "campaign-comics", "folded-mail", "contact-sheet", "gtm-gameboard", "whiteboard-workshop", "broadcast-studio", "type-tunnel", "tactile-clay", "rain-credential", "stagger-proof"];
+  const projectFolders = ["arabic-geometry", "growth-os", "spatial-orbit", "modular-cubes", "future-signal", "swiss-grid", "analog-scrapbook", "art-deco", "retro-computer", "organic-lab", "broadcast-studio", "pitch"];
   for (const folder of projectFolders) {
     const projectSource = await readFile(new URL(`app/_designs/${folder}/Project.tsx`, root), "utf8");
     await access(new URL(`app/_designs/${folder}/project.module.css`, root));
@@ -51,7 +49,7 @@ test("includes thirty-two complete selectable design directions and independent 
   assert.match(portfolio, /ReviewProofWall/);
   assert.match(registry, /loadProject/);
   const route = await readFile(new URL("app/[locale]/page.tsx", root), "utf8");
-  assert.match(route, /3\[0-2\]\|\[12\]\[0-9\]/);
+  assert.match(route, /1\[0-2\]\|\[1-9\]/);
   assert.match(route, /DESIGN_SLUGS\[index\]/);
   assert.match(route, /variantPath=\{`\/\$\{value\}`\}/);
   await access(new URL("app/[locale]/projects/[slug]/page.tsx", root));
