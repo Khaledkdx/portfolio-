@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { motion, useReducedMotion, type Variants } from "framer-motion";
-import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
+import { ChevronLeftIcon, ChevronRightIcon, QuoteIcon, SparklesIcon } from "lucide-react";
 import {
   DESIGN_NAMES,
   pick,
@@ -72,7 +72,7 @@ export function ReviewProofWall({ content, locale, design, variantPath }: Props)
     >
       <div className="review-proof-shell">
         <header className="review-proof-copy">
-          <span>{label} / {DESIGN_NAMES[design]}</span>
+          <span><SparklesIcon aria-hidden="true" /> {label} / {DESIGN_NAMES[design]}</span>
           <h2 id="review-proof-heading">{pick(content.reviews.heading, locale)}</h2>
           <p>{pick(content.reviews.intro, locale)}</p>
         </header>
@@ -115,6 +115,7 @@ export function ReviewProofWall({ content, locale, design, variantPath }: Props)
                   }
                 }}
               >
+                <QuoteIcon className="review-proof-quote-icon" aria-hidden="true" />
                 <div className="review-proof-avatar">
                   {review.avatarUrl ? (
                     <Image src={review.avatarUrl} alt={pick(review.avatarAlt, locale)} width={72} height={72} unoptimized />

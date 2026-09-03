@@ -3571,3 +3571,188 @@ a {
     @apply font-sans;
   }
 }
+
+/* 21st-inspired proof + portfolio readability pass */
+.portfolio-identity {
+  position: sticky;
+  top: 0;
+  z-index: 80;
+  min-height: 64px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) auto minmax(0, 0.85fr);
+  align-items: center;
+  gap: 18px;
+  padding: 10px clamp(16px, 3vw, 42px);
+  background: color-mix(in srgb, canvas, transparent 8%);
+  color: canvastext;
+  border-bottom: 1px solid color-mix(in srgb, canvastext, transparent 84%);
+  backdrop-filter: blur(18px) saturate(1.18);
+  font-family: var(--font-instrument), var(--font-arabic), sans-serif;
+}
+.portfolio-identity__name {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+  text-decoration: none;
+}
+.portfolio-identity__name span {
+  font-size: clamp(16px, 1.7vw, 22px);
+  font-weight: 900;
+  letter-spacing: -0.035em;
+}
+.portfolio-identity__name small,
+.portfolio-identity__meta span,
+.portfolio-identity__links {
+  font-size: 12px;
+  line-height: 1.3;
+  opacity: 0.74;
+}
+.portfolio-identity__meta {
+  display: grid;
+  justify-items: center;
+  gap: 1px;
+  text-align: center;
+  white-space: nowrap;
+}
+.portfolio-identity__meta b {
+  font-size: 13px;
+  letter-spacing: 0.02em;
+}
+.portfolio-identity__links {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+.portfolio-identity__links a {
+  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 13px;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  font-weight: 800;
+  opacity: 1;
+}
+main[class*="_page"] h1 {
+  max-width: 13ch;
+  color: inherit;
+  font-weight: 900;
+  letter-spacing: -0.055em;
+  text-wrap: balance;
+  overflow-wrap: normal;
+}
+main[class*="_page"] h2,
+main[class*="_page"] h3 {
+  color: inherit;
+  font-weight: 850;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+main[class*="_page"] p,
+main[class*="_page"] li,
+main[class*="_page"] blockquote,
+main[class*="_page"] figcaption {
+  color: inherit;
+  overflow-wrap: anywhere;
+}
+main[class*="_page"] p {
+  font-size: max(16px, 1rem);
+  line-height: 1.68;
+}
+main[class*="_page"] a {
+  overflow-wrap: anywhere;
+}
+[dir="rtl"].portfolio-identity {
+  font-family: var(--font-alexandria), var(--font-arabic), sans-serif;
+}
+[dir="rtl"].portfolio-identity .portfolio-identity__links {
+  justify-content: flex-start;
+}
+[dir="rtl"] main[class*="_page"] {
+  font-family: var(--font-alexandria), var(--font-arabic), var(--font-instrument), sans-serif;
+}
+[dir="rtl"] main[class*="_page"] h1 {
+  max-width: 15ch;
+  line-height: 1.16 !important;
+  letter-spacing: 0 !important;
+  word-break: normal;
+}
+[dir="rtl"] main[class*="_page"] h2,
+[dir="rtl"] main[class*="_page"] h3 {
+  line-height: 1.28 !important;
+  letter-spacing: 0 !important;
+}
+[dir="rtl"] main[class*="_page"] p,
+[dir="rtl"] main[class*="_page"] figcaption {
+  line-height: 1.95 !important;
+  text-align: start;
+}
+.review-proof-wall {
+  --review-card-step: clamp(74px, 10vw, 146px);
+  border-top: 1px solid color-mix(in srgb, var(--review-fg), transparent 82%);
+}
+.review-proof-shell {
+  grid-template-columns: minmax(0, 0.72fr) minmax(390px, 1.28fr);
+}
+.review-proof-copy span {
+  align-items: center;
+  gap: 9px;
+}
+.review-proof-copy span svg {
+  width: 16px;
+  height: 16px;
+}
+.review-proof-copy h2 {
+  max-width: 12ch;
+  font-weight: 950;
+}
+.review-proof-quote-icon {
+  width: 28px;
+  height: 28px;
+  opacity: 0.55;
+}
+.review-proof-card {
+  min-height: 410px;
+  transform-origin: center;
+}
+.review-proof-card.is-center {
+  box-shadow:
+    14px 14px 0 var(--review-accent),
+    0 34px 90px color-mix(in srgb, var(--review-bg), #000 52%);
+}
+[dir="rtl"] .review-proof-copy h2 {
+  max-width: 14ch;
+  line-height: 1.15;
+  letter-spacing: 0;
+}
+[dir="rtl"] .review-proof-card blockquote {
+  line-height: 1.65;
+  letter-spacing: 0;
+}
+@media (max-width: 760px) {
+  .portfolio-identity {
+    position: relative;
+    grid-template-columns: 1fr auto;
+    gap: 12px;
+  }
+  .portfolio-identity__meta {
+    display: none;
+  }
+  .portfolio-identity__links {
+    gap: 7px;
+  }
+  .portfolio-identity__links a {
+    min-height: 44px;
+    padding-inline: 11px;
+  }
+  main[class*="_page"] h1 {
+    max-width: 100%;
+    font-size: clamp(38px, 13vw, 68px) !important;
+  }
+  main[class*="_page"] p {
+    font-size: 16px;
+  }
+  .review-proof-shell {
+    grid-template-columns: 1fr;
+  }
+}
