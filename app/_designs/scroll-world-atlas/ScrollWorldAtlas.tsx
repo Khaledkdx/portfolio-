@@ -179,10 +179,6 @@ export default function ScrollWorldAtlas({ content, locale, design, variantPath 
           canvasClassName={styles.scrubCanvas}
           posterClassName={styles.scrubPoster}
         >
-          <div className={styles.scrubHud} aria-hidden="true">
-            <span>{isAr ? "سكرول للتحكم في المشهد" : "scroll to scrub the scene"}</span>
-            <b>{isAr ? "من الهبوط إلى مسار نمو" : "from decline to a growth route"}</b>
-          </div>
           <div className={styles.stageGrid}>
             {routeStages.map((stage, index) => (
               <motion.article

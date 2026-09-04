@@ -199,8 +199,8 @@ export function ScrollScrubCanvas({
           <img src={desktop.poster} alt="" loading="eager" />
         </picture>
         {!reduceMotion ? <canvas ref={canvasRef} className={canvasClassName} aria-label="Scroll-controlled company collapse animation" /> : null}
-        {children}
       </div>
+      {children}
     </div>
   );
 }

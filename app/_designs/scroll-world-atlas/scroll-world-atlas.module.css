@@ -301,6 +301,10 @@
 .scrubScene {
   min-height: 320svh;
   position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(240px, 0.42fr);
+  gap: clamp(16px, 2.5vw, 28px);
+  align-items: start;
 }
 
 .worldStage {
@@ -341,59 +345,8 @@
   display: block;
 }
 
-.scrubPoster[aria-hidden="true"] {
-  opacity: 0;
-}
-
-.scrubHud {
-  position: absolute;
-  z-index: 4;
-  inset-inline: clamp(14px, 3vw, 28px) auto;
-  inset-block-start: clamp(14px, 3vw, 28px);
-  max-width: min(320px, 70%);
-  display: grid;
-  gap: 4px;
-  padding: 13px 15px;
-  color: #f6f0df;
-  background: rgba(9, 14, 13, 0.58);
-  border: 1px solid rgba(246, 240, 223, 0.22);
-  backdrop-filter: blur(10px);
-  box-shadow: 8px 8px 0 rgba(201, 255, 79, 0.18);
-}
-
-.scrubHud span {
-  font: 800 10px/1.2 var(--font-jetbrains), monospace;
-  color: var(--atlas-lime);
-  text-transform: uppercase;
-  letter-spacing: 0.11em;
-}
-
-.scrubHud b {
-  font-size: clamp(14px, 1.6vw, 18px);
-  line-height: 1.25;
-}
-
-.worldStage::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 3;
-  pointer-events: none;
-  background:
-    linear-gradient(90deg, rgba(10, 18, 17, 0.72), transparent 34%, transparent 58%, rgba(10, 18, 17, 0.32)),
-    linear-gradient(0deg, rgba(10, 18, 17, 0.82), transparent 42%);
-}
-
-.rtl .worldStage::before {
-  background:
-    linear-gradient(270deg, rgba(10, 18, 17, 0.72), transparent 34%, transparent 58%, rgba(10, 18, 17, 0.32)),
-    linear-gradient(0deg, rgba(10, 18, 17, 0.82), transparent 42%);
-}
-
 .worldStage {
   min-width: 0;
-  display: grid;
-  gap: 22px;
 }
 
 .worldSvg {
@@ -440,13 +393,13 @@
 }
 
 .stageGrid {
-  position: relative;
-  z-index: 4;
-  align-self: end;
-  padding: clamp(16px, 3vw, 28px);
+  position: sticky;
+  top: 7svh;
+  z-index: 1;
+  min-width: 0;
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 14px;
+  grid-template-columns: 1fr;
+  gap: 12px;
 }
 
 .stageGrid article,
@@ -459,25 +412,39 @@
 }
 
 .stageGrid article {
-  color: #f6f0df;
-  padding: 20px;
-  min-height: 180px;
-  background: rgba(9, 14, 13, 0.6);
-  border-color: rgba(246, 240, 223, 0.18);
-  backdrop-filter: blur(12px);
+  color: var(--atlas-ink);
+  padding: clamp(14px, 1.5vw, 20px);
+  min-height: auto;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.78), rgba(246, 240, 223, 0.62)),
+    rgba(255, 255, 255, 0.68);
+  border-color: rgba(23, 33, 25, 0.16);
+  backdrop-filter: blur(10px) saturate(1.08);
+  box-shadow: 8px 8px 0 rgba(23, 33, 25, 0.08);
 }
 
 .stageGrid small {
+  display: inline-flex;
+  width: fit-content;
+  padding: 5px 8px;
+  background: rgba(255, 90, 54, 0.14);
+  border: 1px solid rgba(255, 90, 54, 0.28);
   color: var(--atlas-signal);
   font-weight: 900;
   text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 10px;
 }
 
 .stageGrid h3,
 .capabilityMap h3 {
   margin: 10px 0;
-  font-size: clamp(22px, 2.5vw, 34px);
+  font-size: clamp(18px, 1.65vw, 24px);
   line-height: 1.1;
+}
+
+.rtl .stageGrid h3 {
+  line-height: 1.24;
 }
 
 .stageGrid p,
@@ -490,12 +457,8 @@
   overflow-wrap: anywhere;
 }
 
-.worldStage .stageGrid p {
-  color: rgba(246, 240, 223, 0.74);
-}
-
 .stageDown {
-  translate: 0 14px;
+  translate: 0 0;
 }
 
 .stageUp {
@@ -503,6 +466,7 @@
   color: #fff;
   grid-column: 1 / -1;
   border-color: rgba(201, 255, 79, 0.42) !important;
+  box-shadow: 0 22px 40px rgba(21, 59, 50, 0.34), 8px 8px 0 rgba(201, 255, 79, 0.16) !important;
 }
 
 .stageUp p {
@@ -1008,6 +972,20 @@
   .rtl .transitionGate {
     margin-inline: clamp(18px, 5vw, 46px);
   }
+  .scrubScene {
+    grid-template-columns: 1fr;
+    min-height: 300svh;
+  }
+  .worldStage {
+    top: 8svh;
+    min-height: min(68svh, 620px);
+  }
+  .stageGrid {
+    position: relative;
+    top: auto;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-self: start;
+  }
 }
 
 @media (max-width: 860px) {
@@ -1028,11 +1006,34 @@
     position: relative;
     top: auto;
   }
+  .world {
+    min-height: auto;
+  }
+  .scrubScene {
+    min-height: 265svh;
+  }
+  .worldStage {
+    top: 9svh;
+    min-height: 56svh;
+    box-shadow: 10px 10px 0 rgba(23, 33, 25, 0.08), inset 0 -46px 70px rgba(23, 33, 25, 0.25);
+  }
   .stationLine,
   .reviewTrack,
   .stageGrid,
   .routeSteps {
     grid-template-columns: 1fr;
+  }
+  .stageGrid {
+    gap: 10px;
+  }
+  .stageGrid article {
+    padding: 15px;
+  }
+  .stageGrid h3 {
+    font-size: clamp(20px, 6vw, 28px);
+  }
+  .stageGrid p {
+    line-height: 1.75;
   }
   .stationLine::before {
     inset-inline: 28px auto;
@@ -1100,6 +1101,18 @@
   }
   .mapCard {
     inset-inline: 3%;
+  }
+  .scrubScene {
+    min-height: 240svh;
+  }
+  .worldStage {
+    min-height: 48svh;
+  }
+  .stageGrid article {
+    border-inline-start: 5px solid var(--atlas-signal);
+  }
+  .stageUp {
+    border-inline-start-color: var(--atlas-lime) !important;
   }
   .transitionGate svg {
     height: 82px;
