@@ -19,7 +19,10 @@ test("ships bilingual cinematic portfolio content without private CV details", a
   assert.match(cinematic, /PortraitImage/);
   assert.match(cinematic, /CAMPAIGNS & GROWTH/);
   assert.match(cinematic, /Review section is ready/);
-  assert.match(scene, /useScroll/);
+  assert.match(scene, /ScrollScrubCanvas/);
+  assert.match(scene, /\/scroll-scrub\/company-collapse\/desktop/);
+  await access(new URL("public/scroll-scrub/company-collapse/desktop/poster.webp", root));
+  await access(new URL("public/scroll-scrub/company-collapse/mobile/poster.webp", root));
   assert.match(scene, /useReducedMotion/);
 });
 
