@@ -130,12 +130,14 @@ export type SiteContent = {
 
 export const DESIGN_SLUGS = [
   "cinematic-growth",
+  "scroll-world-atlas",
 ] as const;
 
 export type DesignSlug = (typeof DESIGN_SLUGS)[number];
 
 export const DESIGN_NAMES: Record<DesignSlug, string> = {
   "cinematic-growth": "Cinematic Growth",
+  "scroll-world-atlas": "Scroll World Atlas",
 };
 
 const t = (en: string, ar: string): LocalizedText => ({ en, ar });

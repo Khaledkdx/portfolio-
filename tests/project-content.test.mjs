@@ -180,6 +180,15 @@ test("migrates legacy design values and growth story content", () => {
   assert.equal(migrated.growthStory.problems.length, 4);
   assert.match(migrated.growthStory.title.en, /business starts falling/);
 
-  migrated.growthStory.result.ar = "";
-  assert.match(validateSiteContent(migrated), /growth story/i);
+  const invalid = structuredClone(migrated);
+  invalid.growthStory.result.ar = "";
+  assert.match(validateSiteContent(invalid), /growth story/i);
+});
+
+test("accepts the scroll world atlas design slug", () => {
+  const content = clone();
+  content.activeDesign = "scroll-world-atlas";
+  const migrated = normalizeSiteContent(content);
+  assert.equal(migrated.activeDesign, "scroll-world-atlas");
+  assert.equal(validateSiteContent(migrated), null);
 });

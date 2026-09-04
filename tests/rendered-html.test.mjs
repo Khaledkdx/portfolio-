@@ -17,28 +17,49 @@ test("ships bilingual cinematic portfolio content without private CV details", a
   assert.doesNotMatch(content, /Alradwan|Sammanoud|Download CV/);
   assert.match(cinematic, /dir=\{locale === "ar" \? "rtl" : "ltr"\}/);
   assert.match(cinematic, /PortraitImage/);
+  assert.match(cinematic, /CAMPAIGNS & GROWTH/);
+  assert.match(cinematic, /Review section is ready/);
   assert.match(scene, /useScroll/);
   assert.match(scene, /useReducedMotion/);
 });
 
-test("ships one cinematic design and an independent project view", async () => {
+test("ships two selectable designs and independent project views", async () => {
   const [content, portfolio, registry] = await Promise.all([
     readFile(new URL("lib/site-content.ts", root), "utf8"),
     readFile(new URL("app/_components/Portfolio.tsx", root), "utf8"),
     readFile(new URL("app/_designs/registry.ts", root), "utf8"),
   ]);
   assert.match(content, /"cinematic-growth"/);
+  assert.match(content, /"scroll-world-atlas"/);
   assert.match(registry, /slug: "cinematic-growth"/);
+  assert.match(registry, /slug: "scroll-world-atlas"/);
   assert.match(content, /activeDesign: "cinematic-growth"/);
-  assert.match(content, /: "cinematic-growth"/);
   const projectSource = await readFile(new URL("app/_designs/cinematic-growth/Project.tsx", root), "utf8");
+  const atlasProjectSource = await readFile(new URL("app/_designs/scroll-world-atlas/Project.tsx", root), "utf8");
   await access(new URL("app/_designs/cinematic-growth/project.module.css", root));
+  await access(new URL("app/_designs/scroll-world-atlas/atlas-project.module.css", root));
+  await access(new URL("app/_designs/scroll-world-atlas/scroll-world-atlas.module.css", root));
   assert.match(projectSource, /ProjectPicture/);
+  assert.match(atlasProjectSource, /ProjectPicture/);
+  assert.match(atlasProjectSource, /const dossier =/);
+  assert.match(atlasProjectSource, /project\.summary/);
+  assert.match(atlasProjectSource, /project\.description/);
+  assert.match(atlasProjectSource, /project\.challenge/);
+  assert.match(atlasProjectSource, /project\.solution/);
+  assert.match(atlasProjectSource, /project\.implementation/);
+  assert.match(atlasProjectSource, /project\.outcome/);
+  const atlasSource = await readFile(new URL("app/_designs/scroll-world-atlas/ScrollWorldAtlas.tsx", root), "utf8");
+  assert.match(atlasSource, /caseProblem/);
+  assert.match(atlasSource, /project\.challenge/);
+  assert.match(atlasSource, /project\.solution/);
+  assert.match(atlasSource, /project\.outcome/);
+  assert.doesNotMatch(atlasSource, /campaignProjects/);
+  assert.doesNotMatch(atlasSource, /slice\(0, 4\)\.map/);
   assert.match(portfolio, /definition\.load\(\)/);
   assert.doesNotMatch(portfolio, /ReviewProofWall/);
   assert.match(registry, /loadProject/);
   const route = await readFile(new URL("app/[locale]/page.tsx", root), "utf8");
-  assert.match(route, /value !== "1"/);
+  assert.match(route, /\/\^\\d\+\$\//);
   assert.match(route, /DESIGN_SLUGS\[index\]/);
   assert.match(route, /variantPath=\{`\/\$\{value\}`\}/);
   await access(new URL("app/[locale]/projects/[slug]/page.tsx", root));
@@ -71,16 +92,24 @@ test("protects every admin mutation and includes independent deployment config",
   await access(new URL("dist/server/index.js", root));
 });
 
-test("admin contains cinematic story CMS, media safety and dirty-state protection", async () => {
-  const [editor, designsPage, designPreviewPage, metrics, scene, mediaRoute] = await Promise.all([
+test("admin contains design switching, cinematic story CMS, media safety and dirty-state protection", async () => {
+  const [editor, adminPage, designsPage, designPreviewPage, designRoute, metrics, scene, mediaRoute] = await Promise.all([
     readFile(new URL("app/admin/AdminEditor.tsx", root), "utf8"),
+    readFile(new URL("app/admin/page.tsx", root), "utf8"),
     readFile(new URL("app/designs/page.tsx", root), "utf8"),
     readFile(new URL("app/designs/[design]/page.tsx", root), "utf8"),
+    readFile(new URL("app/api/admin/design/route.ts", root), "utf8"),
     readFile(new URL("app/_designs/ProjectMetrics.tsx", root), "utf8"),
     readFile(new URL("app/_designs/cinematic-growth/GrowthStoryScene.tsx", root), "utf8"),
     readFile(new URL("app/api/admin/media/[id]/route.ts", root), "utf8"),
   ]);
-  assert.doesNotMatch(editor, /tab === "designs"/);
+  assert.match(editor, /tab === "designs"/);
+  assert.match(editor, /activateDesign/);
+  assert.match(editor, /\/api\/admin\/design/);
+  assert.match(adminPage, /"designs"/);
+  assert.match(designRoute, /getOwner\(\)/);
+  assert.match(designRoute, /isDesignSlug/);
+  assert.match(designRoute, /activeDesign/);
   assert.match(editor, /beforeunload/);
   assert.match(editor, /growthStory\.problems\.map/);
   assert.match(editor, /project\.metrics\.map/);
@@ -95,8 +124,8 @@ test("admin contains cinematic story CMS, media safety and dirty-state protectio
   assert.match(scene, /framer-motion/);
   assert.match(scene, /useReducedMotion/);
   assert.match(mediaRoute, /Review avatar/);
-  assert.match(designsPage, /redirect\("\/admin"\)/);
-  assert.match(designPreviewPage, /redirect\("\/admin"\)/);
+  assert.match(designsPage, /redirect\("\/admin\?tab=designs"\)/);
+  assert.match(designPreviewPage, /tab=designs/);
   assert.match(metrics, /if \(!metrics\.length\) return null/);
   await access(new URL("components/ui/logos3.tsx", root));
   await access(new URL("components/ui/carousel.tsx", root));

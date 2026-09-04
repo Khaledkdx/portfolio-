@@ -5,5 +5,5 @@ export const dynamic = "force-dynamic";
 
 export default async function DesignsPage() {
   await requireOwner("/designs");
-  redirect("/admin");
+  redirect("/admin?tab=designs");
 }

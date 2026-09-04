@@ -13,14 +13,16 @@ type PageProps = {
 };
 
 function variantIndex(value: string): number | null {
-  if (value !== "1") return null;
-  return Number(value) - 1;
+  if (!/^\d+$/.test(value)) return null;
+  const index = Number(value) - 1;
+  return DESIGN_SLUGS[index] ? index : null;
 }
 
 export async function generateMetadata({ params, searchParams }: PageProps): Promise<Metadata> {
   const { locale: value } = await params;
   const query = await searchParams;
   const index = variantIndex(value);
+  if (/^\d+$/.test(value) && index === null) notFound();
   const locale: Locale = isLocale(value) ? value : query.locale === "ar" ? "ar" : "en";
   const content = await readSiteContent();
   const requestHeaders = await headers();
@@ -46,6 +48,7 @@ export async function generateMetadata({ params, searchParams }: PageProps): Pro
 export default async function LocalePage({ params, searchParams }: PageProps) {
   const [{ locale: value }, query] = await Promise.all([params, searchParams]);
   const index = variantIndex(value);
+  if (/^\d+$/.test(value) && index === null) notFound();
   if (!isLocale(value) && index === null) notFound();
   const content = await readSiteContent();
   if (index !== null) {

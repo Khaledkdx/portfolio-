@@ -3,8 +3,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useState, type SetStateAction } from "react";
+import { DESIGN_DEFINITIONS } from "@/app/_designs/registry";
 import type { MediaAsset } from "@/lib/data";
 import {
+  type DesignSlug,
   normalizeProjectSlug,
   normalizeSiteContent,
   type CompanyLogo,
@@ -20,6 +22,7 @@ import {
 
 type Tab =
   | "overview"
+  | "designs"
   | "projects"
   | "companies"
   | "reviews"
@@ -32,6 +35,7 @@ const copy = {
   en: {
     tabs: {
       overview: "Profile & content",
+      designs: "Designs",
       projects: "Case studies",
       companies: "Companies & logos",
       reviews: "Reviews",
@@ -204,6 +208,7 @@ const copy = {
   ar: {
     tabs: {
       overview: "الملف والمحتوى",
+      designs: "التصميمات",
       projects: "دراسات الحالة",
       companies: "الشركات والشعارات",
       reviews: "الآراء",
@@ -543,8 +548,17 @@ export function AdminEditor({
   const [projectSearch, setProjectSearch] = useState("");
   const [projectFilter, setProjectFilter] = useState<ProjectFilter>("all");
   const [mediaSearch, setMediaSearch] = useState("");
+  const [activatingDesign, setActivatingDesign] = useState<DesignSlug | null>(null);
+  const [previewDesign, setPreviewDesign] = useState<DesignSlug | null>(null);
+  const [previewLocale, setPreviewLocale] = useState<Locale>("en");
+  const [previewDevice, setPreviewDevice] = useState<"desktop" | "tablet" | "mobile">("desktop");
   const project = content.projects[selectedProject];
   const t = copy[locale];
+  const designOptions = useMemo(
+    () => Object.values(DESIGN_DEFINITIONS).sort((a, b) => a.index - b.index),
+    [],
+  );
+  const previewDefinition = previewDesign ? DESIGN_DEFINITIONS[previewDesign] : null;
   const tabList = (Object.keys(t.tabs) as Tab[]).map((id) => ({
     id,
     label: t.tabs[id],
@@ -684,6 +698,36 @@ export function AdminEditor({
       setNotice(error instanceof Error ? error.message : t.failed);
     } finally {
       setSaving(false);
+    }
+  }
+
+  async function activateDesign(slug: DesignSlug) {
+    if (slug === content.activeDesign) return;
+    if (!window.confirm(t.confirmActivate)) return;
+    setActivatingDesign(slug);
+    setNotice("");
+    try {
+      const response = await fetch("/api/admin/design", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ activeDesign: slug }),
+      });
+      const result = (await response.json().catch(() => ({}))) as {
+        activeDesign?: DesignSlug;
+        error?: string;
+      };
+      if (!response.ok) throw new Error(result.error ?? t.failed);
+      setContentState((current) =>
+        normalizeSiteContent({
+          ...current,
+          activeDesign: result.activeDesign ?? slug,
+        }),
+      );
+      setNotice(t.designActivated);
+    } catch (error) {
+      setNotice(error instanceof Error ? error.message : t.failed);
+    } finally {
+      setActivatingDesign(null);
     }
   }
 
@@ -859,6 +903,51 @@ export function AdminEditor({
           </div>
         </header>
         {notice && <div className="admin-notice" role="status">{notice}</div>}
+
+        {tab === "designs" && (
+          <div className="admin-stack">
+            <div className="admin-panel">
+              <header>
+                <div>
+                  <span>{t.tabs.designs.toUpperCase()}</span>
+                  <h2>{t.tabs.designs}</h2>
+                  <p className="designs-intro">{t.designsIntro}</p>
+                </div>
+              </header>
+              <div className="design-admin-grid">
+                {designOptions.map((definition) => {
+                  const active = content.activeDesign === definition.slug;
+                  return (
+                    <article className={`design-admin-card ${active ? "active" : ""}`} key={definition.slug}>
+                      <span className="design-card-number">/{definition.index}</span>
+                      {active ? <b className="active-design-label">{t.active}</b> : null}
+                      <div className={`design-card-mini design-card-mini-${definition.index}`} aria-hidden="true">
+                        <i /><i /><i />
+                      </div>
+                      <p>{definition.sector}</p>
+                      <h2>{definition.name}</h2>
+                      <div className="design-swatches" aria-hidden="true">
+                        {definition.palette.map((color) => <i key={color} style={{ background: color }} />)}
+                      </div>
+                      <div className="design-card-actions">
+                        <button onClick={() => { setPreviewDesign(definition.slug); setPreviewLocale(locale); }}>
+                          {t.preview}
+                        </button>
+                        <button
+                          className="primary"
+                          disabled={active || activatingDesign === definition.slug}
+                          onClick={() => activateDesign(definition.slug)}
+                        >
+                          {activatingDesign === definition.slug ? t.activating : t.activate}
+                        </button>
+                      </div>
+                    </article>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        )}
 
         {tab === "overview" && (
           <div className="admin-content-grid">
@@ -1213,6 +1302,40 @@ export function AdminEditor({
           </div>
         )}
       </section>
+
+      {previewDefinition ? (
+        <div className="design-preview-overlay" role="dialog" aria-modal="true" aria-label={previewDefinition.name}>
+          <div className="design-preview-toolbar">
+            <div>
+              <b>{previewDefinition.name}</b>
+              <span>/{previewDefinition.index} · {previewDefinition.sector}</span>
+            </div>
+            <div className="preview-controls" aria-label={locale === "ar" ? "أدوات المعاينة" : "Preview controls"}>
+              {(["desktop", "tablet", "mobile"] as const).map((device) => (
+                <button key={device} className={previewDevice === device ? "active" : ""} onClick={() => setPreviewDevice(device)}>
+                  {t[device]}
+                </button>
+              ))}
+              <button className={previewLocale === "en" ? "active" : ""} onClick={() => setPreviewLocale("en")}>EN</button>
+              <button className={previewLocale === "ar" ? "active" : ""} onClick={() => setPreviewLocale("ar")}>AR</button>
+            </div>
+            <div className="preview-actions">
+              <a href={`/${previewDefinition.index}?locale=${previewLocale}`} target="_blank" rel="noreferrer">{t.openPreview}</a>
+              <button
+                className="primary"
+                disabled={content.activeDesign === previewDefinition.slug || activatingDesign === previewDefinition.slug}
+                onClick={() => activateDesign(previewDefinition.slug)}
+              >
+                {activatingDesign === previewDefinition.slug ? t.activating : t.activate}
+              </button>
+              <button onClick={() => setPreviewDesign(null)}>{t.closePreview}</button>
+            </div>
+          </div>
+          <div className={`design-preview-stage ${previewDevice}`}>
+            <iframe title={previewDefinition.name} src={`/${previewDefinition.index}?locale=${previewLocale}`} />
+          </div>
+        </div>
+      ) : null}
 
     </main>
   );

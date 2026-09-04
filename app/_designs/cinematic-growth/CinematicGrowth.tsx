@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowDownRight, ArrowUpRight, Mail, Pause, Play } from "lucide-react";
+import { ArrowDownRight, ArrowUpRight, Mail, Megaphone, Pause, Play, Quote } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
 import { useState } from "react";
 import { PortraitImage } from "@/app/_components/PortraitImage";
@@ -21,6 +21,16 @@ export default function CinematicGrowth({ content, locale, design, preview, vari
   const projects = publishedProjects(content);
   const reviews = content.reviews.items.filter((item) => item.visible).sort((a, b) => a.order - b.order);
   const companies = content.companies.items.filter((item) => item.visible);
+  const campaignProjects = projects.filter((project) => {
+    const searchable = [
+      project.id,
+      pick(project.eyebrow, "en"),
+      pick(project.title, "en"),
+      pick(project.summary, "en"),
+      ...project.tools,
+    ].join(" ").toLowerCase();
+    return /(campaign|marketing|media|ads|meta|google|tiktok|snapchat|content|creative)/.test(searchable);
+  });
   const langHref = languageHref({ content, locale, design, preview, variantPath });
 
   return (
@@ -62,6 +72,31 @@ export default function CinematicGrowth({ content, locale, design, preview, vari
         <div className={styles.skills}>{content.skills.map((skill) => <span key={skill}>{skill}</span>)}</div>
       </section>
 
+      <section className={styles.campaigns} aria-labelledby="campaigns-title">
+        <div className={styles.campaignIntro}>
+          <span className={styles.eyebrow}>{locale === "ar" ? "الحملات والنمو" : "CAMPAIGNS & GROWTH"}</span>
+          <h2 id="campaigns-title">{locale === "ar" ? "الحملة ليست إعلانًا فقط. هي قرار، رسالة، مسار، ثم تحسين." : "A campaign is not just an ad. It is a decision, a message, a route, then optimization."}</h2>
+          <p>{locale === "ar" ? "هذا الجزء يوضح أين تظهر خبرة شراء الإعلانات، بحث السوق، المحتوى، وتحوير الرسالة داخل نظام النمو." : "This section makes the campaign work visible: media buying, market research, creative direction and message refinement inside the growth system."}</p>
+        </div>
+        <div className={styles.campaignRail}>
+          {(campaignProjects.length ? campaignProjects : projects.slice(0, 3)).map((project, index) => (
+            <motion.article
+              key={project.id}
+              initial={reduced ? false : { opacity: 0, y: 36 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.24 }}
+              transition={{ delay: index * 0.08 }}
+            >
+              <Megaphone aria-hidden="true" />
+              <span>{String(index + 1).padStart(2, "0")} / {pick(project.eyebrow, locale)}</span>
+              <h3>{pick(project.title, locale)}</h3>
+              <p>{pick(project.solution, locale)}</p>
+              <Link href={projectHref(project, { locale, variantPath })}>{pick(content.labels.viewCase, locale)} <ArrowUpRight /></Link>
+            </motion.article>
+          ))}
+        </div>
+      </section>
+
       <section className={styles.work} id="work">
         <header><span className={styles.eyebrow}>{pick(content.labels.work, locale)}</span><h2>{locale === "ar" ? "المشكلة أولًا. ثم النظام. ثم الأثر." : "Problem first. System next. Business value last."}</h2></header>
         <div className={styles.projectGrid}>{projects.map((project, index) => { const cover = projectImages(project)[0]; return <motion.article key={project.id} className={styles.projectCard} initial={reduced ? false : { opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: .2 }}>
@@ -75,7 +110,18 @@ export default function CinematicGrowth({ content, locale, design, preview, vari
       <section className={styles.proof}>
         <div className={styles.experience}><span className={styles.eyebrow}>{pick(content.labels.experience, locale)}</span>{content.experiences.map((item) => <article key={item.id}><div><h3>{pick(item.role, locale)}</h3><b>{item.company}</b></div><p>{pick(item.summary, locale)}</p></article>)}</div>
         {companies.length > 0 && <div className={styles.companyRail}><h2>{pick(content.companies.heading, locale)}</h2><div>{companies.map((company) => <a key={company.id} href={company.website || undefined} target={company.website ? "_blank" : undefined} rel={company.website ? "noreferrer" : undefined}>{company.logoUrl && <Image src={company.logoUrl} alt={pick(company.alt, locale)} width={120} height={54} unoptimized />}{company.showName && <span>{pick(company.name, locale)}</span>}</a>)}</div></div>}
-        {reviews.length > 0 && <div className={styles.reviews}><header><span className={styles.eyebrow}>PROOF</span><h2>{pick(content.reviews.heading, locale)}</h2><p>{pick(content.reviews.intro, locale)}</p></header><div>{reviews.map((review, index) => <motion.blockquote key={review.id} initial={reduced ? false : { opacity: 0, rotate: index % 2 ? 2 : -2, y: 35 }} whileInView={{ opacity: 1, rotate: index % 2 ? 1 : -1, y: 0 }} viewport={{ once: true }}><p>“{pick(review.quote, locale)}”</p><footer><b>{pick(review.author, locale)}</b><span>{pick(review.role, locale)}{review.company ? ` · ${review.company}` : ""}</span></footer></motion.blockquote>)}</div></div>}
+        <div className={styles.reviews}>
+          <header><span className={styles.eyebrow}>REVIEWS</span><h2>{pick(content.reviews.heading, locale)}</h2><p>{pick(content.reviews.intro, locale)}</p></header>
+          {reviews.length > 0 ? (
+            <div>{reviews.map((review, index) => <motion.blockquote key={review.id} initial={reduced ? false : { opacity: 0, rotate: index % 2 ? 2 : -2, y: 35 }} whileInView={{ opacity: 1, rotate: index % 2 ? 1 : -1, y: 0 }} viewport={{ once: true }}><p>“{pick(review.quote, locale)}”</p><footer><b>{pick(review.author, locale)}</b><span>{pick(review.role, locale)}{review.company ? ` · ${review.company}` : ""}</span></footer></motion.blockquote>)}</div>
+          ) : (
+            <div className={styles.reviewEmpty}>
+              <Quote aria-hidden="true" />
+              <b>{locale === "ar" ? "قسم الآراء جاهز" : "Review section is ready"}</b>
+              <p>{locale === "ar" ? "أضف رأيًا حقيقيًا وفعّله من لوحة التحكم ليظهر هنا بدل هذه الحالة المؤقتة." : "Add a verified quote in the admin panel and make it visible to replace this temporary state."}</p>
+            </div>
+          )}
+        </div>
       </section>
 
       <footer className={styles.contact} id="contact"><span className={styles.eyebrow}>{locale === "ar" ? "المشكلة التالية" : "THE NEXT BOTTLENECK"}</span><h2>{pick(content.labels.contact, locale)}</h2><p>{pick(content.labels.contactCopy, locale)}</p><div><a href={`mailto:${content.profile.email}`}><Mail /> {content.profile.email}</a><a href={whatsappHref(content)} target="_blank" rel="noreferrer">WhatsApp <ArrowUpRight /></a></div><small>{pick(content.profile.availability, locale)}</small></footer>

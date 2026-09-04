@@ -14,4 +14,5 @@ export type DesignDefinition = {
 
 export const DESIGN_DEFINITIONS: Record<DesignSlug, DesignDefinition> = {
   "cinematic-growth": { index: 1, slug: "cinematic-growth", name: "Cinematic Growth", sector: "Growth & Automation", palette: ["#070A0D", "#C7FF45", "#FF6B3D"], load: () => import("./cinematic-growth/CinematicGrowth"), loadProject: () => import("./cinematic-growth/Project") },
+  "scroll-world-atlas": { index: 2, slug: "scroll-world-atlas", name: "Scroll World Atlas", sector: "Immersive Growth Map", palette: ["#F6F0DF", "#153B32", "#2454FF"], load: () => import("./scroll-world-atlas/ScrollWorldAtlas"), loadProject: () => import("./scroll-world-atlas/Project") },
 };

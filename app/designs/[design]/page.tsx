@@ -6,7 +6,7 @@ export const dynamic = "force-dynamic";
 type PageProps = { params: Promise<{ design: string }> };
 
 export default async function DesignPreviewRedirect({ params }: PageProps) {
-  await params;
+  const { design } = await params;
   await requireOwner(`/designs/${design}`);
-  redirect("/admin");
+  redirect(`/admin?tab=designs&preview=${encodeURIComponent(design)}`);
 }

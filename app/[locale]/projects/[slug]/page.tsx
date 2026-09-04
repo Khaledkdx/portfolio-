@@ -17,8 +17,9 @@ type PageProps = {
 const getContent = cache(readSiteContent);
 
 function variantIndex(value: string): number | null {
-  if (value !== "1") return null;
-  return Number(value) - 1;
+  if (!/^\d+$/.test(value)) return null;
+  const index = Number(value) - 1;
+  return DESIGN_SLUGS[index] ? index : null;
 }
 
 async function resolve(props: PageProps) {
@@ -28,6 +29,7 @@ async function resolve(props: PageProps) {
     getContent(),
   ]);
   const index = variantIndex(value);
+  if (/^\d+$/.test(value) && index === null) return null;
   if (!isLocale(value) && index === null) return null;
   const locale: Locale = isLocale(value) ? value : query.locale === "ar" ? "ar" : "en";
   const project = projectBySlug(content, slug);
