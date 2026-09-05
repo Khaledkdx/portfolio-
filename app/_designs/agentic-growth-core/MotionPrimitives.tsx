@@ -1,8 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import { motion, useMotionValue, useReducedMotion, useSpring, useTransform } from "framer-motion";
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { BrainCircuit, CheckCircle2, Database, Route, Sparkles, Workflow } from "lucide-react";
+import { motion, useInView, useMotionValue, useReducedMotion, useSpring, useTransform } from "framer-motion";
+import { useRef, type ReactNode } from "react";
+import styles from "./agentic-growth-core.module.css";
 
 export function Reveal({ children, className = "", delay = 0 }: { children: ReactNode; className?: string; delay?: number }) {
   const reduced = useReducedMotion();
@@ -32,69 +34,66 @@ export function CyberPortrait({ className = "" }: { className?: string }) {
   );
 }
 
-export function AvatarScrub({ className = "", frameClassName = "" }: { className?: string; frameClassName?: string }) {
+export function AgenticCoreMap({ locale, className = "" }: { locale: "en" | "ar"; className?: string }) {
   const rootRef = useRef<HTMLDivElement>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
   const reduced = useReducedMotion();
-  const [duration, setDuration] = useState(8);
-  const [ready, setReady] = useState(false);
-
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video || reduced) return;
-    const syncMetadata = () => {
-      if (Number.isFinite(video.duration) && video.duration > 0) setDuration(video.duration);
-      setReady(true);
-    };
-    if (video.readyState >= 1) syncMetadata();
-    video.addEventListener("loadedmetadata", syncMetadata);
-    return () => video.removeEventListener("loadedmetadata", syncMetadata);
-  }, [reduced]);
-
-  useEffect(() => {
-    if (reduced || !ready) return;
-    let frame = 0;
-    const update = () => {
-      frame = 0;
-      const root = rootRef.current;
-      const video = videoRef.current;
-      if (!root || !video || document.visibilityState === "hidden") return;
-      const rect = root.getBoundingClientRect();
-      const range = Math.max(1, rect.height - window.innerHeight);
-      const progress = Math.min(1, Math.max(0, -rect.top / range));
-      const next = Math.min(duration - .04, Math.max(0, progress * duration));
-      if (Math.abs(video.currentTime - next) > .035) video.currentTime = next;
-    };
-    const requestUpdate = () => { if (!frame) frame = requestAnimationFrame(update); };
-    requestUpdate();
-    window.addEventListener("scroll", requestUpdate, { passive: true });
-    window.addEventListener("resize", requestUpdate);
-    document.addEventListener("visibilitychange", requestUpdate);
-    return () => {
-      if (frame) cancelAnimationFrame(frame);
-      window.removeEventListener("scroll", requestUpdate);
-      window.removeEventListener("resize", requestUpdate);
-      document.removeEventListener("visibilitychange", requestUpdate);
-    };
-  }, [duration, ready, reduced]);
-
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video || reduced) return;
-    const prime = () => video.play().then(() => { video.pause(); }).catch(() => undefined);
-    window.addEventListener("pointerdown", prime, { once: true });
-    return () => window.removeEventListener("pointerdown", prime);
-  }, [reduced]);
+  const inView = useInView(rootRef, { amount: .25 });
+  const copy = locale === "ar" ? {
+    label: "نواة تشغيل الأعمال", state: "النظام متصل", input: "إشارات غير منظمة", output: "عمل منسّق",
+    nodes: ["التخطيط", "المحتوى", "العمليات", "إدارة العملاء", "النشر", "خدمة العملاء"],
+    inputs: ["مهام يدوية", "بيانات متفرقة", "متابعة متأخرة"], outputs: ["توجيه", "تنفيذ آلي", "تقرير واضح"],
+    cycle: ["يراقب", "يفهم", "ينفذ", "يتعلم"],
+  } : {
+    label: "Business operating core", state: "System connected", input: "Unstructured signals", output: "Coordinated work",
+    nodes: ["Planning", "Content", "Operations", "CRM", "Publishing", "Customer care"],
+    inputs: ["Manual tasks", "Scattered data", "Late follow-up"], outputs: ["Routed", "Automated", "Reported"],
+    cycle: ["Observe", "Understand", "Act", "Learn"],
+  };
+  const icons = [Sparkles, Workflow, Route, Database, CheckCircle2, BrainCircuit];
+  const animate = !reduced && inView;
 
   return (
-    <div ref={rootRef} className={className}>
-      <div className={frameClassName}>
-        {reduced ? <Image src="/agentic-growth-core/avatar-poster.webp" alt="Khalid's 3D avatar" fill unoptimized sizes="(max-width: 900px) 94vw, 48vw" /> : (
-          <video ref={videoRef} muted playsInline preload="auto" poster="/agentic-growth-core/avatar-poster.webp" onLoadedMetadata={(event) => { setDuration(event.currentTarget.duration || 8); setReady(true); }} aria-label="Scroll-controlled transformation into a 3D agentic operator">
-            <source src="/agentic-growth-core/avatar-transform.mp4" type="video/mp4" />
-          </video>
-        )}
+    <motion.div
+      ref={rootRef}
+      className={`${styles.coreMap} ${className}`}
+      initial={reduced ? false : { opacity: 0, y: 36 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: .18 }}
+      transition={{ duration: .8, ease: [0.22, 1, 0.36, 1] }}
+      aria-label={copy.label}
+    >
+      <div className={styles.coreMapHeader}>
+        <span><i />{copy.state}</span>
+        <b>AGENTIC / OS</b>
       </div>
-    </div>
+      <div className={styles.coreMapStage}>
+        <div className={styles.coreInputs}>
+          <small>{copy.input}</small>
+          {copy.inputs.map((item, index) => <motion.span key={item} animate={animate ? { x: [0, 5, 0], opacity: [.55, 1, .55] } : undefined} transition={{ duration: 2.4, delay: index * .25, repeat: Infinity }}>{item}</motion.span>)}
+        </div>
+        <svg className={styles.coreRoutes} viewBox="0 0 900 600" preserveAspectRatio="none" aria-hidden>
+          {["M80 105 C260 105 235 300 445 300", "M80 300 H445", "M80 495 C260 495 235 300 445 300", "M455 300 C665 300 640 105 820 105", "M455 300 H820", "M455 300 C665 300 640 495 820 495"].map((path, index) => (
+            <motion.path key={path} d={path} initial={reduced ? { pathLength: 1 } : { pathLength: 0 }} whileInView={{ pathLength: 1 }} viewport={{ once: true }} transition={{ duration: 1.15, delay: index * .08 }} />
+          ))}
+        </svg>
+        <div className={styles.agentNodes}>
+          {copy.nodes.map((item, index) => {
+            const Icon = icons[index];
+            return <motion.div key={item} className={styles.agentNode} animate={animate ? { y: [0, index % 2 ? 5 : -5, 0] } : undefined} transition={{ duration: 3.2 + index * .15, repeat: Infinity, ease: "easeInOut" }}><Icon size={17} /><span>{item}</span><i /></motion.div>;
+          })}
+        </div>
+        <motion.div className={styles.intelligenceCore} animate={animate ? { scale: [1, 1.025, 1] } : undefined} transition={{ duration: 2.8, repeat: Infinity, ease: "easeInOut" }}>
+          <div className={styles.coreHalo} aria-hidden />
+          <BrainCircuit size={42} />
+          <strong>AGENTIC<br />CORE</strong>
+          <small>{copy.label}</small>
+        </motion.div>
+        <div className={styles.coreOutputs}>
+          <small>{copy.output}</small>
+          {copy.outputs.map((item, index) => <motion.span key={item} initial={reduced ? false : { opacity: 0, x: locale === "ar" ? 12 : -12 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: .65 + index * .14 }}><CheckCircle2 size={14} />{item}</motion.span>)}
+        </div>
+      </div>
+      <div className={styles.coreCycle}>{copy.cycle.map((item, index) => <span key={item}><b>0{index + 1}</b>{item}</span>)}</div>
+    </motion.div>
   );
 }

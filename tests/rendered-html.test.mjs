@@ -51,7 +51,6 @@ test("ships three selectable designs and independent project views", async () =>
   await access(new URL("public/agentic-growth-core/cyber-human.webp", root));
   await access(new URL("public/agentic-growth-core/agent-network.webp", root));
   await access(new URL("public/agentic-growth-core/avatar.webp", root));
-  await access(new URL("public/agentic-growth-core/avatar-transform.mp4", root));
   assert.match(projectSource, /ProjectPicture/);
   assert.match(atlasProjectSource, /ProjectPicture/);
   assert.match(atlasProjectSource, /const dossier =/);
@@ -62,7 +61,11 @@ test("ships three selectable designs and independent project views", async () =>
   assert.match(atlasProjectSource, /project\.implementation/);
   assert.match(atlasProjectSource, /project\.outcome/);
   assert.match(agenticSource, /content\.agenticStory\.sections/);
-  assert.match(agenticSource, /AvatarScrub/);
+  assert.match(agenticSource, /AgenticCoreMap/);
+  const agenticMotionSource = await readFile(new URL("app/_designs/agentic-growth-core/MotionPrimitives.tsx", root), "utf8");
+  assert.match(agenticMotionSource, /AGENTIC \/ OS/);
+  assert.match(agenticMotionSource, /useReducedMotion/);
+  assert.doesNotMatch(agenticMotionSource, /<video|avatar-transform|avatar-poster/);
   assert.match(agenticSource, /projectSlugs/);
   assert.match(agenticProjectSource, /project\.challenge/);
   assert.match(agenticProjectSource, /project\.solution/);

@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ArrowDown, ArrowUpRight, Bot, BrainCircuit, Building2, Mail, MessageCircle, Network, TimerReset, Workflow } from "lucide-react";
 import { pick } from "@/lib/site-content";
 import { projectHref, publishedProjects, type DesignProps } from "../types";
-import { AvatarScrub, CyberPortrait, Reveal } from "./MotionPrimitives";
+import { AgenticCoreMap, CyberPortrait, Reveal } from "./MotionPrimitives";
 import styles from "./agentic-growth-core.module.css";
 
 const label = {
@@ -73,7 +73,7 @@ export default function AgenticGrowthCore(props: DesignProps) {
 
       <section className={styles.coreSection} id="core">
         <div className={styles.coreCopy}><span>{pick(section("core", 2).eyebrow, locale)}</span><h2>{pick(section("core", 2).title, locale)}</h2><p>{pick(section("core", 2).body, locale)}</p><div className={styles.agentSteps}>{copy.steps.map((step, index) => <div key={step}><i>{index + 1}</i><span>{step}</span></div>)}</div>{renderProof("core", 2)}</div>
-        <AvatarScrub className={styles.scrubTrack} frameClassName={styles.scrubFrame} />
+        <AgenticCoreMap locale={locale} />
       </section>
 
       <section className={styles.engine} id="marketing">
