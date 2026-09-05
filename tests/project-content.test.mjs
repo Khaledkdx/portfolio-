@@ -192,3 +192,18 @@ test("accepts the scroll world atlas design slug", () => {
   assert.equal(migrated.activeDesign, "scroll-world-atlas");
   assert.equal(validateSiteContent(migrated), null);
 });
+
+test("migrates and validates the agentic growth story and third design", () => {
+  const legacy = clone();
+  delete legacy.agenticStory;
+  const migrated = normalizeSiteContent(legacy);
+  assert.equal(migrated.agenticStory.sections.length, 10);
+  assert.match(migrated.agenticStory.headline.en, /intelligent systems/);
+
+  migrated.activeDesign = "agentic-growth-core";
+  assert.equal(validateSiteContent(migrated), null);
+
+  const invalid = structuredClone(migrated);
+  invalid.agenticStory.sections[1].title.ar = "";
+  assert.match(validateSiteContent(invalid), /Agentic story sections/);
+});

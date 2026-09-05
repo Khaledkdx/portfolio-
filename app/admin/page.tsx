@@ -8,7 +8,7 @@ type AdminPageProps = { searchParams: Promise<{ tab?: string }> };
 
 export default async function AdminPage({ searchParams }: AdminPageProps) {
   const query = await searchParams;
-  const tabs = ["overview", "designs", "projects", "companies", "reviews", "services", "experience", "media"] as const;
+  const tabs = ["overview", "designs", "agentic", "projects", "companies", "reviews", "services", "experience", "media"] as const;
   const initialTab = tabs.find((tab) => tab === query.tab);
   const returnTo = initialTab ? `/admin?tab=${initialTab}` : "/admin";
   const owner = await requireOwner(returnTo);

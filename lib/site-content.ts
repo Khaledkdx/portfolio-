@@ -70,6 +70,20 @@ export type GrowthStory = {
   result: LocalizedText;
 };
 
+export type AgenticStorySection = {
+  id: string;
+  eyebrow: LocalizedText;
+  title: LocalizedText;
+  body: LocalizedText;
+  projectSlugs: string[];
+};
+
+export type AgenticStory = {
+  headline: LocalizedText;
+  intro: LocalizedText;
+  sections: AgenticStorySection[];
+};
+
 export type Project = {
   id: string;
   slug: string;
@@ -125,12 +139,14 @@ export type SiteContent = {
     items: Review[];
   };
   growthStory: GrowthStory;
+  agenticStory: AgenticStory;
   projects: Project[];
 };
 
 export const DESIGN_SLUGS = [
   "cinematic-growth",
   "scroll-world-atlas",
+  "agentic-growth-core",
 ] as const;
 
 export type DesignSlug = (typeof DESIGN_SLUGS)[number];
@@ -138,6 +154,7 @@ export type DesignSlug = (typeof DESIGN_SLUGS)[number];
 export const DESIGN_NAMES: Record<DesignSlug, string> = {
   "cinematic-growth": "Cinematic Growth",
   "scroll-world-atlas": "Scroll World Atlas",
+  "agentic-growth-core": "Agentic Growth Core",
 };
 
 const t = (en: string, ar: string): LocalizedText => ({ en, ar });
@@ -339,6 +356,22 @@ export const DEFAULT_CONTENT: SiteContent = {
     ],
     intervention: t("Diagnose → Connect → Automate → Optimize", "تشخيص ← ربط ← أتمتة ← تحسين"),
     result: t("A connected growth system that helps people make faster, clearer decisions.", "نظام نمو مترابط يساعد الفريق على اتخاذ قرارات أسرع وأكثر وضوحاً."),
+  },
+  agenticStory: {
+    headline: t("I build intelligent systems that give businesses momentum—and teams their time back.", "أبني أنظمة ذكية تعيد للشركات زخمها، وللفِرق وقتها."),
+    intro: t("Automation is not about replacing people. It is about connecting decisions, data and repetitive work so every team can focus on what moves the business forward.", "الأتمتة لا تعني استبدال الأشخاص، بل ربط القرارات والبيانات والعمل المتكرر حتى يركز كل فريق على ما يدفع الأعمال إلى الأمام."),
+    sections: [
+      { id: "signal", eyebrow: t("HUMAN × SYSTEM", "الإنسان × النظام"), title: t("Human judgment, amplified by agentic systems.", "خبرة بشرية تضاعفها أنظمة ذكية."), body: t("A portfolio of growth systems designed around real teams, customers and operating pressure.", "بورتفوليو لأنظمة نمو مصممة حول فرق حقيقية وعملاء وضغط تشغيلي فعلي."), projectSlugs: ["performance-marketing", "ai-automation-agents", "sabco-hr-system"] },
+      { id: "pressure", eyebrow: t("THE BUSINESS UNDER PRESSURE", "الشركة تحت الضغط"), title: t("Growth slows when every department works alone.", "يتباطأ النمو عندما يعمل كل قطاع بمعزل عن الآخر."), body: t("Weak lead flow, scattered data, late follow-up and manual approvals create one connected business problem.", "تدفق العملاء الضعيف والبيانات المبعثرة والمتابعة المتأخرة والموافقات اليدوية تصنع مشكلة أعمال مترابطة."), projectSlugs: ["fitbox-operations-system"] },
+      { id: "core", eyebrow: t("THE AGENTIC CORE", "النواة الذكية"), title: t("From repeated effort to a coordinated operating layer.", "من مجهود متكرر إلى طبقة تشغيل منسقة."), body: t("Specialized agents and automations observe, route, act and report while people keep control of the decisions that matter.", "وكلاء متخصصون وأتمتة تراقب وتوجّه وتنفذ وتبلّغ، بينما يظل القرار المهم في يد الفريق."), projectSlugs: ["ai-automation-agents"] },
+      { id: "marketing", eyebrow: t("MARKETING + SALES", "التسويق + المبيعات"), title: t("Turn attention into a measurable customer journey.", "حوّل الانتباه إلى رحلة عميل قابلة للقياس."), body: t("Connect campaigns, qualification, CRM context and follow-up so demand does not disappear between tools.", "اربط الحملات والتأهيل وسياق CRM والمتابعة حتى لا يضيع الطلب بين الأدوات."), projectSlugs: ["fitbox-center-website-admin", "performance-marketing"] },
+      { id: "operations", eyebrow: t("OPERATIONS + HR", "العمليات + الموارد البشرية"), title: t("Make the daily operation visible and repeatable.", "اجعل التشغيل اليومي واضحًا وقابلًا للتكرار."), body: t("Replace fragmented sheets and routine checks with reliable workflows, permissions and live operational context.", "استبدل الجداول المبعثرة والمراجعات الروتينية بمسارات موثوقة وصلاحيات وسياق تشغيلي مباشر."), projectSlugs: ["sabco-hr-system", "fitbox-operations-system"] },
+      { id: "network", eyebrow: t("AGENTIC AI NETWORK", "شبكة الوكلاء الذكية"), title: t("A specialist agent for every repeatable responsibility.", "وكيل متخصص لكل مسؤولية قابلة للتكرار."), body: t("Planning, content, visuals, moderation, publishing and customer response work as one governed network.", "التخطيط والمحتوى والعناصر البصرية والمراجعة والنشر والرد على العملاء تعمل كشبكة واحدة محكومة."), projectSlugs: ["ai-automation-agents"] },
+      { id: "sectors", eyebrow: t("SECTOR WORLDS", "عوالم القطاعات"), title: t("One operating principle, adapted to each sector.", "مبدأ تشغيل واحد يتكيف مع كل قطاع."), body: t("Real estate, logistics, product teams and customer operations each need a system shaped around their real constraints.", "العقارات واللوجستيات وفرق المنتجات وعمليات العملاء تحتاج أنظمة مصممة حول قيودها الفعلية."), projectSlugs: ["property-management-system", "weaa-logistics-platform", "product-technology"] },
+      { id: "time", eyebrow: t("TIME RETURNED", "استعادة الوقت"), title: t("Let systems handle repetition so people can handle judgment.", "دع الأنظمة تتولى التكرار ليتفرغ الأشخاص للحكم والقرار."), body: t("The outcome is not more software. It is clearer priorities, faster access to context and more time for valuable work.", "النتيجة ليست برامج أكثر، بل أولويات أوضح ووصول أسرع للمعلومة ووقت أكبر للعمل ذي القيمة."), projectSlugs: ["sabco-hr-system", "real-estate-agent"] },
+      { id: "constellation", eyebrow: t("PROJECT CONSTELLATION", "كوكبة المشاريع"), title: t("Proof across growth, operations and automation.", "أدلة عمل عبر النمو والعمليات والأتمتة."), body: t("Explore the systems, campaigns and products behind the story.", "استكشف الأنظمة والحملات والمنتجات وراء القصة."), projectSlugs: [] },
+      { id: "contact", eyebrow: t("BUILD THE NEXT SYSTEM", "ابنِ النظام التالي"), title: t("Bring the bottleneck. We will map the route forward.", "هات نقطة التعطيل، وسنرسم طريق التقدم."), body: t("Available for growth, marketing, automation and product opportunities across the UAE, KSA and remote teams.", "متاح لفرص النمو والتسويق والأتمتة والمنتجات في الإمارات والسعودية ومع فرق العمل عن بُعد."), projectSlugs: ["ai-automation-agents"] },
+    ],
   },
   projects: [
     {
@@ -628,6 +661,19 @@ export function normalizeSiteContent(content: SiteContent): SiteContent {
       intervention: content.growthStory?.intervention ?? DEFAULT_CONTENT.growthStory.intervention,
       result: content.growthStory?.result ?? DEFAULT_CONTENT.growthStory.result,
     },
+    agenticStory: {
+      headline: content.agenticStory?.headline ?? DEFAULT_CONTENT.agenticStory.headline,
+      intro: content.agenticStory?.intro ?? DEFAULT_CONTENT.agenticStory.intro,
+      sections: (content.agenticStory?.sections ?? DEFAULT_CONTENT.agenticStory.sections).map((section, index) => ({
+        id: normalizeProjectSlug(section.id || `agentic-section-${index + 1}`),
+        eyebrow: section.eyebrow ?? { en: "", ar: "" },
+        title: section.title ?? { en: "", ar: "" },
+        body: section.body ?? { en: "", ar: "" },
+        projectSlugs: Array.isArray(section.projectSlugs)
+          ? [...new Set(section.projectSlugs.map((slug) => normalizeProjectSlug(String(slug))).filter(Boolean))].slice(0, 3)
+          : [],
+      })),
+    },
     projects: (content.projects ?? []).map((project) => {
       const normalized: Project = {
         ...project,
@@ -703,6 +749,15 @@ export function validateSiteContent(input: SiteContent): string | null {
   if (!content.reviews.intro.en.trim() || !content.reviews.intro.ar.trim()) return "The reviews section requires English and Arabic intro text.";
   if (!content.growthStory.eyebrow.en.trim() || !content.growthStory.eyebrow.ar.trim() || !content.growthStory.title.en.trim() || !content.growthStory.title.ar.trim() || !content.growthStory.intro.en.trim() || !content.growthStory.intro.ar.trim() || !content.growthStory.intervention.en.trim() || !content.growthStory.intervention.ar.trim() || !content.growthStory.result.en.trim() || !content.growthStory.result.ar.trim()) return "The growth story requires complete English and Arabic content.";
   if (content.growthStory.problems.length < 1 || content.growthStory.problems.some((item) => !item.title.en.trim() || !item.title.ar.trim() || !item.description.en.trim() || !item.description.ar.trim())) return "Growth story problems require English and Arabic content.";
+  if (!content.agenticStory.headline.en.trim() || !content.agenticStory.headline.ar.trim() || !content.agenticStory.intro.en.trim() || !content.agenticStory.intro.ar.trim()) return "The agentic story requires complete English and Arabic headline content.";
+  if (content.agenticStory.sections.length < 1 || content.agenticStory.sections.length > 12) return "The agentic story requires between 1 and 12 sections.";
+  const agenticSectionIds = new Set<string>();
+  for (const section of content.agenticStory.sections) {
+    if (!section.id || agenticSectionIds.has(section.id)) return "Agentic story section IDs must be unique.";
+    agenticSectionIds.add(section.id);
+    if (!section.eyebrow.en.trim() || !section.eyebrow.ar.trim() || !section.title.en.trim() || !section.title.ar.trim() || !section.body.en.trim() || !section.body.ar.trim()) return "Agentic story sections require complete English and Arabic content.";
+    if (section.projectSlugs.length > 3) return "Each agentic story section can contain up to 3 projects.";
+  }
   if (content.reviews.items.length > 20) return "The reviews section can contain up to 20 entries.";
   for (const review of content.reviews.items) {
     if (!review.visible) continue;

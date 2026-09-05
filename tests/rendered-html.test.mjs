@@ -26,7 +26,7 @@ test("ships bilingual cinematic portfolio content without private CV details", a
   assert.match(scene, /useReducedMotion/);
 });
 
-test("ships two selectable designs and independent project views", async () => {
+test("ships three selectable designs and independent project views", async () => {
   const [content, portfolio, registry] = await Promise.all([
     readFile(new URL("lib/site-content.ts", root), "utf8"),
     readFile(new URL("app/_components/Portfolio.tsx", root), "utf8"),
@@ -34,14 +34,24 @@ test("ships two selectable designs and independent project views", async () => {
   ]);
   assert.match(content, /"cinematic-growth"/);
   assert.match(content, /"scroll-world-atlas"/);
+  assert.match(content, /"agentic-growth-core"/);
   assert.match(registry, /slug: "cinematic-growth"/);
   assert.match(registry, /slug: "scroll-world-atlas"/);
+  assert.match(registry, /slug: "agentic-growth-core"/);
   assert.match(content, /activeDesign: "cinematic-growth"/);
   const projectSource = await readFile(new URL("app/_designs/cinematic-growth/Project.tsx", root), "utf8");
   const atlasProjectSource = await readFile(new URL("app/_designs/scroll-world-atlas/Project.tsx", root), "utf8");
+  const agenticSource = await readFile(new URL("app/_designs/agentic-growth-core/AgenticGrowthCore.tsx", root), "utf8");
+  const agenticProjectSource = await readFile(new URL("app/_designs/agentic-growth-core/Project.tsx", root), "utf8");
   await access(new URL("app/_designs/cinematic-growth/project.module.css", root));
   await access(new URL("app/_designs/scroll-world-atlas/atlas-project.module.css", root));
   await access(new URL("app/_designs/scroll-world-atlas/scroll-world-atlas.module.css", root));
+  await access(new URL("app/_designs/agentic-growth-core/agentic-growth-core.module.css", root));
+  await access(new URL("app/_designs/agentic-growth-core/project.module.css", root));
+  await access(new URL("public/agentic-growth-core/cyber-human.webp", root));
+  await access(new URL("public/agentic-growth-core/agent-network.webp", root));
+  await access(new URL("public/agentic-growth-core/avatar.webp", root));
+  await access(new URL("public/agentic-growth-core/avatar-transform.mp4", root));
   assert.match(projectSource, /ProjectPicture/);
   assert.match(atlasProjectSource, /ProjectPicture/);
   assert.match(atlasProjectSource, /const dossier =/);
@@ -51,6 +61,13 @@ test("ships two selectable designs and independent project views", async () => {
   assert.match(atlasProjectSource, /project\.solution/);
   assert.match(atlasProjectSource, /project\.implementation/);
   assert.match(atlasProjectSource, /project\.outcome/);
+  assert.match(agenticSource, /content\.agenticStory\.sections/);
+  assert.match(agenticSource, /AvatarScrub/);
+  assert.match(agenticSource, /projectSlugs/);
+  assert.match(agenticProjectSource, /project\.challenge/);
+  assert.match(agenticProjectSource, /project\.solution/);
+  assert.match(agenticProjectSource, /project\.implementation/);
+  assert.match(agenticProjectSource, /project\.outcome/);
   const atlasSource = await readFile(new URL("app/_designs/scroll-world-atlas/ScrollWorldAtlas.tsx", root), "utf8");
   assert.match(atlasSource, /caseProblem/);
   assert.match(atlasSource, /project\.challenge/);
@@ -115,6 +132,8 @@ test("admin contains design switching, cinematic story CMS, media safety and dir
   assert.match(designRoute, /activeDesign/);
   assert.match(editor, /beforeunload/);
   assert.match(editor, /growthStory\.problems\.map/);
+  assert.match(editor, /agenticStory\.sections\.map/);
+  assert.match(editor, /updateAgenticSection/);
   assert.match(editor, /project\.metrics\.map/);
   assert.match(editor, /saveMediaAlt/);
   assert.match(editor, /deleteMedia/);

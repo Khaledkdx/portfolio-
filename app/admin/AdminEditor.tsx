@@ -23,6 +23,7 @@ import {
 type Tab =
   | "overview"
   | "designs"
+  | "agentic"
   | "projects"
   | "companies"
   | "reviews"
@@ -36,6 +37,7 @@ const copy = {
     tabs: {
       overview: "Profile & content",
       designs: "Designs",
+      agentic: "Agentic story",
       projects: "Case studies",
       companies: "Companies & logos",
       reviews: "Reviews",
@@ -79,6 +81,15 @@ const copy = {
     addApproach: "＋ Add step",
     growthStory: "Growth transformation story",
     growthStoryHelp: "Controls the falling-company scroll scene on the public site.",
+    agenticStory: "Agentic Growth Core story",
+    agenticStoryHelp: "Controls the ten chapters and the project proof shown inside design 3.",
+    agenticHeadline: "Design 3 headline",
+    agenticIntro: "Design 3 introduction",
+    sectionId: "Section ID",
+    linkedProjects: "Project proof",
+    linkedProjectsHelp: "Choose up to 3 published case studies for this chapter.",
+    choosePublishedProject: "Choose a published project",
+    noLinkedProjects: "No project proof selected.",
     storyEyebrow: "Story eyebrow",
     storyIntro: "Story introduction",
     storyIntervention: "Intervention sequence",
@@ -209,6 +220,7 @@ const copy = {
     tabs: {
       overview: "الملف والمحتوى",
       designs: "التصميمات",
+      agentic: "القصة الذكية",
       projects: "دراسات الحالة",
       companies: "الشركات والشعارات",
       reviews: "الآراء",
@@ -252,6 +264,15 @@ const copy = {
     addApproach: "＋ إضافة خطوة",
     growthStory: "قصة تحول ونمو الشركة",
     growthStoryHelp: "تتحكم هذه البيانات في مشهد سقوط الشركة وصعودها أثناء التمرير.",
+    agenticStory: "قصة Agentic Growth Core",
+    agenticStoryHelp: "تتحكم في الفصول العشرة والمشاريع التي تظهر داخل التصميم رقم 3.",
+    agenticHeadline: "العنوان الرئيسي للتصميم 3",
+    agenticIntro: "مقدمة التصميم 3",
+    sectionId: "معرّف القسم",
+    linkedProjects: "إثبات المشروع",
+    linkedProjectsHelp: "اختر حتى 3 دراسات حالة منشورة لهذا الفصل.",
+    choosePublishedProject: "اختر مشروعًا منشورًا",
+    noLinkedProjects: "لم يتم اختيار مشروع لهذا الفصل.",
     storyEyebrow: "العنوان العلوي للقصة",
     storyIntro: "مقدمة القصة",
     storyIntervention: "تسلسل التدخل",
@@ -617,6 +638,19 @@ export function AdminEditor({
         index === selectedProject ? { ...item, ...patch } : item,
       ),
     }));
+
+  const updateAgenticSection = (
+    sectionIndex: number,
+    patch: Partial<SiteContent["agenticStory"]["sections"][number]>,
+  ) => setContent((current) => ({
+    ...current,
+    agenticStory: {
+      ...current.agenticStory,
+      sections: current.agenticStory.sections.map((section, index) =>
+        index === sectionIndex ? { ...section, ...patch } : section,
+      ),
+    },
+  }));
 
   function mediaUsages(asset: MediaAsset) {
     const usages: string[] = [];
@@ -1022,6 +1056,43 @@ export function AdminEditor({
                 <div className="full">{repeaterActions(index, content.growthStory.problems.length, (to) => setContent({ ...content, growthStory: { ...content.growthStory, problems: move(content.growthStory.problems, index, to) } }), () => content.growthStory.problems.length > 1 && window.confirm(t.confirmDelete) && setContent({ ...content, growthStory: { ...content.growthStory, problems: content.growthStory.problems.filter((_, itemIndex) => itemIndex !== index) } }))}</div>
               </div></div>)}
             </div>
+          </div>
+        )}
+
+        {tab === "agentic" && (
+          <div className="admin-stack">
+            <div className="admin-panel">
+              <header><div><span>DESIGN 03</span><h2>{t.agenticStory}</h2><p>{t.agenticStoryHelp}</p></div></header>
+              <div className="field-grid">
+                <div className="full"><LocalizedField label={t.agenticHeadline} value={content.agenticStory.headline} locale={locale} multiline onChange={(value) => setContent({ ...content, agenticStory: { ...content.agenticStory, headline: localized(content.agenticStory.headline, value) } })} /></div>
+                <div className="full"><LocalizedField label={t.agenticIntro} value={content.agenticStory.intro} locale={locale} multiline onChange={(value) => setContent({ ...content, agenticStory: { ...content.agenticStory, intro: localized(content.agenticStory.intro, value) } })} /></div>
+              </div>
+            </div>
+            {content.agenticStory.sections.map((section, sectionIndex) => {
+              const linkedProjects = section.projectSlugs.map((slug) => content.projects.find((item) => item.slug === slug)).filter((item): item is Project => Boolean(item));
+              const availableProjects = content.projects.filter((item) => item.status === "published" && !section.projectSlugs.includes(item.slug));
+              return (
+                <div className="admin-panel agentic-section-editor" key={section.id || sectionIndex}>
+                  <header><div><span>{String(sectionIndex + 1).padStart(2, "0")}</span><h2>{section.title[locale] || section.id}</h2></div></header>
+                  <div className="field-grid">
+                    <Field label={t.sectionId} value={section.id} dir="ltr" onChange={(id) => updateAgenticSection(sectionIndex, { id: normalizeProjectSlug(id) })} />
+                    <LocalizedField label={t.eyebrow} value={section.eyebrow} locale={locale} onChange={(value) => updateAgenticSection(sectionIndex, { eyebrow: localized(section.eyebrow, value) })} />
+                    <div className="full"><LocalizedField label={t.title} value={section.title} locale={locale} multiline onChange={(value) => updateAgenticSection(sectionIndex, { title: localized(section.title, value) })} /></div>
+                    <div className="full"><LocalizedField label={t.description} value={section.body} locale={locale} multiline onChange={(value) => updateAgenticSection(sectionIndex, { body: localized(section.body, value) })} /></div>
+                  </div>
+                  <div className="agentic-project-picker">
+                    <div><h3>{t.linkedProjects}</h3><p>{t.linkedProjectsHelp}</p></div>
+                    <select value="" disabled={section.projectSlugs.length >= 3 || availableProjects.length === 0} onChange={(event) => event.target.value && updateAgenticSection(sectionIndex, { projectSlugs: [...section.projectSlugs, event.target.value] })}>
+                      <option value="">{t.choosePublishedProject}</option>
+                      {availableProjects.map((item) => <option key={item.id} value={item.slug}>{item.title[locale]}</option>)}
+                    </select>
+                  </div>
+                  {linkedProjects.length ? <div className="agentic-linked-projects">{linkedProjects.map((item, projectIndex) => (
+                    <div key={item.id}><span>{String(projectIndex + 1).padStart(2, "0")}</span><b>{item.title[locale]}</b>{repeaterActions(projectIndex, section.projectSlugs.length, (to) => updateAgenticSection(sectionIndex, { projectSlugs: move(section.projectSlugs, projectIndex, to) }), () => updateAgenticSection(sectionIndex, { projectSlugs: section.projectSlugs.filter((slug) => slug !== item.slug) }))}</div>
+                  ))}</div> : <p className="empty-state">{t.noLinkedProjects}</p>}
+                </div>
+              );
+            })}
           </div>
         )}
 
