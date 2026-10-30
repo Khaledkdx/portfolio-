@@ -6,18 +6,19 @@ import { ProjectMetrics } from "../ProjectMetrics";
 import type { ProjectDetailProps } from "../types";
 import { projectDetailData } from "../types";
 import styles from "./project.module.css";
+import theme from "./cinematic-growth.module.css";
 
 export default function CinematicProject(props: ProjectDetailProps) {
   const { content, project, locale, variantPath } = props;
   const { images, links, previous, next, base, projectUrl, dir } = projectDetailData(props);
-  return <main className={styles.page} dir={dir} lang={locale}>
-    <nav className={styles.nav}><Link href={base}><span>K/</span>{content.profile.name}</Link><Link href={variantPath ? `${variantPath}/projects/${project.slug}?locale=${locale === "ar" ? "en" : "ar"}` : `/${locale === "ar" ? "en" : "ar"}/projects/${project.slug}`}>{locale === "ar" ? "EN" : "ع"}</Link></nav>
+  return <main className={theme.page + " " + styles.page} dir={dir} lang={locale}>
+    <nav className={styles.nav}><Link href={base + (variantPath ? "?locale=" + locale : "")}><span>K/</span>{content.profile.name}</Link><Link href={variantPath ? `${variantPath}/projects/${project.slug}?locale=${locale === "ar" ? "en" : "ar"}` : `/${locale === "ar" ? "en" : "ar"}/projects/${project.slug}`}>{locale === "ar" ? "EN" : "عربي"}</Link></nav>
     <header className={styles.hero}>
-      <div className={styles.heroCopy}><span>{pick(project.eyebrow, locale)}</span><h1>{pick(project.title, locale)}</h1><p>{pick(project.description, locale)}</p>{links.length > 0 && <div className={styles.links}>{links.map((link) => <a key={link.id} href={link.url} target="_blank" rel="noreferrer">{pick(link.label, locale)} <ArrowUpRight /></a>)}</div>}</div>
-      <div className={styles.caseIndex}><b>CASE</b><strong>{String(project.order).padStart(2, "0")}</strong></div>
+      <div className={styles.heroCopy}><span>{pick(project.eyebrow, locale)}</span><h1>{pick(project.title, locale)}</h1><p>{pick(project.summary, locale)}</p>{links.length > 0 && <div className={styles.links}>{links.map((link) => <a key={link.id} href={link.url} target="_blank" rel="noopener noreferrer">{pick(link.label, locale)} <ArrowUpRight /></a>)}</div>}</div>
     </header>
     {images[0] && <ProjectPicture image={images[0]} locale={locale} priority className={`${styles.cover} project-picture-caption`} sizes="100vw" />}
     <ProjectMetrics project={project} locale={locale} />
+    <section className={styles.description}><h2>{locale === "ar" ? "عن المشروع" : "The project"}</h2><p>{pick(project.description, locale)}</p></section>
     <section className={styles.analysis}>
       <article><span>01 / {pick(content.labels.challenge, locale)}</span><h2>{pick(content.labels.challenge, locale)}</h2><p>{pick(project.challenge, locale)}</p></article>
       <article><span>02 / {pick(content.labels.solution, locale)}</span><h2>{pick(content.labels.solution, locale)}</h2><p>{pick(project.solution, locale)}</p></article>

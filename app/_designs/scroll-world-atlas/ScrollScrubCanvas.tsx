@@ -170,7 +170,7 @@ export function ScrollScrubCanvas({
           if ("requestIdleCallback" in window) {
             window.requestIdleCallback(run, { timeout: 900 });
           } else {
-            window.setTimeout(() => run(), 120);
+            globalThis.setTimeout(() => run(), 120);
           }
         }
       };

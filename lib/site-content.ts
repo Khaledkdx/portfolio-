@@ -152,7 +152,7 @@ export const DESIGN_SLUGS = [
 export type DesignSlug = (typeof DESIGN_SLUGS)[number];
 
 export const DESIGN_NAMES: Record<DesignSlug, string> = {
-  "cinematic-growth": "Cinematic Growth",
+  "cinematic-growth": "Growth Partner / شريك النمو",
   "scroll-world-atlas": "Scroll World Atlas",
   "agentic-growth-core": "Agentic Growth Core",
 };

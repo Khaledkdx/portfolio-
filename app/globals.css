@@ -2695,7 +2695,10 @@ a {
   background: #eceae1;
 }
 .design-card-mini i { position: absolute; display: block; }
-.design-card-mini-1 { background: linear-gradient(90deg,#0b1f33 0 34%,#f4f0e8 34% 75%,#1f6b57 75%); }
+.design-card-mini-1 { background:#f7f8f5;color:#202622; }
+.design-card-mini-1 i:first-child { inset:24px auto auto 12px;width:45%;height:20px;background:#202622;border-radius:0; }
+.design-card-mini-1 i:nth-child(2) { inset:18px 12px auto auto;width:27%;height:60px;background:#cbd6c7;border-radius:3px; }
+.design-card-mini-1 i:nth-child(3) { inset:auto auto 16px 12px;width:28%;height:10px;background:#245747;border-radius:2px; }
 .design-card-mini-2 { background-color:#f6f0df;background-image:radial-gradient(circle at 50% 50%,#153b32 0 18%,transparent 19%),linear-gradient(135deg,#17211922 1px,transparent 1px);background-size:auto,18px 18px; }
 .design-card-mini-2:before{content:"";position:absolute;inset:12px;border:2px dashed #2454ff;border-radius:50%;transform:rotateX(62deg)}
 .design-card-mini-2:after{content:"";position:absolute;left:12%;right:12%;top:52%;height:4px;background:linear-gradient(90deg,#ff5a36,#c9ff4f);border-radius:999px}
