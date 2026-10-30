@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight, Plus } from "lucide-react";
-import { PortraitImage } from "@/app/_components/PortraitImage";
 import { ProjectPicture } from "@/app/_components/ProjectPicture";
 import { pick, projectImages } from "@/lib/site-content";
 import { languageHref, projectHref, publishedProjects, whatsappHref, type DesignProps } from "../types";
@@ -27,10 +26,6 @@ export default function CinematicGrowth(props: DesignProps) {
         <h1>{pick(content.profile.headline, locale)}</h1>
         <p className={styles.intro}>{pick(content.profile.intro, locale)}</p>
         <div className={styles.actions}><a className={styles.primary} href="#work">{ar ? "اكتشف أعمالي" : "Explore my work"}<ArrowUpRight size={19} aria-hidden /></a><a href="#contact">{ar ? "لنتحدث عن مشروعك" : "Let’s talk about your project"}<ArrowUpRight size={18} aria-hidden /></a></div>
-      </EditorialReveal>
-      <EditorialReveal className={styles.portraitColumn} delay={.12}>
-        <figure className={styles.portraitFrame}><PortraitImage content={content} sizes="(max-width: 760px) 80vw, 360px" priority /></figure>
-        <div className={styles.portraitCaption}><strong>{content.profile.name}</strong><span>{pick(content.profile.availability, locale)}</span></div>
       </EditorialReveal>
     </section>
     {projects.length > 0 && <section className={styles.work} id="work">
